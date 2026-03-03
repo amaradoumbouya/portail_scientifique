@@ -1,0 +1,175 @@
+{% load static %}
+<div class="left side-menu">
+    <div class="sidebar-inner slimscrollleft">
+        <div class="user-details">
+            <div class="text-center">
+                <img src="{{ user.ImageUrl }}" alt="" class="img-circle">
+            </div>
+            <div class="user-info">
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">{{user.prenoms|slice:'1'}} {{user.nom}}</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0)"> Profil</a></li>
+                        <li><a href="javascript:void(0)"> Paramètres</a></li>
+                        <li><a href="javascript:void(0)">Vérouiller</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript:void(0)"> Déconnexion</a></li>
+                    </ul>
+                </div>
+
+                <p class="text-muted m-0"><i class="fa fa-dot-circle-o text-success"></i> Online</p>
+            </div>
+        </div>
+        <!--- Divider -->
+        {% if user.is_authenticated and user.role == 'admin' %}
+
+        <div id="sidebar-menu">
+            <ul>
+                <li>
+                    <a href=" {% url 'portail_site:index' %} " class="waves-effect"><i class="ti-world"></i><span>
+                            Aller sur le site </span></a>
+                    <a href=" {% url 'portail_site:dashboard' %} " class="waves-effect"><i class="ti-home"></i><span>
+                            Tableau de bord </span></a>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Auteurs
+                        </span>
+                        <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'auteurs:index' %}">Les auteurs</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Encadreurs
+                        </span>
+                        <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'encadreurs:index' %}">Les encadreurs</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-agenda"></i> <span>
+                            publications
+                        </span> <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'publications:index' %}">Les publications</a></li>
+                    </ul>
+                </li>
+
+                <!-- institutions:index -->
+                <!-- <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-write"></i><span>
+                            Institutions
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="">Les institutions</a></li>
+                    </ul>
+                </li> -->
+
+                <!-- types_document:index -->
+
+                <!-- <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ion-android-folder"></i><span>
+                            Types
+                            document </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="">Les documents</a></li>
+                    </ul>
+                </li> -->
+
+
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i
+                            class="mdi mdi-notification-clear-all"></i><span>
+                            Notifications
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href=" {% url 'contact_us:index' %} ">Les notifications</a></li>
+                    </ul>
+                </li>
+
+                <!-- notifications:index -->
+                <!-- <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i
+                            class="mdi mdi-notification-clear-all"></i><span>
+                            Notifications
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="">Les notifications</a></li>
+                    </ul>
+                </li> -->
+
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i
+                            class="mdi mdi-notification-clear-all"></i><span>
+                            Partenaires
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href=" {% url 'partenaires:index' %} ">Les partenaires</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-multiple"></i><span>
+                            Admins </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'accounts:index' %}">Les admins</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        {% else %}
+
+        <div id="sidebar-menu">
+            <ul>
+                <li>
+                    <a href=" {% url 'portail_site:index' %} " class="waves-effect"><i class="ti-home"></i><span>
+                            Aller sur le site </span></a>
+                </li>
+                <li>
+                    <a href=" {% url 'portail_site:dashboard' %} " class="waves-effect"><i class="ti-home"></i><span>
+                            Tableau de bord </span></a>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Auteurs
+                        </span>
+                        <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'auteurs:index' %}">Mes infos d'auteur</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Encadreurs
+                        </span>
+                        <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'encadreurs:index' %}">Mes encadreurs</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-agenda"></i> <span>
+                            publications
+                        </span> <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'publications:index' %}">Mes publications</a></li>
+                    </ul>
+                </li>
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i
+                            class="mdi mdi-notification-clear-all"></i><span>
+                            Notifications
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href=" {% url 'notifications:index' %} ">Notifications</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        {% endif %}
+
+        <div class="clearfix"></div>
+
+    </div> <!-- end sidebarinner -->
+</div>

@@ -1,0 +1,131 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="page-heading contact-heading header-text text-center py-5" style="background-color: #f5f5f5;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <!-- Image de profil centrée -->
+        <div class="mb-4">
+          <img src="/chemin/vers/image_profil.jpg" alt="Photo de profil d'Amara DOUMBOUYA" class="rounded-circle shadow"
+            style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+        <!-- Texte de bienvenue et nom -->
+        <div class="text-content">
+          <h4 class="text-muted">Bienvenue</h4>
+          <h2 class="fw-bold">{{user.prenoms}} {{user.nom}}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row">
+    <!-- Accordéon horizontal -->
+    <div class="col-md-12">
+      <ul class="nav nav-tabs nav-justified mb-3" id="userTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab">Mon profil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pubs-tab" data-toggle="tab" href="#pubs" role="tab">Mes publications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab">Messages</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="notif-tab" data-toggle="tab" href="#notif" role="tab">Notifications</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="userTabContent">
+        <div class="tab-pane fade show active" id="info" role="tabpanel">
+          <h5>Mes informatons</h5><br>
+          <p>Nom complet : {{user.prenoms}} {{user.nom}}</p><br>
+          <p>Adresse : {{user.adresse}}</p><br>
+          <p>Email : {{user.email}}</p> <br>
+          <p>Téléphone : {{user.tel}}</p> <br>
+          <p>profession : {{user.profession}}</p> <br>
+          <p>Matricule : {{user.matricule}}</p> <br>
+
+          <a href="" class="btn btn-primary btn-sm"><i class="ti-pencil-alt"></i>Modifier mes infos</a>
+          <a href="" class="btn btn-success btn-sm"><i class="ti-pencil-alt"></i> Changer mon mot de passe</a>
+        </div>
+
+        <div class="tab-pane fade" id="pubs" role="tabpanel">
+          <h5>Mes publications</h5>
+          <p>Aucune nouvelle publication.</p> <br>
+          <div class="col-md-12">
+            <ul class="accordion">
+              <li>
+                <a>Article scientifique #1</a>
+                <div class="content">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester
+                    consectetur similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur
+                    adipisic elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti elite.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <a>Thèse de doctorat #2</a>
+                <div class="content">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester
+                    consectetur similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur
+                    adipisic elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti elite.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <a>Mémoire de master #3</a>
+                <div class="content">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester
+                    consectetur similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur
+                    adipisic elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti elite.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <a href=" {% url 'portail_site:depot_publication' %} " class="btn btn-primary btn-sm"><i
+              class="ti-pencil-alt"></i>Faire une publication</a>
+        </div>
+
+        <div class="tab-pane fade" id="messages" role="tabpanel">
+          <h5>Messages</h5>
+          <p>Vous avez 2 nouveaux messages.</p> <br>
+
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+            ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+          <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+            venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus
+            elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae,
+            eleifend ac, enim.</p>
+        </div>
+
+        <div class="tab-pane fade" id="notif" role="tabpanel">
+          <h5>Notifications</h5>
+          <p>Aucune nouvelle notification.</p> <br>
+
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+            ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+          <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+            venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus
+            elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae,
+            eleifend ac, enim.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}

@@ -1,0 +1,37 @@
+{% load static %}
+    <div class="latest-products">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-heading">
+              <h2>Publications récentes</h2>
+              <a href=" {% url 'portail_site:publication' %} ">Toutes les publications<i class="fa fa-angle-right"></i></a>
+            </div>
+          </div>
+
+
+          {% for pub in request.publications %}
+
+          <div class="col-md-4">
+            <div class="product-item">
+              <a href=" {% url 'portail_site:detail_publication' pub.slug %} "><img height="200" width="200" src="{{pub.ImageUrl}}" alt=""></a>
+              <div class="down-content">
+                <a href="{% url 'portail_site:detail_publication' pub.slug %}"><h4>{{pub.titre}}</h4></a>
+                <!-- <h6>$25.75</h6> -->
+                <p>{{pub.resume|safe|truncatechars:'70'}}.</p>
+                <ul class="stars">
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                </ul>
+                <span>Reviews (24)</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>

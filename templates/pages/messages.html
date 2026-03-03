@@ -1,0 +1,111 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="page-heading contact-heading header-text text-center py-5" style="background-color: #f5f5f5;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <!-- Image de profil centrée -->
+        <div class="mb-4">
+          <img src="/chemin/vers/image_profil.jpg" alt="Photo de profil d'Amara DOUMBOUYA" class="rounded-circle shadow"
+            style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+        <!-- Texte de bienvenue et nom -->
+        <div class="text-content">
+          <h4 class="text-muted">Bienvenue</h4>
+          <h2 class="fw-bold">Amara DOUMBOUYA</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row">
+    <!-- Accordéon horizontal -->
+    <div class="col-md-12">
+      <ul class="nav nav-tabs nav-justified mb-3" id="userTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link" id="info-tab" data-toggle="tab" href="#info" role="tab">Mes informations</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pubs-tab" data-toggle="tab" href="#pubs" role="tab">Mes publications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" id="messages-tab" data-toggle="tab" href="#messages" role="tab">Messages</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="notif-tab" data-toggle="tab" href="#notif" role="tab">Notifications</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="userTabContent">
+        <div class="tab-pane fade" id="info" role="tabpanel">
+          <h5>Mes informations</h5>
+          <p>Nom : Amara DOUMBOUYA</p>
+          <p>Email : amara@example.com</p>
+          <p>Téléphone : +224 620 000 000</p> <br>
+
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+            ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+          <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+            venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus
+            elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae,
+            eleifend ac, enim.</p>
+        </div>
+
+        <div class="tab-pane fade" id="pubs" role="tabpanel">
+          <h5>Mes publications</h5>
+          <ul>
+            <li>Article scientifique #1</li>
+            <li>Thèse de doctorat #2</li>
+            <li>Mémoire de master #3</li><br>
+
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+              Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+              ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+            <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet
+              a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus.
+              Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
+              consequat vitae, eleifend ac, enim.</p>
+          </ul>
+        </div>
+
+        <div class="tab-pane fade show active" id="messages" role="tabpanel">
+          <h5>Messages</h5>
+          <p>Vous avez 2 nouveaux messages.</p> <br>
+
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+            ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+          <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+            venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus
+            elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae,
+            eleifend ac, enim.</p>
+        </div>
+
+        <div class="tab-pane fade" id="notif" role="tabpanel">
+          <h5>Notifications</h5>
+          <p>Aucune nouvelle notification.</p> <br>
+
+          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
+            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+            ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+          <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+            venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus
+            elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae,
+            eleifend ac, enim.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}

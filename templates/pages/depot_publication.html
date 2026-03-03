@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="page-heading contact-heading header-text text-center py-5" style="background-color: #f5f5f5;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <!-- Image de profil centrée -->
+        <div class="mb-4">
+          <img src="/chemin/vers/image_profil.jpg" alt="Photo de profil d'Amara DOUMBOUYA" class="rounded-circle shadow"
+            style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+        <!-- Texte de bienvenue et nom -->
+        <div class="text-content">
+          <h4 class="text-muted">Bienvenue</h4>
+          <h2 class="fw-bold">{{user.prenoms}} {{user.nom}}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h3>Soumettre une publication</h3>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Soumettre la publication</button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}

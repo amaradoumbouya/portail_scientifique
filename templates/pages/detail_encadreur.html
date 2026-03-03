@@ -1,0 +1,137 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="page-heading contact-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-content">
+                    <h4>Detail Encadreur</h4>
+                    <!-- <h2>Restons en contact</h2> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="find-us">
+    <div class="container">
+        <div class="row">
+            <!-- Titre principal -->
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <h2>Informations sur l’encadreur</h2>
+                </div>
+            </div>
+
+            <!-- Informations auteur -->
+            <div class="col-md-8">
+                <div class="author-detail">
+                    <img src="{{ encadreur.ImageUrl }}" alt="{{ encadreur.nom }}" class="img-fluid rounded mb-3"
+                        style="max-height: 250px;">
+
+                    <h3> {{ encadreur.grade }} {{ encadreur.prenoms }} {{ encadreur.nom }}</h3>
+                    <p><strong>Email :</strong> {{ encadreur.email }}</p>
+                    <p><strong>Institution :</strong> {{ encadreur.institution }}</p>
+                    <p><strong>Spécialité :</strong> {{ encadreur.specialite }}</p>
+                    <p><strong>Parcours :</strong> {{ encadreur.specialite }} </p>
+
+                    <!-- Réseaux sociaux -->
+                    <div class="social-icons mt-3">
+                        <h5>Réseaux sociaux</h5>
+                        <ul class="list-inline">
+                            {% if encadreur.facebook %}
+                            <li class="list-inline-item"><a href="{{ encadreur.facebook }}"><i
+                                        class="fa fa-facebook"></i></a></li>
+                            {% endif %}
+                            {% if encadreur.twitter %}
+                            <li class="list-inline-item"><a href="{{ encadreur.twitter }}"><i
+                                        class="fa fa-twitter"></i></a></li>
+                            {% endif %}
+                            {% if encadreur.linkedin %}
+                            <li class="list-inline-item"><a href="{{ encadreur.linkedin }}"><i
+                                        class="fa fa-linkedin"></i></a></li>
+                            {% endif %}
+                            {% if encadreur.site_web %}
+                            <li class="list-inline-item"><a href="{{ encadreur.site_web }}"><i class="fa fa-globe"></i></a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin informations auteur -->
+
+            <!-- Les articles auxquels l’auteur a participé -->
+            <div class="col-md-4">
+                <div class="left-content">
+                    <h4>
+                        Publication des auteurs encadrés par {{ encadreur.prenoms }} {{ encadreur.nom }}
+                        <span class="badge badge-primary">{{ publications|length }}</span>
+                    </h4>
+
+                    <ul class="list-group mt-3">
+                        {% for publication in publications %}
+                        <li class="list-group-item">
+                            <a href="{% url 'portail_site:detail_publication' publication.slug %}">
+                                {{ publication.titre }}
+                            </a>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">Aucune publication disponible.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <!-- Fin articles auteur -->
+
+        </div>
+    </div>
+</div>
+
+<div class="happy-clients">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <h2>Partenaires de recherche</h2>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="owl-clients owl-carousel">
+                    <div class="client-item">
+                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="1">
+                    </div>
+
+                    <div class="client-item">
+                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="2">
+                    </div>
+
+                    <div class="client-item">
+                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="3">
+                    </div>
+
+                    <div class="client-item">
+                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="4">
+                    </div>
+
+                    <div class="client-item">
+                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="5">
+                    </div>
+
+                    <div class="client-item">
+                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="6">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}

@@ -1,0 +1,56 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Repondre au message</h4>
+            <ol class="breadcrumb pull-right">
+                <!-- Custom width modal -->
+                <!-- <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                    data-target="#accounts-modal">Ajouter une publication</button> -->
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Repondre au message de {{contact_message.nom_complet}} </h3>
+            </div>
+            <div class="panel-body">
+
+                <form action=" {% url 'contact_us:reponse_au_message_contact' %} " method="post" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <input type="text" name="message_id" value="{{contact_message.id}}" hidden>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Message</label>
+                            <div class="col-md-12">
+                                <textarea name="reponse_au_message" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                    </div> <br>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Repondre</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div> <!-- End Row -->
+{% endblock content %}

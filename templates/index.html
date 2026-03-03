@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head Start-->
+{% include "includes/head.html" %}
+
+<body>
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+    <!-- Header Start-->
+    {% include "includes/header.html" %}
+
+    <!-- Page Content -->
+    {% block content %}
+    <!-- Banner Starts Here -->
+    <div class="banner header-text">
+        <div class="owl-banner owl-carousel">
+            <div class="banner-item-01">
+                <div class="text-content">
+                    <h4>Publications indexées</h4>
+                    <h2>Nouvelles publications Scientifiques</h2>
+                </div>
+            </div>
+            <div class="banner-item-02">
+                <div class="text-content">
+                    <h4>Offre exceptionnelle</h4>
+                    <h2>Accès gratuit aux articles récemment indexés</h2>
+                </div>
+            </div>
+            <div class="banner-item-03">
+                <div class="text-content">
+                    <h4>Dernières publications</h4>
+                    <h2>Découvrez-les dès maintenant</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Banner Ends Here -->
+
+
+    <!-- Nouvvelles_publications -->
+    {% include "includes/les_publications.html" %}
+
+
+    <!-- A propos du portail -->
+    {% include "includes/a_propos_du_protail.html" %}
+
+
+    <div class="call-to-action">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="inner-content">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4>Creative &amp; Unique <em>Portail</em> Scientifique</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque corporis amet elite
+                                    author nulla.</p>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="#" class="filled-button">Purchase Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="inner-content">
+                        <p>Copyright &copy; 2025 Portail Scientifique Co., Ltd.
+
+                            - Design: <a rel="nofollow noopener" href="" target="_blank">CRICT</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% include "includes/foot.html" %}
+
+    {% block scripts %}
+
+
+    {% endblock scripts %}
+</body>
+
+</html>

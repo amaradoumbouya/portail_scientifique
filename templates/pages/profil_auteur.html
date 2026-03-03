@@ -1,0 +1,73 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="page-heading contact-heading header-text text-center py-5" style="background-color: #f5f5f5;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Image de profil centrée -->
+                <div class="mb-4">
+                    <img src="/chemin/vers/image_profil.jpg" alt="Photo de profil d'Amara DOUMBOUYA"
+                        class="rounded-circle shadow" style="width: 150px; height: 150px; object-fit: cover;">
+                </div>
+                <!-- Texte de bienvenue et nom -->
+                <div class="text-content">
+                    <h4 class="text-muted">Bienvenue</h4>
+                    <h2 class="fw-bold">{{user.prenoms}} {{user.nom}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Completez votre profil auteur avant de publier un article scientifique</h3> <br>
+            <form action="{% url "auteurs:profil_auteur" %}" method="post" enctype="multipart/form-data">
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <fieldset>
+                            <input name="subject" type="text" class="form-control" id="subject" placeholder=" Statut"
+                                required="">
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <fieldset>
+                            <input name="subject" type="text" class="form-control" id="subject" placeholder="Institution"
+                                required="">
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <fieldset>
+                            <input name="subject" type="text" class="form-control" id="subject" placeholder="Orcid"
+                                required="">
+                        </fieldset>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-12" hidden>
+                        <fieldset>
+                            <input name="subject" type="text" class="form-control"
+                                required="">
+                        </fieldset>
+                    </div>
+
+                </div> <br>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}

@@ -1,0 +1,112 @@
+{% load static %}
+
+<!-- jQuery  -->
+<script src="{% static 'back/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'back/assets/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'back/assets/js/modernizr.min.js' %}"></script>
+<script src="{% static 'back/assets/js/detect.js' %}"></script>
+<script src="{% static 'back/assets/js/fastclick.js' %}"></script>
+<script src="{% static 'back/assets/js/jquery.slimscroll.js' %}"></script>
+<script src="{% static 'back/assets/js/jquery.blockUI.js' %}"></script>
+<script src="{% static 'back/assets/js/waves.js' %}"></script>
+<script src="{% static 'back/assets/js/wow.min.js' %}"></script>
+<script src="{% static 'back/assets/js/jquery.nicescroll.js' %}"></script>
+<script src="{% static 'back/assets/js/jquery.scrollTo.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/jquery-sparkline/jquery.sparkline.min.js' %}"></script>
+
+
+<!-- Datatables-->
+<script src="{% static 'back/assets/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/dataTables.bootstrap.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/responsive.bootstrap.min.js' %}"></script>
+<script src="{% static 'back/assets/pages/dashborad.js' %}"></script>
+<script src="{% static 'back/assets/js/app.js' %}"></script>
+
+
+
+<!-- Datatables, Ajouter pour la table-->
+<script src="{% static 'back/assets/plugins/datatables/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/buttons.bootstrap.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/jszip.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/pdfmake.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/vfs_fonts.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/buttons.html5.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/buttons.print.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/dataTables.fixedHeader.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/dataTables.keyTable.min.js' %}"></script>
+<script src="{% static 'back/assets/plugins/datatables/dataTables.scroller.min.js' %}"></script>
+
+
+<!-- Datatable init js, Ajouter pour la table -->
+<script src="{% static 'back/assets/pages/datatables.init.js' %}"></script>
+
+
+{% if messages %}
+{% for message in messages %}
+{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+<script>
+    Swal.fire({
+        "title": 'Félicitation',
+        "text": '{{ message }}',
+        "icon": 'success'
+    });
+</script>
+{% endif %}
+{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+<script>
+    Swal.fire({
+        "title": 'Error message',
+        "text": '{{ message }}',
+        "icon": 'error'
+    });
+</script>
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+
+<script>
+    $('.delete-confirm').click(function (event) {
+        event.preventDefault();
+        var form = $(this).closest("form");
+        var name = $(this).data("name");
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-light'
+            },
+            buttonsStyling: true
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Etes-vous sûr ?',
+            text: "Voulez-vous suprimer cet element !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: 'Oui, supprimer !',
+            cancelButtonText: 'Non, annuler !',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+                swalWithBootstrapButtons.fire(
+                    'Supprimer !',
+                    'Suppression en cours...',
+                    'success'
+                )
+            } else if (
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Annuler',
+                    'Vous avez annulé la suppression de cet élement !',
+                    'error'
+                )
+            }
+        });
+    });
+</script>

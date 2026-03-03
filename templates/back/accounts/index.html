@@ -1,0 +1,236 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Administrateurs</h4>
+            <ol class="breadcrumb pull-right">
+                <!-- Custom width modal -->
+                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                    data-target="#accounts-modal">Ajouter un admin</button>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Start -->
+<div class="row">
+    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
+        <!-- sample modal content -->
+        <div id="accounts-modal" class="modal fade" tabindex="-1" role="dialog"
+            aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none">
+            <div class="modal-dialog" style="width:55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="custom-width-modalLabel">Formulaire d'ajout d'un admin</h4>
+                    </div>
+                    <form action="{% url 'accounts:index' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="modal-body">
+
+                            <div class="row">
+
+                                <div class="form-group col-md-6">
+                                    {{form.prenoms|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.nom|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.adresse|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.email|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.tel|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.sexe|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.role|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.photo|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.password1|as_crispy_field}}
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    {{form.password2|as_crispy_field}}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+                            <button type="button" class="btn btn-default waves-effect"
+                                data-dismiss="modal">Fermer</button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Liste Start -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Liste des Admins</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h3><small>Rechercher</small></h3>
+                        <form method="post" id="add_event_form">
+                            <input type="text" class="form-control" placeholder="Rechercher ici" />
+                        </form>
+
+                        <div class="list-group b-0 m-t-20">
+                            <a href="#" class="list-group-item b-0"><span
+                                    class="fa fa-circle text-info m-r-10"></span>Les administrateurs <b>(23)</b></a>
+                        </div>
+                    </div> <!-- end col -->
+
+                    <div class="col-sm-9">
+
+                        <div class="row">
+                            {% for cust in page_obj %}
+                            <div class="col-sm-4">
+                                <div class="panel">
+                                    <div class="panel-body user-card">
+                                        <div class="media-main">
+                                            <a class="pull-left" href="#">
+                                                <img class="thumb-lg img-circle" src="{{ cust.ImageUrl }}" alt="">
+                                            </a>
+                                            <div class="info">
+                                                <h4>{{ cust.prenoms }} {{ cust.nom }}</h4>
+                                                <p class="text-muted">Rôle : {{ cust.role }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <p class="text-muted info-text">Adresse : {{ cust.adresse }}</p>
+                                        <p class="text-muted info-text">Email : {{ cust.email }}</p>
+                                        <p class="text-muted info-text">Téléphone : {{ cust.tel }}</p>
+                                        <hr>
+                                        <ul class="social-links list-inline m-b-0">
+                                            <li><a href="#" data-original-title="Facebook"><i
+                                                        class="fa fa-facebook"></i></a></li>
+                                            <li><a href="#" data-original-title="Instagram"><i
+                                                        class="fa fa-instagram"></i></a></li>
+                                            <li>
+                                                <form action="{% url 'accounts:update_state' %}" method="post"
+                                                    style="display: inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="is_active" value="{{ cust.is_active }}">
+                                                    <input type="hidden" name="id_state" value="{{ cust.id }}">
+                                                    {% if cust.is_active %}
+                                                    <button class="btn btn-sm btn-primary" type="submit" title="Actif">
+                                                        <i class="ti-unlock"></i>
+                                                    </button>
+                                                    {% else %}
+                                                    <button class="btn btn-sm btn-warning" type="submit"
+                                                        title="Suspendu">
+                                                        <i class="ti-lock"></i>
+                                                    </button>
+                                                    {% endif %}
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'accounts:update' cust.slug %}"
+                                                    class="tooltips bg-success" title="Modifier">
+                                                    <i class="ti-pencil-alt"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form action="{% url 'accounts:delete' cust.slug %}" method="post"
+                                                    style="display:inline">
+                                                    {% csrf_token %}
+                                                    <button class="btn btn-sm btn-danger delete-confirm" type="submit"
+                                                        title="Supprimer">
+                                                        <i class="ti-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Pagination -->
+                        <div class="text-center">
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&laquo;</span></li>
+                                {% endif %}
+
+                                {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="active"><span>{{ num }}</span></li>
+                                {% else %}
+                                <li><a href="?page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                <li class="disabled"><span>&raquo;</span></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+
+
+                    </div> <!-- end col -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div> <!-- End Row -->
+
+{% endblock content %}
+
+{% block scripts %}
+<!-- Parsleyjs -->
+<script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('form').parsley();
+    });
+</script>
+
+{% endblock scripts %}

@@ -1,0 +1,101 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Messages</h4>
+            <ol class="breadcrumb pull-right">
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Liste Start -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Liste des Messages envoyés</h3>
+            </div>
+            <div class="panel-body">
+
+                <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Date d'emission</th>
+                            <th>Nom complet</th>
+                            <th>Email</th>
+                            <th>Objet</th>
+                            <th style='width:11%'>Statut</th>
+                            <th style='width:11%'>Action</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {% for message in list_message %}
+                        <tr>
+
+                            <td>{{forloop.counter}}</td>
+
+                            <td> {{message.created_at}} </td>
+
+                            <td> {{message.nom_complet}} </td>
+
+                            <td> {{message.email}} </td>
+
+                            <td> {{message.objectif}} </td>
+
+                            <td>
+                                {% if message.is_read %}
+                                <span style="color:green;">✔ Répondu</span>
+                                {% else %}
+                                <span style="color:orange;">⏳ En attente</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if not message.is_read %}
+                                 <a href=" {% url 'contact_us:repondre_au_message' message.slug %} " class="btn btn-success btn-sm ">Repondre</a>&nbsp;&nbsp;&nbsp;
+                                 {% endif %}
+                                <a href="{% url 'contact_us:detail' message.slug %}" class="btn btn-info btn-sm"><i class="ti-eye"></i></a>&nbsp;&nbsp;&nbsp;
+                                <form action="{% url 'contact_us:delete' message.slug %}" method="post"
+                                    style="display: inline" data-bs-placement="top" data-bs-toggle="tooltip"
+                                    title="Supprimer">
+                                    {% csrf_token %}
+                                    <button class="btn  btn-sm btn-danger delete-confirm" type="submit">
+                                        <i class="ti-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div> <!-- End Row -->
+
+{% endblock content %}
+
+{% block scripts %}
+<!-- Parsleyjs -->
+<script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('form').parsley();
+    });
+</script>
+
+{% endblock scripts %}

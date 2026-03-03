@@ -1,0 +1,80 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Publications</h4>
+            <ol class="breadcrumb pull-right">
+                {% if user.is_authenticated and user.role == 'admin' %}
+                <a href="{% url 'publications:index' %}" class="btn btn-info ">Retour à la liste</a>
+                {% else %}
+                <a href="{% url 'portail_site:dashboard' %}" class="btn btn-info ">Retour à la liste</a>
+                
+                {% endif %}
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Liste Start -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Detail de la publication</h3>
+            </div>
+            <div class="panel-body">
+                <h2>{{ publication.titre }}</h2>
+                <p><strong>Auteur(s) :</strong><br>
+                    {% for auteur in publication.auteurs.all %}
+                    {{ auteur.prenoms }} {{ auteur.nom }}<br>
+                    {% empty %}
+                    Aucun auteur
+                    {% endfor %}
+                </p>
+                <p><strong>Encadreur(s) :</strong><br>
+                    {% for encadreur in publication.encadreurs.all %}
+                    {{ encadreur.prenoms }} {{ encadreur.nom }}<br>
+                    {% empty %}
+                    Aucun encadreur
+                    {% endfor %}
+                </p>
+                <p><strong>Domaine :</strong> {{ publication.domaine }}</p>
+                <p><strong>Résumé :</strong> {{ publication.resume|linebreaksbr }}</p>
+                <p><strong>Mots-clés :</strong> {{ publication.mots_cles }}</p>
+                <p><strong>Date :</strong> {{ publication.date_publication }}</p>
+                <p><strong>Langue :</strong> {{ publication.langue }}</p>
+                <p><strong>Statut :</strong>
+                    {% if publication.statut_indexation == 'Indexée' %}
+                    <span style="color:green;">✔ Indexée</span>
+                    {% elif publication.statut_indexation == 'Rejetée' %}
+                    <span style="color:red;">✘ Rejetée</span>
+                <p><strong>Motif du rejet :</strong>{{ publication.motif_rejet }}</p>
+                {% else %}
+                <span style="color:orange;">⏳ En attente</span>
+                <p><strong>Motif du rejet :</strong>{{ publication.motif_rejet }}</p>
+                {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div> <!-- End Row -->
+
+{% endblock content %}
+
+{% block scripts %}
+<!-- Parsleyjs -->
+<script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('form').parsley();
+    });
+</script>
+
+{% endblock scripts %}

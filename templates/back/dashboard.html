@@ -1,0 +1,513 @@
+{% load static %}
+{% load humanize_time %}
+<!DOCTYPE html>
+<html>
+<!-- Head Start -->
+{% include "back/includes/head.html" %}
+
+<body class="fixed-left">
+
+    <!-- Begin page -->
+    <div id="wrapper">
+
+        <!-- Top Bar Start -->
+        {% include "back/includes/topbar.html" %}
+
+        <!-- Left Sidebar Start -->
+        {% include "back/includes/sidebar.html" %}
+
+        <!-- Start right Content here -->
+
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="container">
+
+                    {% block content %}
+
+
+                    {% if user.is_authenticated and user.role == 'admin' %}
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="page-header-title">
+                                <h4 class="pull-left page-title">Tableau de bord</h4>
+                                <ol class="breadcrumb pull-right">
+                                    <li><a href="#">CRICT</a></li>
+                                    <li class="active">Tableau de bord</li>
+                                </ol>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistique de la publication -->
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Publications</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_publications}} </b></h3>
+                                    <p class="text-muted"><b>0%</b> {{ time_since_last_publication|default:"Aucune" }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Auteurs</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_auteurs}} </b></h3>
+                                    <p class="text-muted"><b>00%</b> {{ time_since_last_auteur|default:"Aucune" }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Encadreurs</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_encadreurs}} </b></h3>
+                                    <p class="text-muted"><b>00%</b> {{ time_since_last_encadreur|default:"Aucune" }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Institutions</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_institutions}} </b></h3>
+                                    <p class="text-muted"><b>00%</b> {{ time_since_last_institution|default:"Aucune" }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Documents</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b>{{nb_publications}}</b></h3>
+                                    <p class="text-muted"><b>00%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4 class="m-t-0">Documents</h4>
+                                    <ul class="list-inline m-t-30 widget-chart text-center">
+                                        <li>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>5248</b></h4>
+                                            <h5 class="text-muted m-b-0">jour</h5>
+                                        </li>
+                                        <li>
+                                            <i class="mdi mdi-arrow-down-bold-circle text-danger"></i>
+                                            <h4 class=""><b>321</b></h4>
+                                            <h5 class="text-muted m-b-0">Semaine</h5>
+                                        </li>
+                                        <li>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>964</b></h4>
+                                            <h5 class="text-muted m-b-0">Mois</h5>
+                                        </li>
+                                    </ul>
+                                    <div id="sparkline1" style="margin: 0 -21px -22px -22px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4 class="m-t-0">Email Envoyé</h4>
+                                    <ul class="list-inline m-t-30 widget-chart text-center">
+                                        <li>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>3654</b></h4>
+                                            <h5 class="text-muted m-b-0">Jour</h5>
+                                        </li>
+                                        <li>
+                                            <i class="mdi mdi-arrow-down-bold-circle text-danger"></i>
+                                            <h4 class=""><b>954</b></h4>
+                                            <h5 class="text-muted m-b-0">Semaine</h5>
+                                        </li>
+                                        <li>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>8462</b></h4>
+                                            <h5 class="text-muted m-b-0">Mois</h5>
+                                        </li>
+                                    </ul>
+                                    <div id="sparkline2" style="margin: 0 -21px -22px -22px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <h4 class="m-t-0">Souscription mensuel</h4>
+                                    <ul class="list-inline m-t-30 widget-chart text-center">
+                                        <li>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>3256</b></h4>
+                                            <h5 class="text-muted m-b-0">Jour</h5>
+                                        </li>
+                                        <li>
+                                            <i class="mdi mdi-arrow-down-bold-circle text-danger"></i>
+                                            <h4 class=""><b>785</b></h4>
+                                            <h5 class="text-muted m-b-0">Semaine</h5>
+                                        </li>
+                                        <li>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>1546</b></h4>
+                                            <h5 class="text-muted m-b-0">Mois</h5>
+                                        </li>
+                                    </ul>
+                                    <div id="sparkline3" style="margin: 0 -21px -22px -22px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Liste des publications -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Liste des publications récentes</h3>
+                                </div>
+                                
+                                <div class="panel-body">
+                                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Photo</th>
+                                                <th>Titre</th>
+                                                <th>Auteur</th>
+                                                <th>Encadreur</th>
+                                                <th>Inst Contributrice</th>
+                                                <th>Statut indexation</th>
+                                                <th>Publié</th>
+                                                <th style='width:11%'>Action</th>
+                                            </tr>
+                                        </thead>
+
+
+                                        <tbody>
+                                            {% for pub in publications %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>
+                                                    <img height="100" width="100" src=" {{ pub.ImageUrl }} " alt="">
+                                                </td>
+                                                <td>{{pub.titre}}</td>
+                                                <td>
+                                                    {% for auteur in pub.auteurs.all %}
+                                                    {{ auteur.prenoms }} {{ auteur.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% empty %}
+                                                    Aucun auteur
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% for encadreur in pub.encadreurs.all %}
+                                                    {{ encadreur.prenoms }} {{ encadreur.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% empty %}
+                                                    Aucun encadreur
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% for institution in pub.institutions_contributrices.all %}
+                                                    {{ institution.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% empty %}
+                                                    Aucune institution
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% if pub.statut_indexation == 'Indexée' %}
+                                                    <span style="color:green;">✔ Indexée</span>
+                                                    {% elif pub.statut_indexation == 'Rejetée' %}
+                                                    <span style="color:red;">✘ Rejetée</span>
+                                                    {% else %}
+                                                    <span style="color:orange;">⏳ En attente</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'publications:statut_publication' %}"
+                                                        method="post">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="statut_publication"
+                                                            value="{{pub.statut_publication}}" hidden>
+                                                        <input type="text" name="idpublier" value="{{pub.id}}" hidden>
+                                                        {% if pub.statut_publication and pub.statut_indexation == 'Indexée' %}
+                                                        <button type="submit"
+                                                            class="btn btn-primary btn-sm">OUI</button>
+                                                        {% else %}
+                                                        <button type="submit" class="btn btn-danger btn-sm">NON</button>
+                                                        {% endif %}
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'publications:detail' pub.slug %}"
+                                                        class="btn btn-info btn-sm"><i
+                                                            class="ti-eye"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <a href="{% url 'publications:update' pub.slug %}"
+                                                        class="btn btn-success btn-sm "><i
+                                                            class="ti-pencil-alt"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <form action="{% url 'publications:delete' pub.slug %}"
+                                                        method="post" style="display: inline" data-bs-placement="top"
+                                                        data-bs-toggle="tooltip" title="Supprimer">
+                                                        {% csrf_token %}
+                                                        <button class="btn  btn-sm btn-danger delete-confirm"
+                                                            type="submit">
+                                                            <i class="ti-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="page-header-title">
+                                <h4 class="pull-left page-title">Tableau de bord</h4>
+                                <ol class="breadcrumb pull-right">
+                                    <li><a href="#">CRICT</a></li>
+                                    <li class="active">Tableau de bord</li>
+                                </ol>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistique de la publication -->
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Publications</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_publications}} </b></h3>
+                                    <p class="text-muted"><b>00%</b> {{time_since_last_publication|default:"Aucune"}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Likes</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_likes}} </b></h3>
+                                    <p class="text-muted"><b>00%</b> {{ time_since_last_like|default:"Aucun" }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Commentaires</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_commentaires}} </b></h3>
+                                    <p class="text-muted"><b>00%</b> {{time_since_last_commentaire|default:"Aucun"}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Téléchargements</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b> {{nb_telechargements}} </b></h3>
+                                    <p class="text-muted"><b>00%</b> {{time_since_last_telechargement|default:"Aucun"}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="panel panel-primary text-center">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Partages</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <h3 class=""><b>00</b></h3>
+                                    <p class="text-muted"><b>00%</b> 00:00:00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Liste des publications -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Liste mes publications</h3>
+                                </div>
+                                <div class="panel-body">
+
+                                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Photo</th>
+                                                <th>Titre</th>
+                                                <th>Auteur</th>
+                                                <th>Encadreur</th>
+                                                <th>Inst Contributrice</th>
+                                                <th>Statut indexation</th>
+                                                <th>Publié</th>
+                                                <th style='width:11%'>Action</th>
+                                            </tr>
+                                        </thead>
+
+
+                                        <tbody>
+                                            {% for pub in publications %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>
+                                                    <img height="100" width="100" src=" {{ pub.ImageUrl }} " alt="">
+                                                </td>
+                                                <td>{{pub.titre}}</td>
+                                                <td>
+                                                    {% for auteur in pub.auteurs.all %}
+                                                    {{ auteur.prenoms }} {{ auteur.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% empty %}
+                                                    Aucun auteur
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% for encadreur in pub.encadreurs.all %}
+                                                    {{ encadreur.prenoms }} {{ encadreur.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% empty %}
+                                                    Aucun encadreur
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% for institution in pub.institutions_contributrices.all %}
+                                                    {{ institution.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% empty %}
+                                                    Aucune institution
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% if pub.statut_indexation == 'Indexée' %}
+                                                    <span style="color:green;">✔ Indexée</span>
+                                                    {% elif pub.statut_indexation == 'Rejetée' %}
+                                                    <span style="color:red;">✘ Rejetée</span>
+                                                    {% else %}
+                                                    <span style="color:orange;">⏳ En attente</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'publications:statut_publication' %}"
+                                                        method="post">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="statut_publication"
+                                                            value="{{pub.statut_publication}}" hidden>
+                                                        <input type="text" name="idpublier" value="{{pub.id}}" hidden>
+                                                        {% if pub.statut_publication and pub.statut_indexation == 'Indexée' %}
+                                                        <button type="submit"
+                                                            class="btn btn-primary btn-sm">OUI</button>
+                                                        {% else %}
+                                                        <button type="submit" class="btn btn-danger btn-sm">NON</button>
+                                                        {% endif %}
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'publications:detail' pub.slug %}"
+                                                        class="btn btn-info btn-sm"><i
+                                                            class="ti-eye"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <a href="{% url 'publications:update' pub.slug %}"
+                                                        class="btn btn-success btn-sm "><i
+                                                            class="ti-pencil-alt"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <form action="{% url 'publications:delete' pub.slug %}"
+                                                        method="post" style="display: inline" data-bs-placement="top"
+                                                        data-bs-toggle="tooltip" title="Supprimer">
+                                                        {% csrf_token %}
+                                                        <button class="btn  btn-sm btn-danger delete-confirm"
+                                                            type="submit">
+                                                            <i class="ti-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endif %}
+
+                    {% endblock content %}
+
+                </div> <!-- container -->
+
+            </div> <!-- content -->
+
+            <footer class="footer">
+                2025 - 2026 © CRICT.
+            </footer>
+
+        </div>
+        <!-- End Right content here -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <!-- Foot Start -->
+    {% include "back/includes/foot.html" %}
+    {% block scripts %}
+
+
+    {% endblock scripts %}
+</body>
+
+</html>
