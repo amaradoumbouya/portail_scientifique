@@ -39,11 +39,11 @@
                             <div class="row">
 
                                 <div class="form-group col-md-6">
-                                    {{form.nom|as_crispy_field}}
+                                    {{form.nom_institution|as_crispy_field}}
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    {{form.type|as_crispy_field}}
+                                    {{form.type_institution|as_crispy_field}}
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -55,7 +55,7 @@
                                 </div>
 
                                 <div class="form-group col-md-12">
-                                    {{form.site_web|as_crispy_field}}
+                                    {{form.site_web_institution|as_crispy_field}}
                                 </div>
 
                             </div>
@@ -103,11 +103,11 @@
                         {% for inst in institutions %}
                         <tr>
                             <td>{{forloop.counter}}</td>
-                            <td>{{inst.nom}}</td>
-                            <td>{{inst.type}}</td>
+                            <td>{{inst.nom_institution}}</td>
+                            <td>{{inst.type_institution}}</td>
                             <td>{{inst.ville}}</td>
                             <td>{{inst.pays}}</td>
-                            <td>{{inst.site_web}}</td>
+                            <td>{{inst.site_web_institution}}</td>
                             <td>
                                 <a href="" class="btn btn-info btn-sm"><i class="ti-eye"></i></a>&nbsp;&nbsp;&nbsp;
                                 <a href="{% url 'institutions:update' inst.slug %}" class="btn btn-primary btn-sm "><i

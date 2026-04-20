@@ -1,0 +1,15 @@
+# Fichiers sensibles
+.env
+db.sqlite3
+
+# Fichiers locaux
+settings_local.py
+settings.py
+
+# Dossiers
+media/
+node_modules/
+
+# Fichiers Python
+__pycache__/
+*.pyc

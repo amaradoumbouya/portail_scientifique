@@ -127,7 +127,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR/'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media/'
-LOGIN_REDIRECT_URL = 'portail_site:dashboard'
+LOGIN_REDIRECT_URL = 'accounts:profil_user'
 LOGOUT_REDIRECT_URL ='portail_site:connexion'
 AUTH_USER_MODEL = 'accounts.CustumerUser'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
@@ -137,16 +137,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Paramètres SMTP pour Gmail 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'           # Fournisseur : Gmail
-# EMAIL_PORT = 587                        # Port SMTP sécurisé (TLS)
-# EMAIL_USE_TLS = True                    # Utilisation du chiffrement TLS
-# EMAIL_HOST_USER = 'amarambaloudoumbouya@gmail.com'  # Ton adresse Gmail
-# EMAIL_HOST_PASSWORD = 'bzsxwrqkudgudobu' # ⚠️ Mot de passe spécifique (voir plus bas)
-# DEFAULT_FROM_EMAIL = 'amarambaloudoumbouya@gmail.com'
-
 
 # CONFIGURATION MAILHOG
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

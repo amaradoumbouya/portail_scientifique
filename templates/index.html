@@ -1,99 +1,855 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<!-- Head Start-->
-{% include "includes/head.html" %}
+<html lang="zxx">
+
+<head>
+    {% include "includes/head.html" %}
+
+    {% block title %}
+    <title>Accueil - Portail Scientifique</title>
+    {% endblock title %}
+    
+
+    {% block style %}
+        <style>
+        /* Barre de recherche principale */
+        .search-bar-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .search-input-wrapper:focus-within {
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 18px 25px;
+            font-size: 16px;
+            background: transparent;
+            color: #333;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: scale(1.05);
+        }
+
+        /* Filtres de recherche */
+        .search-filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            cursor: pointer;
+        }
+
+        .filter-tag input {
+            display: none;
+        }
+
+        .filter-tag span {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tag input:checked+span {
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .filter-tag:hover span {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .search-input {
+                padding: 15px 20px;
+                font-size: 14px;
+            }
+
+            .search-btn {
+                padding: 12px 20px;
+            }
+
+            .filter-tag span {
+                padding: 6px 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+    
+    {% endblock style %}
+
+</head>
 
 <body>
-    <!-- ***** Preloader Start ***** -->
-    <div id="preloader">
-        <div class="jumper">
-            <div></div>
-            <div></div>
-            <div></div>
+    <!-- Preloader -->
+    <div id="loading">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+            </div>
         </div>
     </div>
-    <!-- ***** Preloader End ***** -->
-    <!-- Header Start-->
-    {% include "includes/header.html" %}
+    <!-- End Preloader -->
 
-    <!-- Page Content -->
+    <!-- Start Navbar Area -->
+     {% include "includes/navbar.html" %}
+
+    <!-- End Navbar Area -->
     {% block content %}
-    <!-- Banner Starts Here -->
-    <div class="banner header-text">
-        <div class="owl-banner owl-carousel">
-            <div class="banner-item-01">
-                <div class="text-content">
-                    <h4>Publications indexées</h4>
-                    <h2>Nouvelles publications Scientifiques</h2>
-                </div>
-            </div>
-            <div class="banner-item-02">
-                <div class="text-content">
-                    <h4>Offre exceptionnelle</h4>
-                    <h2>Accès gratuit aux articles récemment indexés</h2>
-                </div>
-            </div>
-            <div class="banner-item-03">
-                <div class="text-content">
-                    <h4>Dernières publications</h4>
-                    <h2>Découvrez-les dès maintenant</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Banner Ends Here -->
+    <!-- Slider  -->
+     {% include "includes/sliders.html" %}
+    <!-- End Slider  -->
 
-
-    <!-- Nouvvelles_publications -->
-    {% include "includes/les_publications.html" %}
-
-
-    <!-- A propos du portail -->
-    {% include "includes/a_propos_du_protail.html" %}
-
-
-    <div class="call-to-action">
+    <!--  statistiques  -->
+    <section class="service-area">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="inner-content">
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-service text-center">
+                        <div class="service-icon">
+                            <i class="flaticon-book"></i>
+                        </div>
+                        <div class="service-content">
+                            <h2>Publications</h2>
+                            <p>+1 250 articles publiés</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-service text-center">
+                        <div class="service-icon">
+                            <i class="flaticon-graduation-cap"></i>
+                        </div>
+                        <div class="service-content">
+                            <h2>Thèses & Mémoires</h2>
+                            <p>+320 thèses soutenues</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-service text-center sst-10">
+                        <div class="service-icon">
+                            <i class="flaticon-user"></i>
+                        </div>
+                        <div class="service-content">
+                            <h2>Auteurs & Chercheurs</h2>
+                            <p>+540 chercheurs inscrits</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-service text-center sst-10">
+                        <div class="service-icon">
+                            <i class="flaticon-folder"></i>
+                        </div>
+                        <div class="service-content">
+                            <h2>Institutions</h2>
+                            <p>+25 institutions partenaires</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- End  statistiques  -->
+
+    <div class="shape-ellips">
+        <img src="{% static 'front/assets/images/shape.png' %}" alt="shape" />
+    </div>
+
+    <!-- Publications récentes  -->
+
+    <section class="home-ragular-course pb-100">
+        <div class="container">
+            <div class="section-tittle text-center">
+                <h2>Recherches Récentes</h2>
+                <p>
+                    Accédez aux dernières publications scientifiques et innovations académiques.
+                </p>
+            </div>
+
+            <div class="row">
+
+                <!-- Publication 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-ragular-course">
+                        <div class="course-img">
+                            <img src="{% static 'front/assets/images/courses/publication_1.png' %}" alt="publication" />
+                            <h2>Intelligence Artificielle</h2>
+                        </div>
+                        <div class="course-content">
+                            <p>
+                                Étude sur l’utilisation du traitement automatique du langage pour l’indexation des
+                                publications scientifiques.
+                            </p>
+                            <a href="#" class="border-btn">Lire l’article</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Publication 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-ragular-course">
+                        <div class="course-img">
+                            <img src="{% static 'front/assets/images/courses/publication_2.png' %}" alt="publication" />
+                            <h2>Systèmes d’Information</h2>
+                        </div>
+                        <div class="course-content">
+                            <p>
+                                Conception d’un portail intelligent pour la gestion et la diffusion des publications
+                                scientifiques.
+                            </p>
+                            <a href="#" class="border-btn">Lire l’article</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Publication 3 -->
+                <div class="col-lg-4 col-md-6 sst-10">
+                    <div class="single-ragular-course">
+                        <div class="course-img">
+                            <img src="{% static 'front/assets/images/courses/publication_3.png' %}" alt="publication" />
+                            <h2>Data Science</h2>
+                        </div>
+                        <div class="course-content">
+                            <p>
+                                Analyse des données scientifiques pour améliorer la visibilité et l’impact des
+                                recherches académiques.
+                            </p>
+                            <a href="#" class="border-btn">Lire l’article</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- End Publications récentes  -->
+
+    <!-- Pourquoi choisir le portail scientifique ? -->
+    <section class="choose-area">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-lg-6 ps-0">
+                    <div class="home-choose-img">
+                        <img src="{% static 'front/assets/images/science.png' %}" alt="choose" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 home-choose">
+                    <div class="home-choose-content">
+                        <div class="section-tittle">
+                            <h2>Pourquoi choisir le portail scientifique ?</h2>
+                            <p>
+                                La plateforme offre un environnement moderne pour la gestion, la diffusion et
+                                l’indexation
+                                des publications scientifiques. Elle facilite la collaboration entre chercheurs et
+                                valorise
+                                la recherche académique.
+                            </p>
+                        </div>
+
                         <div class="row">
-                            <div class="col-md-8">
-                                <h4>Creative &amp; Unique <em>Portail</em> Scientifique</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque corporis amet elite
-                                    author nulla.</p>
+                            <div class="col-lg-4 col-sm-12 col-md-5">
+                                <ul class="choose-list-left">
+                                    <li><i class="flaticon-check-mark"></i>Publications validées</li>
+                                    <li><i class="flaticon-check-mark"></i>Interface intuitive</li>
+                                    <li><i class="flaticon-check-mark"></i>Accès rapide aux recherches</li>
+                                    <li><i class="flaticon-check-mark"></i>Collaboration académique</li>
+                                    <li><i class="flaticon-check-mark"></i>Sécurité des données</li>
+                                </ul>
                             </div>
-                            <div class="col-md-4">
-                                <a href="#" class="filled-button">Purchase Now</a>
+
+                            <div class="col-lg-8 col-sm-12 col-md-7">
+                                <div class="choose-list-home">
+                                    <ul>
+                                        <li><i class="flaticon-check-mark"></i>Indexation automatique intelligente</li>
+                                        <li><i class="flaticon-check-mark"></i>Gestion des auteurs et encadreurs</li>
+                                        <li><i class="flaticon-check-mark"></i>Support multi-domaines scientifiques</li>
+                                        <li><i class="flaticon-check-mark"></i>Visibilité des travaux de recherche</li>
+                                        <li><i class="flaticon-check-mark"></i>Plateforme évolutive et moderne</li>
+                                    </ul>
+                                </div>
                             </div>
+
+                            <a href="#" class="box-btn">En savoir plus</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+    <!-- End Pourquoi choisir le portail scientifique ? -->
 
-    {% endblock content %}
-
-    <footer>
-        <div class="container">
+    <!-- Inscription  -->
+    <section class="home-admission">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="inner-content">
-                        <p>Copyright &copy; 2025 Portail Scientifique Co., Ltd.
+                <div class="col-lg-12">
+                    <div class="single-addmission">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="admission-circle">
+                                    <h2>Soumission <span> ouverte</span></h2>
 
-                            - Design: <a rel="nofollow noopener" href="" target="_blank">CRICT</a></p>
+                                    <div class="admission-shape1">
+                                        <img src="{% static 'front/assets/images/admission/shape1.png' %}"
+                                            alt="shape" />
+                                    </div>
+                                    <div class="admission-shape2">
+                                        <img src="{% static 'front/assets/images/admission/shape2.png' %}"
+                                            alt="shape" />
+                                    </div>
+                                    <div class="admission-shape3">
+                                        <img src="{% static 'front/assets/images/admission/shape3.png' %}"
+                                            alt="shape" />
+                                    </div>
+                                    <div class="admission-shape4">
+                                        <img src="{% static 'front/assets/images/admission/shape4.png' %}"
+                                            alt="shape" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-8 col-md-7">
+                                <div class="admission-content">
+                                    <h2>Soumettez vos publications scientifiques</h2>
+                                    <p>
+                                        Les chercheurs, enseignants et étudiants sont invités à soumettre leurs travaux.
+                                        Date limite de soumission : <strong>30 Mars 2026</strong>. Temps restant :
+                                    </p>
+
+                                    <ul class="admission-list">
+                                        <li>
+                                            <p id="days">21</p>
+                                            <span>Jours</span>
+                                        </li>
+                                        <li>
+                                            <p id="hours">15</p>
+                                            <span>Heures</span>
+                                        </li>
+                                        <li>
+                                            <p id="minutes">10</p>
+                                            <span>Minutes</span>
+                                        </li>
+                                        <li>
+                                            <p id="seconds">50</p>
+                                            <span>Secondes</span>
+                                        </li>
+                                    </ul>
+
+                                    <a href="#" class="box-btn">Soumettre maintenant</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <span class="loon">
+                            <img src="{% static 'front/assets/images/admission/shape5.png' %}" alt="shape" />
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
-    </footer>
+    </section>
+    <!-- End Inscription  -->
 
+    <!-- Special Course -->
+    <section class="home-special-course">
+        <div class="container-fluid">
+            <div class="section-tittle text-center">
+                <h2>Autres Publications</h2>
+                <p>
+                    Découvrez d’autres travaux scientifiques récents issus de différents domaines de recherche.
+                </p>
+            </div>
+
+            <div class="home-course-slider owl-carousel owl-theme">
+
+                <div class="single-home-special-course">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_1.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>IA & Traitement du langage</h2>
+                            <p>
+                                Étude sur l’utilisation du NLP pour l’analyse et l’indexation des documents
+                                scientifiques.
+                            </p>
+                            <a href="#" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-home-special-course">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_2.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>Systèmes d’Information</h2>
+                            <p>
+                                Conception de plateformes intelligentes pour la gestion des données scientifiques.
+                            </p>
+                            <a href="#" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-home-special-course">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_3.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>Data Science</h2>
+                            <p>
+                                Analyse des données de recherche pour améliorer la visibilité scientifique.
+                            </p>
+                            <a href="#" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-home-special-course">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_4.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>Innovation Académique</h2>
+                            <p>
+                                Nouvelles approches pour la diffusion et la valorisation des travaux scientifiques.
+                            </p>
+                            <a href="#" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- End Special Course -->
+
+    <!-- Evenements Slider  -->
+    <section class="course-slider-area">
+        <div class="container">
+            <div class="course-slider owl-carousel owl-theme">
+
+                <!-- Event 1 -->
+                <div class="row align-items-center">
+                    <div class="col-lg-5 col-md-5">
+                        <div class="course-slider-img">
+                            <img src="{% static 'front/assets/images/courses/conference_1.png' %}" alt="event" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 col-md-7">
+                        <div class="course-slider-content">
+                            <h2>Conférence Scientifique – 01 Avril 2026</h2>
+                            <p>
+                                Participez à une conférence dédiée aux avancées en intelligence artificielle et en
+                                science des données.
+                                Des chercheurs et experts partageront leurs travaux et résultats récents.
+                            </p>
+
+                            <div class="course-slider-btn">
+                                <a href="#" class="box-btn">S’inscrire</a>
+                                <a href="#" class="border-btn">Voir les détails</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="row align-items-center">
+                    <div class="col-lg-5 col-md-5">
+                        <div class="course-slider-img">
+                            <img src="{% static 'front/assets/images/courses/conference_2.png' %}" alt="event" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 col-md-7">
+                        <div class="course-slider-content">
+                            <h2>Atelier de Recherche – 01 Avril 2026</h2>
+                            <p>
+                                Atelier pratique sur les systèmes d’information et l’indexation automatique des
+                                publications scientifiques.
+                                Idéal pour chercheurs et doctorants.
+                            </p>
+
+                            <div class="course-slider-btn">
+                                <a href="#" class="box-btn">Participer</a>
+                                <a href="#" class="border-btn">Voir plus d’événements</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- End Evenements Slider -->
+
+    <span class="left-shape">
+        <img src="{% static 'front/assets/images/left-shape.png' %}" alt="shape" />
+    </span>
+
+    <!-- Actualités  -->
+    <section class="home-news pb-100 pt-100">
+        <div class="container">
+
+            <div class="section-tittle text-center">
+                <h2>Actualités Scientifiques</h2>
+                <p>
+                    Découvrez les dernières informations, publications et avancées issues de la communauté scientifique.
+                </p>
+            </div>
+
+            <div class="row">
+
+                <!-- News 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-home-news">
+                        <a href="">
+                            <img src="{% static 'front/assets/images/news/home_2.png' %}" alt="news" />
+                        </a>
+
+                        <div class="single-home-content">
+                            <h2>Avancées en Intelligence Artificielle</h2>
+                            <p class="calender">
+                                <i class="flaticon-calendar"></i> 01 Avril, 2026
+                            </p>
+                            <p>
+                                Les nouvelles recherches montrent des progrès significatifs dans le traitement
+                                automatique du langage naturel.
+                            </p>
+                            <a href="" class="line-bnt">Lire plus <i class="flaticon-next"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-home-news">
+                        <a href="">
+                            <img src="{% static 'front/assets/images/news/home_3.png' %}" alt="news" />
+                        </a>
+
+                        <div class="single-home-content">
+                            <h2>Top Chercheurs 2026</h2>
+                            <p class="calender">
+                                <i class="flaticon-calendar"></i> 01 Avril, 2026
+                            </p>
+                            <p>
+                                Mise en lumière des chercheurs ayant contribué aux publications les plus influentes de
+                                l’année.
+                            </p>
+                            <a href="" class="line-bnt">Lire plus <i class="flaticon-next"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News 3 -->
+                <div class="col-lg-4 col-md-6 sst-10">
+                    <div class="single-home-news">
+                        <a href="">
+                            <img src="{% static 'front/assets/images/news/science.png' %}" alt="news" />
+                        </a>
+
+                        <div class="single-home-content">
+                            <h2>Recherche en Santé Publique</h2>
+                            <p class="calender">
+                                <i class="flaticon-calendar"></i> 01 Avril, 2026
+                            </p>
+                            <p>
+                                Études récentes sur les maladies virales et les stratégies de prévention en santé
+                                publique.
+                            </p>
+                            <a href="" class="line-bnt">Lire plus <i class="flaticon-next"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- End Actualités -->
+
+    <!-- Chercheurs et Contributeurs -->
+    <section class="home-teachers-area">
+        <div class="container">
+
+            <div class="section-tittle text-center">
+                <h2>Nos Chercheurs et Contributeurs</h2>
+                <p>
+                    Découvrez les experts, chercheurs et encadreurs qui contribuent à la production et à la diffusion
+                    des connaissances scientifiques.
+                </p>
+            </div>
+
+            <div class="row">
+
+                <!-- Chercheur 1 -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-home-teacher">
+
+                        <div class="teacher-img">
+                            <a href="#">
+                                <img src="{% static 'front/assets/images/teachers/img5.png' %}" alt="chercheur" />
+                            </a>
+                        </div>
+
+                        <div class="teachers-content">
+                            <h2>Dr. Amara CAMARA</h2>
+                            <p>Chercheur en Intelligence Artificielle</p>
+                        </div>
+
+                        <div class="teacher-social">
+                            <ul>
+                                <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                                <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                                <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                                <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Chercheur 2 -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-home-teacher">
+
+                        <div class="teacher-img">
+                            <a href="#">
+                                <img src="{% static 'front/assets/images/teachers/img2.png' %}" alt="chercheur" />
+                            </a>
+                        </div>
+
+                        <div class="teachers-content">
+                            <h2>Pr. Oumou Younoussa BAH</h2>
+                            <p>Spécialiste en Santé Publique</p>
+                        </div>
+
+                        <div class="teacher-social">
+                            <ul>
+                                <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                                <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                                <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                                <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Chercheur 3 -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-home-teacher">
+
+                        <div class="teacher-img">
+                            <a href="#">
+                                <img src="{% static 'front/assets/images/teachers/img11.png' %}" alt="chercheur" />
+                            </a>
+                        </div>
+
+                        <div class="teachers-content">
+                            <h2>Dr. COSSI </h2>
+                            <p>Chercheur en Cybersécurité</p>
+                        </div>
+
+                        <div class="teacher-social">
+                            <ul>
+                                <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                                <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                                <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                                <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Chercheur 4 -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-home-teacher">
+
+                        <div class="teacher-img">
+                            <a href="#">
+                                <img src="{% static 'front/assets/images/teachers/img5.png' %}" alt="chercheur" />
+                            </a>
+                        </div>
+
+                        <div class="teachers-content">
+                            <h2>Dr. Babou DIONE</h2>
+                            <p>Chercheur en télécommunications</p>
+                        </div>
+
+                        <div class="teacher-social">
+                            <ul>
+                                <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                                <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                                <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                                <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- End Chercheurs et Contributeurs -->
+
+    {% endblock content %}
+    <!-- Footer Area -->
+    <div class="footer-area">
+        <div class="container">
+            <div class="row">
+
+                <!-- Logo + description -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-left">
+                        <a href="index.html" class="logo">
+                            <img src="{% static 'front/assets/images/logo2.png' %}" alt="logo" />
+                        </a>
+
+                        <p>
+                            Plateforme dédiée à la publication, l’indexation et la diffusion des travaux scientifiques.
+                            Elle favorise la collaboration entre chercheurs et la valorisation du savoir académique.
+                        </p>
+
+                        <ul class="footer-social">
+                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                            <li><a href="#"><i class="flaticon-google-plus"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Portail -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-content fml-25">
+                        <h2>Portail Scientifique</h2>
+                        <ul>
+                            <li><a href="#"><i class="flaticon-next"></i> Support technique</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> Opportunités de recherche</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> Chercheurs & auteurs</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> Institutions partenaires</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-content fml-15">
+                        <h2>Navigation</h2>
+                        <ul>
+                            <li><a href="index.html"><i class="flaticon-next"></i> Accueil</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> Publications</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> Recherches</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> À propos</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-content fml-15 fml-20">
+                        <h2>Contact</h2>
+                        <ul>
+                            <li><a href="tel:+224000000000"><i class="flaticon-next"></i> +224 XX XX XX XX</a></li>
+                            <li><a href="tel:+224000000001"><i class="flaticon-next"></i> +224 XX XX XX XX</a></li>
+                            <li><a href="mailto:contact@portailscientifique.crict.edu.gn"><i class="flaticon-next"></i>
+                                    contact@portailscientifique.crict.edu.gn</a></li>
+                            <li><a href="#"><i class="flaticon-next"></i> portailscientifique.crict.edu.gn</a></li>
+                            <li>
+                                <a href="#">
+                                    <i class="flaticon-next"></i> Conakry, Guinée
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Footer Area -->
+
+    <!-- Copy Area -->
+    <div class="copy-area">
+        <div class="container">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="copy">
+                        <p>© <span>CRICT</span> — Tous droits réservés.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Copy Area -->
+
+    <!-- Scroll top -->
+    <a href="#" class="scroll-top wow animate__animated animate__bounceInDown">
+        <i class="fas fa-angle-double-up"></i>
+    </a>
     {% include "includes/foot.html" %}
-
     {% block scripts %}
-
 
     {% endblock scripts %}
 </body>

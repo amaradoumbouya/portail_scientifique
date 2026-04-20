@@ -1,279 +1,227 @@
 {% extends "index.html" %}
 {% load static %}
+{% block title %}
+<title>A propos - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+
+{% endblock style %}
 
 
 {% block content %}
-    <div class="page-heading about-heading header-text">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="text-content">
-              <h4>A propos du</h4>
-              <h2>Portail Scientifique</h2>
+<!-- Start Page Title Area -->
+<div class="banner-area about">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>A Propos</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active"> A Propos</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
+</div>
+<!-- End Page Title Area -->
 
+<!-- Choose area  -->
+<section class="choose-area">
+    <div class="container-fluid">
+        <div class="row align-items-center">
 
-    <div class="best-features about-features">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-heading">
-              <h2>Notre expérience</h2>
+            <!-- Image -->
+            <div class="col-lg-6 ps-0">
+                <div class="home-choose-img">
+                    <img src="{% static 'front/assets/images/science.png' %}" alt="choose" />
+                </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="right-image">
-              <img src="{% static 'front/' %}assets/images/feature-image.jpg" alt="">
+
+            <!-- Contenu -->
+            <div class="col-lg-6 home-choose">
+                <div class="home-choose-content">
+                    <div class="section-tittle">
+                        <h2>Pourquoi choisir notre portail scientifique ?</h2>
+                        <p>
+                            Notre plateforme est conçue pour répondre aux besoins des chercheurs, enseignants et
+                            étudiants
+                            en facilitant la gestion, la publication et la diffusion des travaux scientifiques.
+                            Elle garantit une organisation structurée, une visibilité accrue et un accès simplifié aux
+                            connaissances.
+                        </p>
+                    </div>
+
+                    <div class="row">
+
+                        <!-- Liste gauche -->
+                        <div class="col-lg-4 col-sm-12 col-md-5">
+                            <ul class="choose-list-left">
+                                <li><i class="flaticon-check-mark"></i>Plateforme moderne et intuitive</li>
+                                <li><i class="flaticon-check-mark"></i>Soumission rapide des articles</li>
+                                <li><i class="flaticon-check-mark"></i>Indexation automatique intelligente</li>
+                                <li><i class="flaticon-check-mark"></i>Accès sécurisé aux données</li>
+                                <li><i class="flaticon-check-mark"></i>Interface adaptée aux chercheurs</li>
+                            </ul>
+                        </div>
+
+                        <!-- Liste droite -->
+                        <div class="col-lg-8 col-sm-12 col-md-7">
+                            <div class="choose-list-home">
+                                <ul>
+                                    <li><i class="flaticon-check-mark"></i>Classement par domaines scientifiques</li>
+                                    <li><i class="flaticon-check-mark"></i>Recherche avancée multi-critères</li>
+                                    <li><i class="flaticon-check-mark"></i>Visibilité nationale et internationale</li>
+                                    <li><i class="flaticon-check-mark"></i>Gestion des auteurs et institutions</li>
+                                    <li><i class="flaticon-check-mark"></i>Support pour conférences et événements
+                                        scientifiques</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Bouton -->
+                        <a href="#" class="box-btn">En savoir plus</a>
+
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="left-content">
-              <h4>Qui sommes nous &amp; Qu'est-ce qu'on fait ?</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed voluptate nihil eum consectetur similique? Consectetur, quod, incidunt, harum nisi dolores delectus reprehenderit voluptatem perferendis dicta dolorem non blanditiis ex fugiat. Lorem ipsum dolor sit amet, consectetur adipisicing elit.<br><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti eum ratione ex ea praesentium quibusdam? Aut, in eum facere corrupti necessitatibus perspiciatis quis.</p>
-              <ul class="social-icons">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="#"><i class="fa fa-behance"></i></a></li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
+</section>
+<!-- End Choose area -->
 
-    
-    <div class="team-members">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-heading">
-              <h2>Notre équipe de chercheur</h2>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="team-member">
-              <div class="thumb-container">
-                <img src="{% static 'front/' %}assets/images/team_01.jpg" alt="">
-                <div class="hover-effect">
-                  <div class="hover-content">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                      <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                      <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="down-content">
-                <h4>Amara CAMARA</h4>
-                <span>Directeur Général</span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing itaque corporis nulla.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="team-member">
-              <div class="thumb-container">
-                <img src="{% static 'front/' %}assets/images/team_02.jpg" alt="">
-                <div class="hover-effect">
-                  <div class="hover-content">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                      <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                      <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="down-content">
-                <h4>Karry Pitcher</h4>
-                <span>Product Expert</span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing itaque corporis nulla.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="team-member">
-              <div class="thumb-container">
-                <img src="{% static 'front/' %}assets/images/team_03.jpg" alt="">
-                <div class="hover-effect">
-                  <div class="hover-content">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                      <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                      <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="down-content">
-                <h4>Michael Soft</h4>
-                <span>Chief Marketing</span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing itaque corporis nulla.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="team-member">
-              <div class="thumb-container">
-                <img src="{% static 'front/' %}assets/images/team_04.jpg" alt="">
-                <div class="hover-effect">
-                  <div class="hover-content">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                      <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                      <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="down-content">
-                <h4>Mary Cool</h4>
-                <span>Product Specialist</span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing itaque corporis nulla.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="team-member">
-              <div class="thumb-container">
-                <img src="{% static 'front/' %}assets/images/team_05.jpg" alt="">
-                <div class="hover-effect">
-                  <div class="hover-content">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                      <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                      <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="down-content">
-                <h4>George Walker</h4>
-                <span>Product Photographer</span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing itaque corporis nulla.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="team-member">
-              <div class="thumb-container">
-                <img src="{% static 'front/' %}assets/images/team_06.jpg" alt="">
-                <div class="hover-effect">
-                  <div class="hover-content">
-                    <ul class="social-icons">
-                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                      <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                      <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="down-content">
-                <h4>Kate Town</h4>
-                <span>General Manager</span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing itaque corporis nulla.</p>
-              </div>
-            </div>
-          </div>
+<!-- Teachers Area -->
+<section class="home-teachers-area pt-100">
+    <div class="container">
+
+        <div class="section-tittle text-center">
+            <h2>Nos Chercheurs et Contributeurs</h2>
+            <p>
+                Découvrez les experts, chercheurs et encadreurs qui contribuent à la production et à la diffusion
+                des connaissances scientifiques.
+            </p>
         </div>
-      </div>
-    </div>
 
-
-    <div class="services">
-      <div class="container">
         <div class="row">
-          <div class="col-md-4">
-            <div class="service-item">
-              <div class="icon">
-                <i class="fa fa-gear"></i>
-              </div>
-              <div class="down-content">
-                <h4>Gestion des résultats de recherche</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat.</p>
-                <a href="#" class="filled-button">Details</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="service-item">
-              <div class="icon">
-                <i class="fa fa-gear"></i>
-              </div>
-              <div class="down-content">
-                <h4>Relations avec les chercheurs/auteurs</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat.</p>
-                <a href="#" class="filled-button">Details</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="service-item">
-              <div class="icon">
-                <i class="fa fa-gear"></i>
-              </div>
-              <div class="down-content">
-                <h4>Collection Internationale</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat.</p>
-                <a href="#" class="filled-button">Details</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
+            <!-- Chercheur 1 -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-home-teacher">
 
-    <div class="happy-clients">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-heading">
-              <h2>Partenaires de recherche</h2>
+                    <div class="teacher-img">
+                        <a href="#">
+                            <img src="{% static 'front/assets/images/teachers/img5.png' %}" alt="chercheur" />
+                        </a>
+                    </div>
+
+                    <div class="teachers-content">
+                        <h2>Dr. Amara CAMARA</h2>
+                        <p>Chercheur en Intelligence Artificielle</p>
+                    </div>
+
+                    <div class="teacher-social">
+                        <ul>
+                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                        </ul>
+                    </div>
+
+                </div>
             </div>
-          </div>
-          <div class="col-md-12">
-            <div class="owl-clients owl-carousel">
-              <div class="client-item">
-                <img src="{% static 'front/' %}assets/images/client-01.png" alt="1">
-              </div>
-              
-              <div class="client-item">
-                <img src="{% static 'front/' %}assets/images/client-01.png" alt="2">
-              </div>
-              
-              <div class="client-item">
-                <img src="{% static 'front/' %}assets/images/client-01.png" alt="3">
-              </div>
-              
-              <div class="client-item">
-                <img src="{% static 'front/' %}assets/images/client-01.png" alt="4">
-              </div>
-              
-              <div class="client-item">
-                <img src="{% static 'front/' %}assets/images/client-01.png" alt="5">
-              </div>
-              
-              <div class="client-item">
-                <img src="{% static 'front/' %}assets/images/client-01.png" alt="6">
-              </div>
+
+            <!-- Chercheur 2 -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-home-teacher">
+
+                    <div class="teacher-img">
+                        <a href="#">
+                            <img src="{% static 'front/assets/images/teachers/img2.png' %}" alt="chercheur" />
+                        </a>
+                    </div>
+
+                    <div class="teachers-content">
+                        <h2>Pr. Oumou Younoussa BAH</h2>
+                        <p>Spécialiste en Santé Publique</p>
+                    </div>
+
+                    <div class="teacher-social">
+                        <ul>
+                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                        </ul>
+                    </div>
+
+                </div>
             </div>
-          </div>
+
+            <!-- Chercheur 3 -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-home-teacher">
+
+                    <div class="teacher-img">
+                        <a href="#">
+                            <img src="{% static 'front/assets/images/teachers/img11.png' %}" alt="chercheur" />
+                        </a>
+                    </div>
+
+                    <div class="teachers-content">
+                        <h2>Dr. COSSI </h2>
+                        <p>Chercheur en Cybersécurité</p>
+                    </div>
+
+                    <div class="teacher-social">
+                        <ul>
+                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Chercheur 4 -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-home-teacher">
+
+                    <div class="teacher-img">
+                        <a href="#">
+                            <img src="{% static 'front/assets/images/teachers/img5.png' %}" alt="chercheur" />
+                        </a>
+                    </div>
+
+                    <div class="teachers-content">
+                        <h2>Dr. Babou DIONE</h2>
+                        <p>Chercheur en télécommunications</p>
+                    </div>
+
+                    <div class="teacher-social">
+                        <ul>
+                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
+                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
+                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
+                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-      </div>
     </div>
+</section>
+<!-- End Teachers Area -->
+
 {% endblock content %}
 
 {% block scripts %}

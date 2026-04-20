@@ -85,7 +85,7 @@
                                 alt="{{user.prenoms|slice:'1'}} {{user.nom|slice:'1'}}" class="img-circle"> </a>
 
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:void(0)"> Profil</a></li>
+                            <li><a href="{% url 'accounts:profil_user' %}">Mon profil</a></li>
                             <li><a href="javascript:void(0)"><span class="badge badge-success pull-right">5</span>
                                     Paramètres </a></li>
                             <li><a href="javascript:void(0)"> Vérouiller</a></li>

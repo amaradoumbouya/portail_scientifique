@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 from django.contrib.auth.decorators import login_required
-from portail_site.views import DashboardTemplateView, IndexTemplateView, PublicationTemplateView, AproposTemplateView, contact_us_template_view, detail_publication_template, detail_auteur_template_view, detail_encadreur_template_view, inscriptionTemplateView, user_login_view, depot_publication, MonprofilTemplateView, MespublicationsTemplateView, MessagesTemplateView, NotificationsTemplateView, activate_account, publication_par_type_template_view, like_publication, comment_publication, download_publication
+from portail_site.views import *
 
 
 app_name = 'portail_site'
@@ -21,6 +21,8 @@ urlpatterns = [
     path('a-propos/', AproposTemplateView.as_view(), name='a_propos'),
     path('contact/', views.contact_us_template_view, name='contact'),
     path('inscription/', views.inscriptionTemplateView, name='inscription'),
+    path('compte-institution/', views.inscription_compte_institution, name='inscription_institution'),
+    path('compte-enseignant/', views.inscription_compte_enseignant, name='inscription_enseignant'),
     path('activation/<uidb64>/<token>/', activate_account, name='activation'),
     path('mon-profil/', login_required(MonprofilTemplateView.as_view()), name='mon_profil'),
     path('mes-publications/',login_required(MespublicationsTemplateView.as_view()), name='mes_publications'),
@@ -32,5 +34,15 @@ urlpatterns = [
     path('detail-encadreur/<slug:slug>/', views.detail_encadreur_template_view, name='detail_encadreur'),
     path('connexion/', views.user_login_view, name='connexion'),
     path('deconnexion/',auth_views.LogoutView.as_view(),name="deconnexion"),
+
+    # URLs pour les modals
+    path('modal/profil/', views.modal_profil, name='modal_profil'),
+    path('modal/biographie/', views.modal_biographie, name='modal_biographie'),
+    path('modal/emploi/', views.modal_emploi, name='modal_emploi'),
+    path('modal/education-qualification/', views.modal_education_qualification, name='modal_education_qualification'),
+    path('modal/experience-professionnelle/', views.modal_experience_professionnelle, name='modal_experience_professionnelle'),
+    path('modal/travaux-recherche/', views.modal_travaux_recherche, name='modal_travaux_recherche'),
+    path('modal/reseaux-sociaux/', views.modal_reseaux_sociaux, name='modal_reseaux_sociaux'),
+
     
 ]

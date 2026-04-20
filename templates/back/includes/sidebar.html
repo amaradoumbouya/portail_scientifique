@@ -10,11 +10,19 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"
                         aria-expanded="false">{{user.prenoms|slice:'1'}} {{user.nom}}</a>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)"> Profil</a></li>
+                        <li><a href="{% url 'accounts:profil_user' %}">Mon profil</a></li>
                         <li><a href="javascript:void(0)"> Paramètres</a></li>
                         <li><a href="javascript:void(0)">Vérouiller</a></li>
                         <li class="divider"></li>
-                        <li><a href="javascript:void(0)"> Déconnexion</a></li>
+                        <li>
+                            <form method="post" action="{% url 'portail_site:deconnexion' %}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item text-danger"
+                                    style="width: 100%; text-align: left; background: none; border: none; padding: 10px 20px;">
+                                    Déconnexion
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
 
@@ -22,7 +30,7 @@
             </div>
         </div>
         <!--- Divider -->
-        {% if user.is_authenticated and user.role == 'admin' %}
+        {% if user.is_authenticated and user.is_superuser %}
 
         <div id="sidebar-menu">
             <ul>
@@ -32,6 +40,16 @@
                     <a href=" {% url 'portail_site:dashboard' %} " class="waves-effect"><i class="ti-home"></i><span>
                             Tableau de bord </span></a>
                 </li>
+
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-write"></i><span>
+                            Mon profil
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'accounts:profil_user' %}">Voir mon profil</a></li>
+                    </ul>
+                </li>
+
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Auteurs
                         </span>
@@ -40,6 +58,7 @@
                         <li><a href="{% url 'auteurs:index' %}">Les auteurs</a></li>
                     </ul>
                 </li>
+
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Encadreurs
                         </span>
@@ -48,6 +67,7 @@
                         <li><a href="{% url 'encadreurs:index' %}">Les encadreurs</a></li>
                     </ul>
                 </li>
+
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ti-agenda"></i> <span>
                             publications
@@ -56,16 +76,6 @@
                         <li><a href="{% url 'publications:index' %}">Les publications</a></li>
                     </ul>
                 </li>
-
-                <!-- institutions:index -->
-                <!-- <li class="has_sub">
-                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-write"></i><span>
-                            Institutions
-                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
-                    <ul class="list-unstyled">
-                        <li><a href="">Les institutions</a></li>
-                    </ul>
-                </li> -->
 
                 <!-- types_document:index -->
 
@@ -122,15 +132,28 @@
         {% else %}
 
         <div id="sidebar-menu">
+
             <ul>
+
                 <li>
                     <a href=" {% url 'portail_site:index' %} " class="waves-effect"><i class="ti-home"></i><span>
                             Aller sur le site </span></a>
                 </li>
+
                 <li>
                     <a href=" {% url 'portail_site:dashboard' %} " class="waves-effect"><i class="ti-home"></i><span>
                             Tableau de bord </span></a>
                 </li>
+
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-write"></i><span>
+                            Mon profil
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'accounts:profil_user' %}">Voir mon profil</a></li>
+                    </ul>
+                </li>
+
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Auteurs
                         </span>
@@ -139,6 +162,7 @@
                         <li><a href="{% url 'auteurs:index' %}">Mes infos d'auteur</a></li>
                     </ul>
                 </li>
+
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Encadreurs
                         </span>
@@ -147,6 +171,7 @@
                         <li><a href="{% url 'encadreurs:index' %}">Mes encadreurs</a></li>
                     </ul>
                 </li>
+
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ti-agenda"></i> <span>
                             publications
@@ -155,6 +180,7 @@
                         <li><a href="{% url 'publications:index' %}">Mes publications</a></li>
                     </ul>
                 </li>
+
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i
                             class="mdi mdi-notification-clear-all"></i><span>
@@ -164,7 +190,9 @@
                         <li><a href=" {% url 'notifications:index' %} ">Notifications</a></li>
                     </ul>
                 </li>
+
             </ul>
+
         </div>
 
         {% endif %}

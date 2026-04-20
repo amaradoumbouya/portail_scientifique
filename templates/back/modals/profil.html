@@ -1,0 +1,67 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% url 'portail_site:modal_profil' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <div class="form-group col-md-6">
+                {{form_custumer_user.prenoms|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_custumer_user.nom|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_custumer_user.sexe|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_custumer_user.email|as_crispy_field}}
+                    <small class="form-text text-muted">L'email sera utilisé pour la connexion et pour la réinitialisation du mot de passe. Assurez-vous que ce soit un email professionnel de l'institution.</small>
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_custumer_user.tel|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_user_profile.adresse|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_user_profile.fonction_poste|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_user_profile.grade|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_user_profile.specialite|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_user_profile.orcid|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-12">
+                {{form_user_profile.photo|as_crispy_field}}
+                    <small class="form-text text-muted">La photo doit être au format JPG ou PNG et ne doit pas dépasser 2 Mo.</small>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+
+    </div>
+
+</form>

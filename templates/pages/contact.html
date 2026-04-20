@@ -1,193 +1,151 @@
 {% extends "index.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block title %}
+<title>Contact - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+
+{% endblock style %}
 
 
 {% block content %}
-<div class="page-heading contact-heading header-text">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-content">
-                    <h4>contact</h4>
-                    <h2>Restons en contact</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="find-us">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Notre localisation</h2>
-                </div>
-            </div>
-            <div class="col-md-8">
-
-                <div id="map">
-                    <iframe
-                        src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                        width="100%" height="330px" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="left-content">
-                    <h4>Notre bureau</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester consectetur
-                        similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur adipisic elit. Et,
-                        consequuntur, modi mollitia corporis ipsa voluptate corrupti.</p>
-                    <ul class="social-icons">
-                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+<!-- Start Page Title Area -->
+<div class="banner-area contact">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Contact Us</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active">Contact</p>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- End Page Title Area -->
+<div class="shape-ellips-contact">
+    <img src="{% static 'front/assets/images/contact-shape.png' %}" alt="shape" />
+</div>
 
-
-<div class="send-message">
+<!-- Service area -->
+<div class="contact-service">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Envoyez-nous un message</h2>
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-service text-center">
+                    <div class="service-icon">
+                        <i class="flaticon-clock"></i>
+                    </div>
+                    <div class="service-content">
+                        <p>Everyday : 24H/24</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="contact-form">
-                    <form id="contact" action="{% url 'portail_site:contact' %}" method="post">
-                        {% csrf_token %}
-                        {% if messages %}
-                        <ul class="messages">
-                            {% for message in messages %}
-                            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                                <div class="alert alert-success" role="alert">
-                                    <strong>{{ message }}</strong>
-                                </div>
-                                </li>
-                                {% endfor %}
-                        </ul>
-                        {% endif %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-service text-center">
+                    <div class="service-icon">
+                        <i class="flaticon-pin"></i>
+                    </div>
+                    <div class="service-content">
+                        <p>UGANC DIXINN/CONAKRY</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="single-service text-center sst-10">
+                    <div class="service-icon">
+                        <i class="flaticon-telephone"></i>
+                    </div>
+                    <div class="service-content">
+                        <a href="tel:+1(321)984754">+224 621 xx xx xx</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Service area -->
+
+<!-- Contact Area -->
+<section class="home-contact-area pb-100">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-lg-6 ps-0">
+                <div class="contact-img">
+                    <img src="{% static 'front/assets/images/contact.png' %}" alt="contact" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="home-contact-content">
+                    <h2>What Do You Want to Know?</h2>
+                    <form id="contactForm">
                         <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <fieldset>
-                                    {{form.nom_complet|as_crispy_field}}
-                                </fieldset>
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" name="name" id="name" class="form-control" required
+                                        data-error="Please enter your name" placeholder="Your Name" />
+                                    <div class="help-block with-errors"></div>
+                                </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <fieldset>
-                                    {{form.email|as_crispy_field}}
-                                </fieldset>
+
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="form-group">
+                                    <input type="email" name="email" id="email" class="form-control" required
+                                        data-error="Please enter your email" placeholder="Your Email" />
+                                    <div class="help-block with-errors"></div>
+                                </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                <fieldset>
-                                    {{form.objectif|as_crispy_field}}
-                                </fieldset>
+
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" name="phone_number" id="phone_number" required
+                                        data-error="Please enter your number" class="form-control"
+                                        placeholder="Your Phone" />
+                                    <div class="help-block with-errors"></div>
+                                </div>
                             </div>
-                            <div class="col-lg-12">
-                                <fieldset>
-                                    {{form.message|as_crispy_field}}
-                                </fieldset>
+
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" name="msg_subject" id="msg_subject" class="form-control" required
+                                        data-error="Please enter your subject" placeholder="Your Subject" />
+                                    <div class="help-block with-errors"></div>
+                                </div>
                             </div>
-                            <div class="col-lg-12">
-                                <fieldset>
-                                    <button type="submit" id="form-submit" class="filled-button">Envoyer</button>
-                                </fieldset>
+
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <textarea name="message" class="form-control" id="message" cols="30" rows="5"
+                                        required data-error="Write your message" placeholder="Your Message"></textarea>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12">
+                                <button type="submit" class="default-btn page-btn box-btn">
+                                    Envoyer
+                                </button>
+                                <div id="msgSubmit" class="h3 text-center hidden"></div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="col-md-4">
-                <ul class="accordion">
-                    <li>
-                        <a>Accordion Title One</a>
-                        <div class="content">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester
-                                consectetur similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur
-                                adipisic elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti elite.
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <a>Second Title Here</a>
-                        <div class="content">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester
-                                consectetur similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur
-                                adipisic elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti elite.
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <a>Accordion Title Three</a>
-                        <div class="content">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester
-                                consectetur similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur
-                                adipisic elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti elite.
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <a>Fourth Accordion Title</a>
-                        <div class="content">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisic elit. Sed voluptate nihil eumester
-                                consectetur similiqu consectetur.<br><br>Lorem ipsum dolor sit amet, consectetur
-                                adipisic elit. Et, consequuntur, modi mollitia corporis ipsa voluptate corrupti elite.
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
-</div>
+</section>
+<!-- End Contact Area -->
 
-<div class="happy-clients">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Partenaires de recherche</h2>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="owl-clients owl-carousel">
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="1">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="2">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="3">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="4">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="5">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="6">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock content %}
 
 {% block scripts %}

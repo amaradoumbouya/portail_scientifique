@@ -33,7 +33,7 @@ class InstitutionUpdateView(UpdateView):
     context_object_name = "institution"
 
     def form_valid(self, form):
-        messages.success(self.request, f"Institution {self.request.POST.get('nom')} modifié avec succès !")
+        messages.success(self.request, f"Institution {self.request.POST.get('nom_institution')} modifié avec succès !")
         return super().form_valid(form)
 
     

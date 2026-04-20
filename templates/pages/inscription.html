@@ -2,138 +2,96 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block title %}
+<title>Inscription - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+
+{% endblock style %}
+
 
 {% block content %}
-<!-- Start Page heading -->
-<div class="page-heading contact-heading header-text">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-content">
-                    <h4>Inscription</h4>
-                    <h2>Créer votre compte</h2>
+<!-- Start Page Title Area -->
+<div class="banner-area signup">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Inscription</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active"> S'inscrire </p>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- End Page heading -->
+<!-- End Page Title Area -->
 
-<!-- Start Content -->
-<div class="register-form py-5">
+
+<!-- SignUp -->
+<section class="signup-area">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h3>Créer votre compte</h3>
-                        <p>Remplissez les informations pour vous inscrire</p>
-                    </div>
-                    <div class="card-body">
-                        <form action="{% url 'portail_site:inscription' %}" method="post">
-                            {% csrf_token %}
-                            {% if messages %}
-                            <ul class="messages">
-                                {% for message in messages %}
-                                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                                    <div class="alert alert-success" role="alert">
-                                        <strong>{{ message }}</strong>
-                                    </div>
-                                    </li>
-                                    {% endfor %}
-                            </ul>
-                            {% endif %}
+        <div class="row align-items-center">
 
-                            <div class="form-group">
-                                {{form.prenoms|as_crispy_field}}
+            <div class="col-lg-6">
+                <div class="sign-up-img">
+                    <img src="{% static 'front/assets/images/signupp.png' %}" alt="singup">
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="signup-form">
+                    <h2>Créer un compte</h2>
+                    <form>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <select class="form-control" id="typeCompte">
+                                        <option value="">Sélectionnez votre type de compte</option>
+                                        <option value="{% url 'portail_site:inscription_institution' %}">
+                                            Université/Institution
+                                        </option>
+                                        <option value="{% url 'portail_site:inscription_enseignant' %}">
+                                            Enseignant/Enseignant chercheur</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                {{form.nom|as_crispy_field}}
+                            <div class="col-lg-12">
+                                <a id="btnEnvoyer" href="#" class="box-btn btn-block">Envoyer</a>
                             </div>
-
-
-                            <div class="form-group">
-                                {{form.adresse|as_crispy_field}}
-                            </div>
-
-                            <div class="form-group">
-                                {{form.email|as_crispy_field}}
-                            </div>
-
-                            <div class="form-group">
-                                {{form.tel|as_crispy_field}}
-                            </div>
-
-                            <div class="form-group">
-                                {{form.sexe|as_crispy_field}}
-                            </div>
-
-                            <div class="form-group">
-                                {{form.password1|as_crispy_field}}
-                            </div>
-
-                            <div class="form-group">
-                                {{form.password2|as_crispy_field}}
-                            </div>
-
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary btn-block">S'inscrire</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <small>Vous avez déjà un compte ? <a href="{% url 'portail_site:connexion' %}">Connectez-vous</a></small>
-                    </div>
+                            <span class="already">Avez-vous déjà un compte ? <a
+                                    href="{% url 'portail_site:connexion' %}">Connectez - vous!</a></span>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- End Content -->
+</section>
+<!-- End SignUp -->
 
-<!-- Start Happy client -->
-<div class="happy-clients">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Partenaires de recherche</h2>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="owl-clients owl-carousel">
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="1">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="2">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="3">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="4">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="5">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/' %}assets/images/client-01.png" alt="6">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Happy client -->
 {% endblock content %}
 
 {% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById("typeCompte").addEventListener("change", function () {
+            let url = this.value; // récupérer la valeur sélectionnée
+            let bouton = document.getElementById("btnEnvoyer");
 
+            if (url !== "") {
+                bouton.href = url; // mettre dans le href
+            } else {
+                bouton.href = "#"; // désactiver si rien sélectionné
+            }
+        });
+    });
+</script>
 {% endblock scripts %}

@@ -72,3 +72,8 @@ class CustumUserDeleteView(DeleteView):
     model         = CustumerUser
     template_name = "back/accounts/index.html"
     success_url   = reverse_lazy("accounts:index")
+
+
+########## Profil user ##########
+def profil_user_template_view(request):
+    return render(request, 'back/accounts/profil_user.html')
