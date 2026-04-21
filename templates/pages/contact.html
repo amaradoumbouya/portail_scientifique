@@ -81,62 +81,55 @@
         <div class="row align-items-center">
             <div class="col-lg-6 ps-0">
                 <div class="contact-img">
-                    <img src="{% static 'front/assets/images/contact.png' %}" alt="contact" />
+                    <img src="{% static 'front/assets/images/contactt.png' %}" alt="contact" />
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="home-contact-content">
-                    <h2>What Do You Want to Know?</h2>
-                    <form id="contactForm">
+                    <h2>Laissez - nous un message</h2>
+                    <form id="contactForm" action="{% url 'portail_site:contact' %}" method="post">
+                        {% csrf_token %}
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                <div class="alert alert-success" role="alert">
+                                    <strong>{{ message }}</strong>
+                                </div>
+                                </li>
+                                {% endfor %}
+                        </ul>
+                        {% endif %}
                         <div class="row">
+
                             <div class="col-lg-6 col-sm-6">
                                 <div class="form-group">
-                                    <input type="text" name="name" id="name" class="form-control" required
-                                        data-error="Please enter your name" placeholder="Your Name" />
-                                    <div class="help-block with-errors"></div>
+                                    {{form.nom_complet|as_crispy_field}}
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-sm-6">
                                 <div class="form-group">
-                                    <input type="email" name="email" id="email" class="form-control" required
-                                        data-error="Please enter your email" placeholder="Your Email" />
-                                    <div class="help-block with-errors"></div>
+                                    {{form.email|as_crispy_field}}
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 col-sm-6">
+                            <div class="col-lg-12 col-sm-12">
                                 <div class="form-group">
-                                    <input type="text" name="phone_number" id="phone_number" required
-                                        data-error="Please enter your number" class="form-control"
-                                        placeholder="Your Phone" />
-                                    <div class="help-block with-errors"></div>
+                                    {{form.objectif|as_crispy_field}}
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 col-sm-6">
+                            <div class="col-lg-12 col-sm-12">
                                 <div class="form-group">
-                                    <input type="text" name="msg_subject" id="msg_subject" class="form-control" required
-                                        data-error="Please enter your subject" placeholder="Your Subject" />
-                                    <div class="help-block with-errors"></div>
+                                    {{form.message|as_crispy_field}}
                                 </div>
                             </div>
 
                             <div class="col-lg-12 col-md-12">
-                                <div class="form-group">
-                                    <textarea name="message" class="form-control" id="message" cols="30" rows="5"
-                                        required data-error="Write your message" placeholder="Your Message"></textarea>
-                                    <div class="help-block with-errors"></div>
-                                </div>
+                                <button type="submit" class="default-btn page-btn box-btn">Envoyer</button>
                             </div>
-
-                            <div class="col-lg-12 col-md-12">
-                                <button type="submit" class="default-btn page-btn box-btn">
-                                    Envoyer
-                                </button>
-                                <div id="msgSubmit" class="h3 text-center hidden"></div>
-                                <div class="clearfix"></div>
-                            </div>
+                            
                         </div>
                     </form>
                 </div>

@@ -16,24 +16,34 @@ class PublicationTemplateView(TemplateView):
     template_name = 'pages/publication.html'
 
 # La vue publication par type
-def publication_par_type_template_view(request, slug):
-    type_document = get_object_or_404(TypeDocument, slug=slug)
-    publications = Publication.objects.filter(type_document=type_document, statut_publication=True).order_by('-id')
-    paginator = Paginator(publications, 6)  # ou 10, selon votre choix
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, "pages/publication_par_type.html", {'page_obj':page_obj, 'type_document':type_document})
+# def publication_par_type_template_view(request, slug):
+#     type_document = get_object_or_404(TypeDocument, slug=slug)
+#     publications = Publication.objects.filter(type_document=type_document, statut_publication=True).order_by('-id')
+#     paginator = Paginator(publications, 6)  # ou 10, selon votre choix
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, "pages/publication_par_type.html", {'page_obj':page_obj, 'type_document':type_document})
+
+def publication_par_type_template_view(request):
+    # C'est la vrai vue qui est commentée ci-haut
+
+    return render(request, "pages/publication_par_type.html")
 
 
 
 
 # Detail_d'une_publication
-def detail_publication_template(request, slug):
-    publication = get_object_or_404(Publication, slug=slug)
-    publications_categorie = Publication.objects.filter(domaine=publication.domaine).exclude(id=publication.id).order_by('-id')[:10]
-    comments = publication.comments.order_by('-id')[:5]
-    return render(request, 'pages/detail_publication.html', {'publication': publication, 'publications_categorie': publications_categorie, 'comments': comments,
-    })
+# def detail_publication_template(request, slug):
+#     publication = get_object_or_404(Publication, slug=slug)
+#     publications_categorie = Publication.objects.filter(domaine=publication.domaine).exclude(id=publication.id).order_by('-id')[:10]
+#     comments = publication.comments.order_by('-id')[:5]
+#     return render(request, 'pages/detail_publication.html', {'publication': publication, 'publications_categorie': publications_categorie, 'comments': comments,
+#     })
+
+def detail_publication_template(request):
+    # C'est la vrai vue qui est commentée ci-haut
+
+    return render(request, 'pages/detail_publication.html')
 
 
 # Informations sur l'auteur
