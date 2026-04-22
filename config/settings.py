@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -13,8 +13,16 @@ SECRET_KEY = 'django-insecure-+&5yqc!(q^il$#523z#01w=w!vosyjzoxy_lb4(h-)*a5!qn76
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["portailscientifique.crict.edu.gn","127.0.0.1","localhost",]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://portailscientifique.crict.edu.gn",
+    "https://portailscientifique.crict.edu.gn",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 
@@ -82,9 +90,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_portail',
-        'USER': 'root',
-        'PASSWORD': '',
+        "NAME": os.getenv("DB_NAME", "portail_db"),
+        "USER": os.getenv("DB_USER", "portail_user"),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+	"HOST": os.getenv("DB_HOST", "db"),
+	"PORT": os.getenv("DB_PORT", "3306"),
+	"OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     }
 }
 
@@ -124,7 +135,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR/'static']
+STATIC_ROOT = BASE_DIR/'static'
+#STATICFILES_DIRS = [BASE_DIR/'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media/'
 LOGIN_REDIRECT_URL = 'accounts:profil_user'
@@ -138,9 +150,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CONFIGURATION MAILHOG
+# CONFIGURATION SUPREMECLUSTER POUR NOTRE DOMAINE
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
+EMAIL_HOST = 'mail.supremecluster.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
+EMAIL_HOST_USER = "contact@portailscientifique.crict.edu.gn"
+EMAIL_HOST_PASSWORD = "ozm763GIB#"
+DEFAULT_FROM_EMAIL = f"CRICT<{EMAIL_HOST_USER}>"
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_TIMEOUT = 10

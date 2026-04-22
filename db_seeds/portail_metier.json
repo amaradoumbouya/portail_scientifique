@@ -1,0 +1,1992 @@
+[
+{
+  "model": "accounts.custumeruser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$XyBetTOG2r8t52d14M433t$RqFXga0HWBYavmGKu1EYNw4FJZ1vZ6CUsQORr2xiypw=",
+    "last_login": "2025-10-28T13:52:42.616Z",
+    "prenoms": "Amara",
+    "nom": "DOUMBOUYA",
+    "slug": "1",
+    "adresse": "KOBAYAH",
+    "email": "amaradoumbouya442@gmail.com",
+    "tel": "+224 621 63 56 10",
+    "sexe": "masculin",
+    "role": "admin",
+    "photo": "accounts/WhatsApp_Image_2025-10-28_at_10_0kqndH9.29.31.jpeg",
+    "is_active": true,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-06-20T12:58:03.417Z",
+    "updated_at": "2025-10-28T11:46:06.941Z"
+  }
+},
+{
+  "model": "accounts.custumeruser",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$Ea8lXEA5u67Nnz5UcSZylT$1dEzTpeX5YdL31kZKIb5GmGgHslV/tM2C8Ss98ouWTc=",
+    "last_login": "2025-07-31T10:54:24.976Z",
+    "prenoms": "Amara M'balou",
+    "nom": "DOUMBOUYA",
+    "slug": "amara-mbalou-doumbouya-2",
+    "adresse": "KOBAYAH",
+    "email": "amarambaloudoumbouya@gmail.com",
+    "tel": "+224 621 63 56 10",
+    "sexe": "masculin",
+    "role": "auteur",
+    "photo": "accounts/AD_PHOTO_EHlXrYB.jpeg",
+    "is_active": true,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-06-21T13:11:50.591Z",
+    "updated_at": "2025-08-01T12:23:35.629Z"
+  }
+},
+{
+  "model": "accounts.custumeruser",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$7tVpjAhsJ8UfxnYnSBgkwH$qr2xpO3FpSW0/DBIECyTCLKJK4my4Qr5YjfMUFNjGPw=",
+    "last_login": "2025-07-30T14:52:17.591Z",
+    "prenoms": "Morifindjan",
+    "nom": "KONATE",
+    "slug": "morifindjan-konate-7",
+    "adresse": "KOBAYAH",
+    "email": "morifindjankonate@gmail.com",
+    "tel": "+224 621 63 56 10",
+    "sexe": "masculin",
+    "role": "auteur",
+    "photo": "",
+    "is_active": true,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-07-30T14:51:14.937Z",
+    "updated_at": "2025-07-30T14:54:12.471Z"
+  }
+},
+{
+  "model": "accounts.custumeruser",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$nRpCGfAsMPI3BOMunfpZNj$kvVcZBpG9nv/AePfjK/j1DII16RhgGH/Q9v6LUlR1Zc=",
+    "last_login": "2025-08-01T14:36:17.157Z",
+    "prenoms": "Aminata",
+    "nom": "CONDE",
+    "slug": "aminata-conde-22",
+    "adresse": "TOMBOLIA",
+    "email": "aminataconde@gmail.com",
+    "tel": "+224 628 24 66 45",
+    "sexe": "feminin",
+    "role": "auteur",
+    "photo": "",
+    "is_active": true,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-08-01T14:35:28.638Z",
+    "updated_at": "2025-08-01T14:37:43.137Z"
+  }
+},
+{
+  "model": "accounts.custumeruser",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$jnnGpw58sZ8Xd5L8CMhQZq$2kn1WbyhQKdW4ov3da1T7Qj91Xy+ja9tArtUnA7aWrM=",
+    "last_login": "2025-08-01T14:45:53.123Z",
+    "prenoms": "Nagnouma",
+    "nom": "KOUROUMA",
+    "slug": "nagnouma-kourouma-23",
+    "adresse": "KOBAYAH",
+    "email": "gnoumakourouma@gmail.com",
+    "tel": "+224 621 63 56 11",
+    "sexe": "feminin",
+    "role": "auteur",
+    "photo": "",
+    "is_active": true,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-08-01T14:45:09.668Z",
+    "updated_at": "2025-08-01T14:47:12.670Z"
+  }
+},
+{
+  "model": "accounts.custumeruser",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$KhZSI2LX4VDMVHzOMRD83T$EdqG31n1wEGeeZEsqgwPlkBFVq7EolxKRF6gWDh1Apc=",
+    "last_login": "2025-08-04T11:05:29.491Z",
+    "prenoms": "Sidiki",
+    "nom": "KOUROUMA",
+    "slug": "sidiki-kourouma-24",
+    "adresse": "SANGOYAH",
+    "email": "sidikikourouma@gmail.com",
+    "tel": "+224 628 24 66 45",
+    "sexe": "masculin",
+    "role": "auteur",
+    "photo": "accounts/AD_PHOTO_R9Atch6.jpeg",
+    "is_active": true,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-08-01T14:54:55.490Z",
+    "updated_at": "2025-08-04T05:20:19.310Z"
+  }
+},
+{
+  "model": "accounts.custumeruser",
+  "pk": 25,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$nbQfdT0cF7pSG19AT2HPR9$zG28ZFj9gnP7uUHE5gUlaWIe5Y2QHpHj0toOnVdp0vA=",
+    "last_login": "2025-10-28T13:53:38.366Z",
+    "prenoms": "Oumar",
+    "nom": "FOFANA",
+    "slug": "oumar-fofana-25",
+    "adresse": "KOBAYAH",
+    "email": "oumarfofana@gmail.com",
+    "tel": "620655183",
+    "sexe": "masculin",
+    "role": "auteur",
+    "photo": "accounts/WhatsApp_Image_2025-10-28_at_10.29.31.jpeg",
+    "is_active": true,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-10-28T10:20:54.021Z",
+    "updated_at": "2025-10-28T10:35:03.051Z"
+  }
+},
+{
+  "model": "accounts.custumeruser",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$ILpPnI4jigMbPj9vmVxtEn$nTGVkPYrMLXSFTNdvThV9hSeW9Sr/pyxP5dh/n3nXoM=",
+    "last_login": null,
+    "prenoms": "Prof Alpha Kabinet",
+    "nom": "KEITA",
+    "slug": "prof-alpha-kabinet-keita-26",
+    "adresse": "KALOUM",
+    "email": "amaradoumbouya443@gmail.com",
+    "tel": "621252526",
+    "sexe": "masculin",
+    "role": null,
+    "photo": "",
+    "is_active": false,
+    "is_staff": false,
+    "is_admin": false,
+    "created_at": "2025-10-28T13:51:51.476Z",
+    "updated_at": "2025-10-28T13:51:53.186Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 2,
+  "fields": {
+    "photo": "auteurs/photos/IMG_1031.jpg",
+    "nom": "DOUMBOUYA",
+    "prenoms": "Amara",
+    "email": "amaradoumbouya442@gmail.com",
+    "orcid": "kkkkkoooo",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": "",
+    "slug": "1",
+    "user": null,
+    "created_at": "2025-06-21T14:41:18.047Z",
+    "updated_at": "2025-07-16T13:25:44.078Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 3,
+  "fields": {
+    "photo": "",
+    "nom": "KONATE",
+    "prenoms": "Aboubacar Demba",
+    "email": "aboubacarb2o99@gmail.com",
+    "orcid": "kkkkkoooo",
+    "statut": "Chercheur",
+    "institution": 2,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": null,
+    "slug": "aboubacar-demba-konate-3",
+    "user": 1,
+    "created_at": "2025-07-03T11:38:40.143Z",
+    "updated_at": "2025-07-03T11:38:40.149Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 4,
+  "fields": {
+    "photo": "",
+    "nom": "CAMARA",
+    "prenoms": "Mamoudou",
+    "email": "mamoudoucamara@crict.edu.gn",
+    "orcid": "kkkkk",
+    "statut": "Chercheur",
+    "institution": 2,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": null,
+    "slug": "mamoudou-camara-4",
+    "user": 1,
+    "created_at": "2025-07-03T11:39:07.804Z",
+    "updated_at": "2025-07-03T11:39:07.806Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 5,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO.jpeg",
+    "nom": "KOUROUMA",
+    "prenoms": "M'balou",
+    "email": "mbaloukourouma@gmail.com",
+    "orcid": "02145788544",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": "",
+    "twitter": "",
+    "linkedin": "",
+    "site_web": "",
+    "biographie": "",
+    "slug": "mbalou-kourouma-5",
+    "user": null,
+    "created_at": "2025-07-21T09:06:03.594Z",
+    "updated_at": "2025-07-21T09:06:03.594Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 6,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_PUtpHK0.jpeg",
+    "nom": "CAMARA",
+    "prenoms": "Oury doyen",
+    "email": "ourydoyencamara@gmail.com",
+    "orcid": "02145788544",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": "",
+    "slug": "oury-doyen-camara-6",
+    "user": null,
+    "created_at": "2025-07-21T09:39:53.289Z",
+    "updated_at": "2025-07-30T11:46:11.290Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 7,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_tgyY6et.jpeg",
+    "nom": "DOUMBOUYA",
+    "prenoms": "Ousmane M'balou",
+    "email": "ousmanembaloudoumbouya@gmail.com",
+    "orcid": "0000-0003-1234-5678",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": "",
+    "slug": "ousmane-mbalou-doumbouya-7",
+    "user": null,
+    "created_at": "2025-07-29T11:49:26.778Z",
+    "updated_at": "2025-07-30T11:45:59.531Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 8,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_8aVwD0F.jpeg",
+    "nom": "KONATE",
+    "prenoms": "Morifindjan",
+    "email": "morifindjankonate@gmail.com",
+    "orcid": "02145788544",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": "",
+    "twitter": "",
+    "linkedin": "",
+    "site_web": "",
+    "biographie": "",
+    "slug": "morifindjan-konate-8",
+    "user": null,
+    "created_at": "2025-07-30T14:54:12.462Z",
+    "updated_at": "2025-07-30T14:54:12.462Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 9,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_TqXW873.jpeg",
+    "nom": "CONDE",
+    "prenoms": "Sidiki Fatta",
+    "email": "sidikifattaconde@gmail.com",
+    "orcid": "02145788544",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": "",
+    "slug": "sidiki-fatta-conde-9",
+    "user": 6,
+    "created_at": "2025-07-31T15:18:01.611Z",
+    "updated_at": "2025-07-31T15:18:01.611Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 10,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_wqGhDoa.jpeg",
+    "nom": "OULARE",
+    "prenoms": "Bénoit",
+    "email": "benoitoulare@gmail.com",
+    "orcid": "02145788544",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": "",
+    "slug": "benoit-oulare-10",
+    "user": 6,
+    "created_at": "2025-08-01T12:23:35.635Z",
+    "updated_at": "2025-08-01T12:23:35.635Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 11,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_hltyAdQ.jpeg",
+    "nom": "CONDE",
+    "prenoms": "Aminata",
+    "email": "aminataconde@gmail.com",
+    "orcid": "0000-0003-1234-5678",
+    "statut": "Chercheur",
+    "institution": 1,
+    "facebook": "",
+    "twitter": "",
+    "linkedin": "",
+    "site_web": "",
+    "biographie": "",
+    "slug": "aminata-conde-11",
+    "user": null,
+    "created_at": "2025-08-01T14:37:43.135Z",
+    "updated_at": "2025-08-01T14:37:43.135Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 12,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_Hs7o4q2.jpeg",
+    "nom": "KOUROUMA",
+    "prenoms": "Nagnouma",
+    "email": "nagnoumakourouma@gmail.com",
+    "orcid": "0000-0003-1234-5678",
+    "statut": "Doctorant",
+    "institution": 2,
+    "facebook": "",
+    "twitter": "",
+    "linkedin": "",
+    "site_web": "",
+    "biographie": "",
+    "slug": "nagnouma-kourouma-12",
+    "user": null,
+    "created_at": "2025-08-01T14:47:12.663Z",
+    "updated_at": "2025-08-01T14:47:12.663Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 13,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_4CS0WMq.jpeg",
+    "nom": "KOUROUMA",
+    "prenoms": "Sidiki",
+    "email": "sidikikourouma@gmail.com",
+    "orcid": "0000-0003-1234-5678",
+    "statut": "Doctorant",
+    "institution": 1,
+    "facebook": "",
+    "twitter": "",
+    "linkedin": "",
+    "site_web": "",
+    "biographie": "",
+    "slug": "sidiki-kourouma-13",
+    "user": null,
+    "created_at": "2025-08-01T14:56:19.754Z",
+    "updated_at": "2025-08-01T14:56:19.754Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 14,
+  "fields": {
+    "photo": "auteurs/photos/AD_PHOTO_BWNDq9y.jpeg",
+    "nom": "CAMARA",
+    "prenoms": "Mamoudou",
+    "email": "mamoudoucamara@crict.edu.gn",
+    "orcid": "0000-0003-1234-5678",
+    "statut": "Enseignant",
+    "institution": 2,
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "biographie": "",
+    "slug": "mamoudou-camara-14",
+    "user": 24,
+    "created_at": "2025-08-04T05:20:19.325Z",
+    "updated_at": "2025-08-04T05:20:19.325Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 15,
+  "fields": {
+    "photo": "auteurs/photos/WhatsApp_Image_2025-10-28_at_10.29.31.jpeg",
+    "nom": "FOFANA",
+    "prenoms": "Oumar",
+    "email": "oumarfofana@gmail.com",
+    "orcid": "02145788544",
+    "statut": "Doctorant",
+    "institution": 2,
+    "facebook": "",
+    "twitter": "",
+    "linkedin": "",
+    "site_web": "",
+    "biographie": "",
+    "slug": "oumar-fofana-15",
+    "user": null,
+    "created_at": "2025-10-28T10:32:20.728Z",
+    "updated_at": "2025-10-28T10:32:20.728Z"
+  }
+},
+{
+  "model": "auteurs.auteur",
+  "pk": 16,
+  "fields": {
+    "photo": "auteurs/photos/WhatsApp_Image_2025-10-28_at_10_JD9zN7G.29.31.jpeg",
+    "nom": "FOFANA",
+    "prenoms": "Oumar",
+    "email": "oumarfofana@gmail.com",
+    "orcid": "021457885444",
+    "statut": "Enseignant",
+    "institution": 2,
+    "facebook": "https://facebook.com",
+    "twitter": "https://twitter.com",
+    "linkedin": "https://linkedin.com",
+    "site_web": "https://portofolior.com",
+    "biographie": "gggggggggggggggllllllllllllllllllllllllllllllllllcccccccccccccccccccccccccccccccccooooooooooooooocccccccccccc",
+    "slug": "oumar-fofana-16",
+    "user": 25,
+    "created_at": "2025-10-28T10:35:03.054Z",
+    "updated_at": "2025-10-28T10:35:03.054Z"
+  }
+},
+{
+  "model": "contact_us.contactus",
+  "pk": 2,
+  "fields": {
+    "nom_complet": "Amara M'balou DOUMBOUYA",
+    "email": "amaradoumbouya442@gmail.com",
+    "slug": "1",
+    "objectif": "Demande de rencontre avec le Directeur Général du CRICT",
+    "message": "Bonjour\r\nje viens respectueusement au près de vous solliciter une rencontre avec le Directeur Général du CRICT dans le cadre partenariat entre nos deux institutions de recherche.\r\nVeuillez agréer Monsieur le Directeur.",
+    "reponse_au_message": "Bonjour M Amara M'balou DOUMBOUYA\r\nPar rapport à votre requette, le programme de rencontre avec le Directeur Général du CRICT est le prévu le 30 Aout 2025 à 10h00.\r\nMerci de votre patiente et passer une excellente journée.",
+    "is_read": true,
+    "user": null,
+    "created_at": "2025-07-24T09:18:58.266Z",
+    "updated_at": "2025-07-24T09:18:58.266Z"
+  }
+},
+{
+  "model": "contact_us.contactus",
+  "pk": 3,
+  "fields": {
+    "nom_complet": "Sidiki Fatta CONDE",
+    "email": "sidikifattaconde@gmail.com",
+    "slug": "sidiki-fatta-conde-3",
+    "objectif": "Demande d'aide à la publication de mon memoire master sur le portail scientifique",
+    "message": "Bonjour,\r\nJe viens solliciter votre aide pour la publication de mon memoire de master sur le portail scientifique. Dans l'attente d'une suite favorable, recevez mes salutations les plus sinceres. \r\nCordialement.",
+    "reponse_au_message": "Bonjour M Sidiki Fatta CONDE,\r\nSuite à votre demande d'aide pour la publication de votre memoire de master sur le portail scientifique, nous avons le plaisir de informer que notre équipe technique est prete à vous recevoir avec bras ouvert dans nos locaux le 10 Aout 2025 à 10h00.\r\nMerci de votre patience. \r\nCordialement.",
+    "is_read": true,
+    "user": null,
+    "created_at": "2025-07-24T09:56:15.113Z",
+    "updated_at": "2025-07-24T09:56:15.113Z"
+  }
+},
+{
+  "model": "contact_us.contactus",
+  "pk": 4,
+  "fields": {
+    "nom_complet": "Amara M'balou DOUMBOUYA",
+    "email": "amaradoumbouya442@gmail.com",
+    "slug": "amara-mbalou-doumbouya-4",
+    "objectif": "Demande de rencontre avec le Directeur Général du CRICT",
+    "message": "fffffffffffffffffffffffffff",
+    "reponse_au_message": "hc,vbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "is_read": true,
+    "user": null,
+    "created_at": "2025-08-04T11:03:39.070Z",
+    "updated_at": "2025-08-04T11:03:39.070Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 2,
+  "fields": {
+    "photo": "",
+    "prenoms": "Amara Sékou",
+    "nom": "DOUMBOUYA",
+    "slug": "1",
+    "email": "amarasekoudoumbouya@gmail.com",
+    "institution": 1,
+    "grade": "Docteur",
+    "specialite": "Ingenieur informaticien",
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "parcours": "Amara sékou DOUMBOUYA est un ingenieur informaticien évoluant au CRICT",
+    "user": 1,
+    "created_at": "2025-07-03T10:26:31.783Z",
+    "updated_at": "2025-07-30T11:46:22.038Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 3,
+  "fields": {
+    "photo": "",
+    "prenoms": "Mamoudou",
+    "nom": "CAMARA",
+    "slug": "mamoudou-camara-3",
+    "email": "mamoudoucamara@crict.edu.gn",
+    "institution": 2,
+    "grade": "Docteur",
+    "specialite": "Ingenieur Télécoms",
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "parcours": "Mamoudou CAMARA est un ingenieur tlélécommunications",
+    "user": 1,
+    "created_at": "2025-07-03T11:40:34.901Z",
+    "updated_at": "2025-07-30T11:46:27.110Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 4,
+  "fields": {
+    "photo": "",
+    "prenoms": "Aboubacar Demba",
+    "nom": "KONATE",
+    "slug": "aboubacar-demba-konate-4",
+    "email": "aboubacarb2o99@gmail.com",
+    "institution": 2,
+    "grade": "Professeur",
+    "specialite": "Ingenieur Télécoms",
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "parcours": "Aboubacar Demba KONATE est un informaticien qualifié",
+    "user": 1,
+    "created_at": "2025-07-03T11:41:31.317Z",
+    "updated_at": "2025-07-30T11:46:32.485Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 5,
+  "fields": {
+    "photo": "encadreurs/photos/AD_PHOTO.jpeg",
+    "prenoms": "Sidiki Fatta",
+    "nom": "CONDE",
+    "slug": "sidiki-fatta-conde-5",
+    "email": "sidikifattaconde@gmail.com",
+    "institution": 1,
+    "grade": "Professeur",
+    "specialite": "Ingenieur informaticien",
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "parcours": "",
+    "user": 6,
+    "created_at": "2025-07-31T15:19:42.326Z",
+    "updated_at": "2025-07-31T15:19:42.330Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 6,
+  "fields": {
+    "photo": "encadreurs/photos/AD_PHOTO_uyqZjJl.jpeg",
+    "prenoms": "Mamoudou",
+    "nom": "CAMARA",
+    "slug": "mamoudou-camara-6",
+    "email": "mamoudoucamara@gmail.com",
+    "institution": 1,
+    "grade": "Professeur",
+    "specialite": "Ingenieur Télécoms",
+    "facebook": null,
+    "twitter": null,
+    "linkedin": null,
+    "site_web": null,
+    "parcours": "",
+    "user": 6,
+    "created_at": "2025-08-01T12:24:25.431Z",
+    "updated_at": "2025-08-01T12:24:25.434Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 7,
+  "fields": {
+    "photo": "encadreurs/photos/WhatsApp_Image_2025-10-28_at_10.54.52.jpeg",
+    "prenoms": "Mory",
+    "nom": "KONATE",
+    "slug": "mory-konate-7",
+    "email": "morykonate@gmail.com",
+    "institution": 1,
+    "grade": "Professeur",
+    "specialite": "Ingenieur informaticien",
+    "facebook": "https://facebook.com",
+    "twitter": "https://twitter.com",
+    "linkedin": "https://linkedin.com",
+    "site_web": "https://morykonate.edu.gn",
+    "parcours": "Ingenieur informaticien",
+    "user": 25,
+    "created_at": "2025-10-28T11:03:48.933Z",
+    "updated_at": "2025-10-28T11:03:48.936Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 8,
+  "fields": {
+    "photo": "encadreurs/photos/WhatsApp_Image_2025-10-28_at_10.55.12.jpeg",
+    "prenoms": "Ibrahima Maki",
+    "nom": "KEITA",
+    "slug": "ibrahima-maki-keita-8",
+    "email": "ibrahimamakikeita@gmail.com",
+    "institution": 2,
+    "grade": "Maître de conférences",
+    "specialite": "Maintenancier",
+    "facebook": "https://facebook.com",
+    "twitter": "https://twitter.com",
+    "linkedin": "https://linkedin.com",
+    "site_web": "https://ibrahimamakikonate.edu.gn",
+    "parcours": "Maintenancier",
+    "user": 25,
+    "created_at": "2025-10-28T11:05:50.055Z",
+    "updated_at": "2025-10-28T11:05:50.058Z"
+  }
+},
+{
+  "model": "encadreurs.encadreur",
+  "pk": 9,
+  "fields": {
+    "photo": "encadreurs/photos/WhatsApp_Image_2025-10-28_at_10.55.50.jpeg",
+    "prenoms": "Ousmane Sekou",
+    "nom": "DOUMBOUYA",
+    "slug": "ousmane-sekou-doumbouya-9",
+    "email": "ousmanesekoudoumbouya@gmail.com",
+    "institution": 3,
+    "grade": "Docteur",
+    "specialite": "Technicien support",
+    "facebook": "https://facebook.com",
+    "twitter": "https://twitter.com",
+    "linkedin": "https://linkedin.com",
+    "site_web": "https://ousmanesekoudoumbouya.edu.gn",
+    "parcours": "Technicien support",
+    "user": 25,
+    "created_at": "2025-10-28T11:07:43.973Z",
+    "updated_at": "2025-10-28T11:07:43.974Z"
+  }
+},
+{
+  "model": "institutions.institution",
+  "pk": 1,
+  "fields": {
+    "nom": "CRICT",
+    "slug": "1",
+    "type": "Centre de recherche",
+    "ville": "Conakry",
+    "pays": "Guinée",
+    "site_web": "https://crict.edu.gn",
+    "user": null,
+    "created_at": "2025-06-20T10:43:28.811Z",
+    "updated_at": "2025-06-21T14:54:33.119Z"
+  }
+},
+{
+  "model": "institutions.institution",
+  "pk": 2,
+  "fields": {
+    "nom": "UGANC",
+    "slug": "uganc-universite-2",
+    "type": "Université",
+    "ville": "Conakry",
+    "pays": "Guinée",
+    "site_web": "http://uganc.edu.gn",
+    "user": 1,
+    "created_at": "2025-07-03T11:28:44.963Z",
+    "updated_at": "2025-07-03T11:28:44.967Z"
+  }
+},
+{
+  "model": "institutions.institution",
+  "pk": 3,
+  "fields": {
+    "nom": "Herbier National",
+    "slug": "herbier-national-centre-de-recherche-3",
+    "type": "Centre de recherche",
+    "ville": "Conakry",
+    "pays": "Guinée",
+    "site_web": "http://herbier.edu.gn",
+    "user": 1,
+    "created_at": "2025-07-03T11:29:33.030Z",
+    "updated_at": "2025-07-03T11:29:33.033Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "slug": "1",
+    "objectif": "Statut de votre publication: Comment devenir developpeur web et mobile",
+    "detail": "\n\n        Bonjour amaradoumbouya442@gmail.com, votre publication intitulée Comment devenir developpeur web et mobile a été traitée.\n\n        Statut : Rejetée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/comment-devenir-developpeur-web-et-mobile-francais-3.\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-14T13:08:01.172Z",
+    "updated_at": "2025-07-14T13:08:01.172Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 2,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-2",
+    "objectif": "Statut de votre publication: Comment devenir developpeur web et mobile",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Comment devenir developpeur web et mobile a été traitée.\n\n        Statut : Rejetée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/comment-devenir-developpeur-web-et-mobile-francais-3/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-14T13:32:33.298Z",
+    "updated_at": "2025-07-14T13:32:33.298Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 3,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-3",
+    "objectif": "Statut de votre publication: Developpement web",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Developpement web a été traitée.\n\n        Statut : Rejetée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/developpement-web-francais-21/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-14T14:18:53.043Z",
+    "updated_at": "2025-07-14T14:18:53.043Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 4,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-4",
+    "objectif": "Statut de votre publication: Developpement web",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Developpement web a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/developpement-web-francais-3/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-14T14:30:25.007Z",
+    "updated_at": "2025-07-14T14:30:25.007Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 5,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-5",
+    "objectif": "Statut de votre publication: Developpement web non",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Developpement web non a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/developpement-web-non-francais-23/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-14T14:31:29.052Z",
+    "updated_at": "2025-07-14T14:31:29.052Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 6,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-6",
+    "objectif": "Statut de votre publication: Developpement web non",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Developpement web non a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/developpement-web-non-francais-23/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-14T14:35:59.820Z",
+    "updated_at": "2025-07-14T14:35:59.820Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 7,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-7",
+    "objectif": "Statut de votre publication: Developpement web non",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Developpement web non a été traitée.\n\n        Statut : Rejetée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/developpement-web-non-francais-23/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-14T14:44:33.583Z",
+    "updated_at": "2025-07-14T14:44:33.583Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 8,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-8",
+    "objectif": "Statut de votre publication: IA et la generation du texte, comprendre et maitriser",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée IA et la generation du texte, comprendre et maitriser a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/ia-et-la-generation-du-texte-comprendre-et-maitriser-francais-26/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:12:34.629Z",
+    "updated_at": "2025-07-15T12:12:34.629Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 9,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-9",
+    "objectif": "Statut de votre publication: Microsoft copilot optimisez votre collaboration",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Microsoft copilot optimisez votre collaboration a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/microsoft-copilot-optimisez-votre-collaboration-francais-27/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:16:58.079Z",
+    "updated_at": "2025-07-15T12:16:58.079Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 10,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-10",
+    "objectif": "Statut de votre publication: After effets pour pc et pour mac",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée After effets pour pc et pour mac a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/after-effets-pour-pc-et-pour-mac-francais-28/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:20:28.767Z",
+    "updated_at": "2025-07-15T12:20:28.767Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 11,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-11",
+    "objectif": "Statut de votre publication: Debuter et se perfectionner avec azure concepts fondamentaux",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Debuter et se perfectionner avec azure concepts fondamentaux a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/debuter-et-se-perfectionner-avec-azure-concepts-fondamentaux-francais-29/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:22:42.231Z",
+    "updated_at": "2025-07-15T12:22:42.231Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 12,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-12",
+    "objectif": "Statut de votre publication: Inernet au quotidien nouvelle edition",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Inernet au quotidien nouvelle edition a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/inernet-au-quotidien-nouvelle-edition-francais-30/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:24:51.679Z",
+    "updated_at": "2025-07-15T12:24:51.679Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 13,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-13",
+    "objectif": "Statut de votre publication: Analyse de données marketing avec l'IA",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Analyse de données marketing avec l'IA a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/analyse-de-donnees-marketing-avec-lia-francais-31/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:27:44.373Z",
+    "updated_at": "2025-07-15T12:27:44.373Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 14,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-14",
+    "objectif": "Statut de votre publication: Data Scientiste et langage r statistique",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Data Scientiste et langage r statistique a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/data-scientiste-et-langage-r-statistique-francais-32/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:29:59.771Z",
+    "updated_at": "2025-07-15T12:29:59.771Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 15,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-15",
+    "objectif": "Statut de votre publication: Excel et word et microsoft",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Excel et word et microsoft a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/excel-et-word-et-microsoft-francais-33/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-15T12:32:14.360Z",
+    "updated_at": "2025-07-15T12:32:14.360Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 16,
+  "fields": {
+    "user": 1,
+    "slug": "amara-doumbouya-16",
+    "objectif": "Statut de votre publication: Maitrisez la data science avec python",
+    "detail": "\n\n        Bonjour Amara DOUMBOUYA, votre publication intitulée Maitrisez la data science avec python a été traitée.\n\n        Statut : Indexée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/maitrisez-la-data-science-avec-python-francais-34/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-17T09:47:15.214Z",
+    "updated_at": "2025-07-17T09:47:15.214Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 17,
+  "fields": {
+    "user": null,
+    "slug": "oury-doyen-camara-17",
+    "objectif": "Statut de votre publication: Les fondamentaux du langage python",
+    "detail": "\n\n        Bonjour Oury doyen CAMARA, votre publication intitulée Les fondamentaux du langage python a été traitée.\n\n        Statut : Rejetée.\n\n        .\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/les-fondamentaux-du-langage-python-francais-35/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-21T10:33:20.257Z",
+    "updated_at": "2025-07-21T10:33:20.257Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 18,
+  "fields": {
+    "user": null,
+    "slug": "oury-doyen-camara-18",
+    "objectif": "Statut de votre publication: apprendre le developpement des projets",
+    "detail": "\n\n        Bonjour Oury doyen CAMARA, votre publication intitulée apprendre le developpement des projets a été traitée.\n\n        Statut : Rejetée.\n\n        ❌ Motif du rejet: Le domaine n'a pas pu être identifié..\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/apprendre-le-developpement-des-projets-francais-35/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-21T11:30:56.116Z",
+    "updated_at": "2025-07-21T11:30:56.116Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 19,
+  "fields": {
+    "user": null,
+    "slug": "oury-doyen-camara-19",
+    "objectif": "Statut de votre publication: fondamentaux du langage",
+    "detail": "\n\n        Bonjour Oury doyen CAMARA, votre publication intitulée fondamentaux du langage a été traitée.\n\n        Statut : Indexée.\n\n        ✅ Elle a été indexée avec succès..\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/fondamentaux-du-langage-francais-35/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-21T11:32:34.059Z",
+    "updated_at": "2025-07-21T11:32:34.059Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 20,
+  "fields": {
+    "user": null,
+    "slug": "ousmane-mbalou-doumbouya-20",
+    "objectif": "Statut de votre publication: Python3 les fondamentaux",
+    "detail": "\n\n        Bonjour Ousmane M'balou DOUMBOUYA, votre publication intitulée Python3 les fondamentaux a été traitée.\n\n        Statut : Indexée.\n\n        ✅ Elle a été indexée avec succès..\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/python3-les-fondamentaux-francais-35/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-29T11:57:20.134Z",
+    "updated_at": "2025-07-29T11:57:20.134Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 21,
+  "fields": {
+    "user": 21,
+    "slug": "morifindjan-konate-21",
+    "objectif": "Statut de votre publication: Infrastructure réseaux en milieu scolaire",
+    "detail": "\n\n        Bonjour Morifindjan KONATE, votre publication intitulée Infrastructure réseaux en milieu scolaire a été traitée.\n\n        Statut : Indexée.\n\n        ✅ Elle a été indexée avec succès..\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/infrastructure-reseaux-en-milieu-scolaire-francais-35/\n\n        Merci pour votre contribution Scientifique. \n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-07-30T15:13:22.251Z",
+    "updated_at": "2025-07-30T15:13:22.251Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 22,
+  "fields": {
+    "user": 24,
+    "slug": "sidiki-kourouma-22",
+    "objectif": "Statut de votre publication: Infrastructure réseaux en milieu scolaire",
+    "detail": "\n\n        Bonjour Sidiki KOUROUMA, votre publication intitulée Infrastructure réseaux en milieu scolaire a été traitée.\n\n        Statut : En attente.\n\n        ❌ Motif du rejet: None.\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/infrastructure-reseaux-en-milieu-scolaire-francais-40/\n\n        Merci pour votre contribution Scientifique.\n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-08-04T05:21:22.077Z",
+    "updated_at": "2025-08-04T05:21:22.077Z"
+  }
+},
+{
+  "model": "notifications.notification",
+  "pk": 23,
+  "fields": {
+    "user": 25,
+    "slug": "oumar-fofana-23",
+    "objectif": "Statut de votre publication: Infrastructure réseaux en milieu Administratif",
+    "detail": "\n\n        Bonjour Oumar FOFANA, votre publication intitulée Infrastructure réseaux en milieu Administratif a été traitée.\n\n        Statut : En attente.\n\n        ❌ Motif du rejet: None.\n\n        Vous pouvvez consultez le detail ici http://127.0.0.1:8000/publications/detail-publication/infrastructure-reseaux-en-milieu-administratif-francais-41/\n\n        Merci pour votre contribution Scientifique.\n\n        L'equipe du portail ",
+    "notif_statut": false,
+    "created_at": "2025-10-28T11:26:10.178Z",
+    "updated_at": "2025-10-28T11:26:10.178Z"
+  }
+},
+{
+  "model": "partenaires.partenaire",
+  "pk": 1,
+  "fields": {
+    "nom": "CRICT(Centre de Recherche en Informatique et Cyber-Technologie)",
+    "logo": "partenaires/logos/logo_crict.png",
+    "site_web": "https://crict.edu.gn",
+    "email": "infos@crict.edu.gn",
+    "telephone": "612186456",
+    "adresse": "DIXINN/GUINEE-CONAKRY",
+    "description": "CRICT(Centre de Recherche en Informatique et Cyber-Technologie) est un centre de recherche qui evolue dans les domaines ci-après: Cybersecurité, Internet des Objet Connectés(OIT), Intelligence Artificielle(IA) etc...",
+    "slug": "1",
+    "user": 1,
+    "date_ajout": "2025-07-24T12:32:22.530Z",
+    "is_actif": true
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 1,
+  "fields": {
+    "photo": "publicatons/photos/python-coffrets-de-2-livres-maitrisez-le-nlp-avec-spacy-et-nltk-9782_luFM9fI.webp",
+    "titre": "Infrastructure réseaux",
+    "type_document": 2,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-08",
+    "fichier_pdf": "publications/BON_A_SAVOIR.docx",
+    "langue": "français",
+    "doi": "kkkkkk",
+    "orcid_auteur_principal": "kkkkkk",
+    "statut_indexation": "Indexée",
+    "motif_rejet": null,
+    "mots_cles": "dns, domaine, serveur, serveurs, web",
+    "resume": "BON A SAVOIR\nC’ est quoi un serveur DNS ?\n",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "1",
+    "date_ajout_systeme": "2025-07-10T11:10:34.945Z",
+    "updated_at": "2025-07-17T09:28:25.429Z",
+    "auteurs": [
+      2
+    ],
+    "encadreurs": [
+      2
+    ],
+    "institutions_contributrices": [
+      1
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 2,
+  "fields": {
+    "photo": "publicatons/photos/le-machine-learning-et-l-ia-generative-avec-python-de-la-theorie-a-l_2eNoGey.webp",
+    "titre": "Méthode appliquée",
+    "type_document": 2,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-03",
+    "fichier_pdf": "publications/NOTIONS_SUR_AWS.docx",
+    "langue": "français",
+    "doi": "kkkkkk",
+    "orcid_auteur_principal": "kkkkkk",
+    "statut_indexation": "Indexée",
+    "motif_rejet": null,
+    "mots_cles": "application, aws, créer, django, docker",
+    "resume": "NOTIONS SUR L’UTILISATION DE AWS AVEC ARNO\n Les informations du compte\nCompte ID : 637423393650\nLien de connexion : https://\nristeldevelopers.signin.aws.amazon.com/console\nNom : DOUMBOUYA\nEmail : amarambaloudoumbouya@gmail.com\nPassword : Am@.......................\nAccount Alias : risteldevelopers\nLes étapes à suivre pour la configuration AWS\n",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "methode-appliquee-a-la-creation-des-sites-et-applications-web-francais-2",
+    "date_ajout_systeme": "2025-07-10T11:40:36.174Z",
+    "updated_at": "2025-07-17T09:28:20.022Z",
+    "auteurs": [
+      2,
+      3
+    ],
+    "encadreurs": [
+      2,
+      3
+    ],
+    "institutions_contributrices": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 22,
+  "fields": {
+    "photo": "publicatons/photos/le-devops-en-pratique-avec-gitlab-gestion-de-projets-et-pipelines-ci-cd.webp",
+    "titre": "Developpement web",
+    "type_document": 2,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-10",
+    "fichier_pdf": "publications/DevWep_zIeFFMH.docx",
+    "langue": "français",
+    "doi": "12000",
+    "orcid_auteur_principal": "kkkkkk",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "attente, django, pwa, temps, web",
+    "resume": "Titre\nConception d’une application web progressive (PWA) pour la\ngestion intelligente des files d’attente dans les centres de santé\nurbains\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "developpement-web-francais-3",
+    "date_ajout_systeme": "2025-07-14T14:30:22.679Z",
+    "updated_at": "2025-07-17T09:28:14.136Z",
+    "auteurs": [
+      2,
+      3,
+      4
+    ],
+    "encadreurs": [
+      2,
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      1,
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 25,
+  "fields": {
+    "photo": "publicatons/photos/power-bi-desktop-reporting-et-analyse-de-donnees-au-quotidien-3e-edition.webp",
+    "titre": "Developpement web non",
+    "type_document": 3,
+    "domaine": "Autres",
+    "date_publication": "2025-07-11",
+    "fichier_pdf": "publications/DevWebNon_fNVawb6.docx",
+    "langue": "français",
+    "doi": "12000",
+    "orcid_auteur_principal": "kkkkkk",
+    "statut_indexation": "Rejetée",
+    "motif_rejet": "Le domaine n'a pas pu être identifié.",
+    "mots_cles": "bien, faire, gens, site, ça",
+    "resume": "Amadou Bah Développeur freelance (aucune affiliation, pas d’email,\npas d’ORCID)\n On a fait un site avec HTML et CSS pour afficher des informations.\n",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "developpement-web-non-francais-23",
+    "date_ajout_systeme": "2025-07-14T14:44:31.429Z",
+    "updated_at": "2025-07-17T09:28:07.621Z",
+    "auteurs": [
+      2,
+      3,
+      4
+    ],
+    "encadreurs": [
+      2,
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      1,
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 26,
+  "fields": {
+    "photo": "publicatons/photos/l-ia-et-la-generation-de-texte-comprendre-et-maitriser-chatgpt-gemin_qK0oUqX.webp",
+    "titre": "IA et la generation du texte",
+    "type_document": 3,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-01",
+    "fichier_pdf": "publications/fichiers/DevWep.docx",
+    "langue": "français",
+    "doi": "jjjjjjjj",
+    "orcid_auteur_principal": "lllllll",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "attente, django, pwa, temps, web",
+    "resume": "Titre\nConception d’une application web progressive (PWA) pour la\ngestion intelligente des files d’attente dans les centres de santé\nurbains\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "ia-et-la-generation-du-texte-comprendre-et-maitriser-francais-26",
+    "date_ajout_systeme": "2025-07-15T12:12:32.449Z",
+    "updated_at": "2025-07-17T09:28:03.301Z",
+    "auteurs": [
+      2,
+      3
+    ],
+    "encadreurs": [
+      2,
+      3
+    ],
+    "institutions_contributrices": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 27,
+  "fields": {
+    "photo": "publicatons/photos/microsoft-copilot-optimisez-votre-productivite-en-collaborant-avec-l-ia.webp",
+    "titre": "Microsoft copilot optimisez",
+    "type_document": 5,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-02",
+    "fichier_pdf": "publications/fichiers/DevMob.docx",
+    "langue": "français",
+    "doi": "10.1038/s41586-020-2649-2",
+    "orcid_auteur_principal": "0000-0002-1825-0097",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "application, développement, flutter, langues, mobile",
+    "resume": "Titre\nDéveloppement d’une application mobile multiplateforme pour\nl’apprentissage des langues africaines : Étude de cas sur le soussou,\nle peulh et le malinké\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "microsoft-copilot-optimisez-votre-collaboration-francais-27",
+    "date_ajout_systeme": "2025-07-15T12:16:55.920Z",
+    "updated_at": "2025-07-17T09:27:58.884Z",
+    "auteurs": [
+      3,
+      4
+    ],
+    "encadreurs": [
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 28,
+  "fields": {
+    "photo": "publicatons/photos/after-effects-2025-pour-pc-et-mac.webp",
+    "titre": "After effets pour pc et mac",
+    "type_document": 5,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-04",
+    "fichier_pdf": "publications/fichiers/DevMob_517zXJZ.docx",
+    "langue": "français",
+    "doi": "10.1109/5.771073",
+    "orcid_auteur_principal": "0000-0003-1419-2405",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "application, développement, flutter, langues, mobile",
+    "resume": "Titre\nDéveloppement d’une application mobile multiplateforme pour\nl’apprentissage des langues africaines : Étude de cas sur le soussou,\nle peulh et le malinké\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "after-effets-pour-pc-et-pour-mac-francais-28",
+    "date_ajout_systeme": "2025-07-15T12:20:26.644Z",
+    "updated_at": "2025-07-17T09:27:52.620Z",
+    "auteurs": [
+      2,
+      3
+    ],
+    "encadreurs": [
+      2,
+      3
+    ],
+    "institutions_contributrices": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 29,
+  "fields": {
+    "photo": "publicatons/photos/debuter-et-se-perfectionner-avec-azure-concepts-fondamentaux-et-mise_c4rgdF8.webp",
+    "titre": "Debuter et se perfectionner",
+    "type_document": 3,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-05",
+    "fichier_pdf": "publications/fichiers/DevMob_MtbnwP4.docx",
+    "langue": "français",
+    "doi": "10.1016/j.artmed.2004.07.017",
+    "orcid_auteur_principal": "0000-0001-5109-3700",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "application, développement, flutter, langues, mobile",
+    "resume": "Titre\nDéveloppement d’une application mobile multiplateforme pour\nl’apprentissage des langues africaines : Étude de cas sur le soussou,\nle peulh et le malinké\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "debuter-et-se-perfectionner-avec-azure-concepts-fondamentaux-francais-29",
+    "date_ajout_systeme": "2025-07-15T12:22:40.094Z",
+    "updated_at": "2025-07-17T09:27:49.738Z",
+    "auteurs": [
+      2,
+      3
+    ],
+    "encadreurs": [
+      2,
+      3
+    ],
+    "institutions_contributrices": [
+      1,
+      3
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 30,
+  "fields": {
+    "photo": "publicatons/photos/internet-au-quotidien-nouvelle-edition.webp",
+    "titre": "Inernet au quotidien nouvelle",
+    "type_document": 2,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-06",
+    "fichier_pdf": "publications/fichiers/DevWep_f0Tv24S.docx",
+    "langue": "français",
+    "doi": "10.1145/3360322",
+    "orcid_auteur_principal": "0000-0002-3843-3472",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "attente, django, pwa, temps, web",
+    "resume": "Titre\nConception d’une application web progressive (PWA) pour la\ngestion intelligente des files d’attente dans les centres de santé\nurbains\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "inernet-au-quotidien-nouvelle-edition-francais-30",
+    "date_ajout_systeme": "2025-07-15T12:24:49.555Z",
+    "updated_at": "2025-07-17T09:27:47.663Z",
+    "auteurs": [
+      3,
+      4
+    ],
+    "encadreurs": [
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 31,
+  "fields": {
+    "photo": "publicatons/photos/analyse-de-donnees-marketing-avec-l-ia-pilotez-vos-actions-avec-chat_IFOddiV.webp",
+    "titre": "Analyse de données marketing",
+    "type_document": 3,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-07",
+    "fichier_pdf": "publications/fichiers/DevWep_s2ymgcr.docx",
+    "langue": "français",
+    "doi": "10.1007/s00134-020-05991-x",
+    "orcid_auteur_principal": "0000-0002-1694-233X",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "attente, django, pwa, temps, web",
+    "resume": "Titre\nConception d’une application web progressive (PWA) pour la\ngestion intelligente des files d’attente dans les centres de santé\nurbains\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "analyse-de-donnees-marketing-avec-lia-francais-31",
+    "date_ajout_systeme": "2025-07-15T12:27:42.239Z",
+    "updated_at": "2025-07-17T09:27:46.448Z",
+    "auteurs": [
+      2,
+      3,
+      4
+    ],
+    "encadreurs": [
+      2,
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 32,
+  "fields": {
+    "photo": "publicatons/photos/data-scientist-et-langage-r-statistiques.webp",
+    "titre": "Data Scientiste et langage",
+    "type_document": 5,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-08",
+    "fichier_pdf": "publications/fichiers/DevMob_pX1MwSI.docx",
+    "langue": "français",
+    "doi": "10.1093/nar/gkaa974",
+    "orcid_auteur_principal": "0000-0003-0530-4305",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "application, développement, flutter, langues, mobile",
+    "resume": "Titre\nDéveloppement d’une application mobile multiplateforme pour\nl’apprentissage des langues africaines : Étude de cas sur le soussou,\nle peulh et le malinké\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "data-scientiste-et-langage-r-statistique-francais-32",
+    "date_ajout_systeme": "2025-07-15T12:29:57.659Z",
+    "updated_at": "2025-07-17T09:27:45.252Z",
+    "auteurs": [
+      2,
+      3
+    ],
+    "encadreurs": [
+      2,
+      3
+    ],
+    "institutions_contributrices": [
+      1,
+      3
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 33,
+  "fields": {
+    "photo": "publicatons/photos/excel-et-word-versions-2024-et-microsoft-365-coffret-de-deux-livres.webp",
+    "titre": "Excel et word et microsoft",
+    "type_document": 5,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-09",
+    "fichier_pdf": "publications/fichiers/DevMob_DWNyOil.docx",
+    "langue": "français",
+    "doi": "10.1186/s13059-020-02141-4",
+    "orcid_auteur_principal": "0000-0002-9079-593X",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "application, développement, flutter, langues, mobile",
+    "resume": "Titre\nDéveloppement d’une application mobile multiplateforme pour\nl’apprentissage des langues africaines : Étude de cas sur le soussou,\nle peulh et le malinké\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "excel-et-word-et-microsoft-francais-33",
+    "date_ajout_systeme": "2025-07-15T12:32:12.237Z",
+    "updated_at": "2025-07-17T09:40:30.620Z",
+    "auteurs": [
+      2,
+      3,
+      4
+    ],
+    "encadreurs": [
+      2,
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      1,
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 34,
+  "fields": {
+    "photo": "publicatons/photos/maitrisez-la-data-science-avec-python.webp",
+    "titre": "la data science avec python",
+    "type_document": 5,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-16",
+    "fichier_pdf": "publications/fichiers/DevMob_U4b0quz.docx",
+    "langue": "français",
+    "doi": "10.1109/5.771090",
+    "orcid_auteur_principal": "0000-0002-1825-0099",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "application, développement, flutter, langues, mobile",
+    "resume": "Titre\nDéveloppement d’une application mobile multiplateforme pour\nl’apprentissage des langues africaines : Étude de cas sur le soussou,\nle peulh et le malinké\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 1,
+    "slug": "maitrisez-la-data-science-avec-python-francais-34",
+    "date_ajout_systeme": "2025-07-17T09:47:12.107Z",
+    "updated_at": "2025-09-30T15:39:31.744Z",
+    "auteurs": [
+      2,
+      3,
+      4
+    ],
+    "encadreurs": [
+      2,
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 39,
+  "fields": {
+    "photo": "",
+    "titre": "Infrastructure réseaux en milieu scolaire",
+    "type_document": 2,
+    "domaine": "Informatique",
+    "date_publication": "2025-07-08",
+    "fichier_pdf": "publications/fichiers/DevWep_vlEBjW4.docx",
+    "langue": "français",
+    "doi": "10.1109/5.771073",
+    "orcid_auteur_principal": "0000-0002-1825-0097",
+    "statut_indexation": "Indexée",
+    "motif_rejet": "",
+    "mots_cles": "attente, django, pwa, temps, web",
+    "resume": "Titre\nConception d’une application web progressive (PWA) pour la\ngestion intelligente des files d’attente dans les centres de santé\nurbains\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": true,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 21,
+    "slug": "infrastructure-reseaux-en-milieu-scolaire-francais-35",
+    "date_ajout_systeme": "2025-07-30T15:13:19.727Z",
+    "updated_at": "2025-07-30T15:13:20.188Z",
+    "auteurs": [
+      2,
+      3,
+      4
+    ],
+    "encadreurs": [
+      2,
+      3,
+      4
+    ],
+    "institutions_contributrices": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 40,
+  "fields": {
+    "photo": "publicatons/photos/python-apprenez-a-developper-des-projets-ludiques-3e-edition_HmPywgz.webp",
+    "titre": "Infrastructure réseaux en milieu scolaire",
+    "type_document": 1,
+    "domaine": "Informatique",
+    "date_publication": "2025-08-01",
+    "fichier_pdf": "publications/fichiers/DevWep_sM9GGb4.docx",
+    "langue": "français",
+    "doi": null,
+    "orcid_auteur_principal": null,
+    "statut_indexation": "En attente",
+    "motif_rejet": null,
+    "mots_cles": "attente, django, pwa, temps, web",
+    "resume": "Titre\nConception d’une application web progressive (PWA) pour la\ngestion intelligente des files d’attente dans les centres de santé\nurbains\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": false,
+    "nom_revue": null,
+    "nom_colloque": "kkkkkk",
+    "lien_article": null,
+    "user": 24,
+    "slug": "infrastructure-reseaux-en-milieu-scolaire-francais-40",
+    "date_ajout_systeme": "2025-08-04T05:21:19.047Z",
+    "updated_at": "2025-08-04T05:21:19.903Z",
+    "auteurs": [
+      14
+    ],
+    "encadreurs": [],
+    "institutions_contributrices": []
+  }
+},
+{
+  "model": "publications.publication",
+  "pk": 41,
+  "fields": {
+    "photo": "publicatons/photos/python-apprenez-a-developper-des-projets-ludiques-3e-edition_61y7U4S.webp",
+    "titre": "Infrastructure réseaux en milieu Administratif",
+    "type_document": 3,
+    "domaine": "Informatique",
+    "date_publication": "2025-10-28",
+    "fichier_pdf": "publications/fichiers/Configuration_du_server_dans_sites_available.docx",
+    "langue": "français",
+    "doi": "10.1016/j.artint.2020.103345",
+    "orcid_auteur_principal": "https://orcid.org/0000-0002-1825-0097",
+    "statut_indexation": "En attente",
+    "motif_rejet": null,
+    "mots_cles": "attente, django, pwa, temps, web",
+    "resume": "Titre\nConception d’une application web progressive (PWA) pour la\ngestion intelligente des files d’attente dans les centres de santé\nurbains\n Auteurs\n Amara DOUMBOUYA, M.Sc.",
+    "statut_publication": false,
+    "nom_revue": null,
+    "nom_colloque": null,
+    "lien_article": null,
+    "user": 25,
+    "slug": "infrastructure-reseaux-en-milieu-administratif-francais-41",
+    "date_ajout_systeme": "2025-10-28T11:26:07.920Z",
+    "updated_at": "2025-10-28T11:33:44.212Z",
+    "auteurs": [
+      16
+    ],
+    "encadreurs": [
+      7,
+      8,
+      9
+    ],
+    "institutions_contributrices": [
+      1
+    ]
+  }
+},
+{
+  "model": "publications.publicationlike",
+  "pk": 16,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "liked_at": "2025-07-25T13:28:26.520Z"
+  }
+},
+{
+  "model": "publications.publicationlike",
+  "pk": 17,
+  "fields": {
+    "publication": 34,
+    "user": 1,
+    "liked_at": "2025-07-25T16:21:46.192Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 1,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "C'est un bon article",
+    "created_at": "2025-07-25T13:00:54.368Z",
+    "updated_at": "2025-07-25T13:00:54.368Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 2,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "C'est un bon article",
+    "created_at": "2025-07-25T13:01:00.598Z",
+    "updated_at": "2025-07-25T13:01:00.598Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 3,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "",
+    "created_at": "2025-07-25T13:01:25.472Z",
+    "updated_at": "2025-07-25T13:01:25.472Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 4,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "",
+    "created_at": "2025-07-25T13:01:26.204Z",
+    "updated_at": "2025-07-25T13:01:26.204Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 5,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "",
+    "created_at": "2025-07-25T13:01:26.967Z",
+    "updated_at": "2025-07-25T13:01:26.967Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 6,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:09:33.286Z",
+    "updated_at": "2025-07-25T13:09:33.286Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 7,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:09:35.774Z",
+    "updated_at": "2025-07-25T13:09:35.774Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 8,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:09:43.291Z",
+    "updated_at": "2025-07-25T13:09:43.291Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 9,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:09:46.248Z",
+    "updated_at": "2025-07-25T13:09:46.248Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 10,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:10:00.458Z",
+    "updated_at": "2025-07-25T13:10:00.458Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 11,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:10:01.590Z",
+    "updated_at": "2025-07-25T13:10:01.590Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 12,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:10:03.083Z",
+    "updated_at": "2025-07-25T13:10:03.083Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 13,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "c'est un bon article",
+    "created_at": "2025-07-25T13:10:05.559Z",
+    "updated_at": "2025-07-25T13:10:05.559Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 14,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "Ce article est très bon à lire",
+    "created_at": "2025-07-25T13:28:51.869Z",
+    "updated_at": "2025-07-25T13:28:51.869Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 15,
+  "fields": {
+    "publication": 33,
+    "user": 1,
+    "contenu": "Ce article est très bon à lire",
+    "created_at": "2025-07-25T13:28:55.428Z",
+    "updated_at": "2025-07-25T13:28:55.428Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 16,
+  "fields": {
+    "publication": 34,
+    "user": 1,
+    "contenu": "C'est un bon article scientifique. Beau boulot !",
+    "created_at": "2025-07-25T16:22:21.534Z",
+    "updated_at": "2025-07-25T16:22:21.534Z"
+  }
+},
+{
+  "model": "publications.publicationcomment",
+  "pk": 18,
+  "fields": {
+    "publication": 34,
+    "user": 24,
+    "contenu": "hhhhhhhhhhhhh",
+    "created_at": "2025-08-04T11:08:43.155Z",
+    "updated_at": "2025-08-04T11:08:43.155Z"
+  }
+},
+{
+  "model": "publications.publicationdownload",
+  "pk": 1,
+  "fields": {
+    "publication": 33,
+    "ip_address": "127.0.0.1",
+    "user": 1,
+    "downloaded_at": "2025-07-25T13:09:06.234Z",
+    "updated_at": "2025-07-25T13:09:06.234Z"
+  }
+},
+{
+  "model": "publications.publicationdownload",
+  "pk": 3,
+  "fields": {
+    "publication": 34,
+    "ip_address": "127.0.0.1",
+    "user": 24,
+    "downloaded_at": "2025-08-04T11:08:15.852Z",
+    "updated_at": "2025-08-04T11:08:15.852Z"
+  }
+},
+{
+  "model": "types_document.typedocument",
+  "pk": 1,
+  "fields": {
+    "libelle": "Communication Scientifique",
+    "slug": "1",
+    "user": null,
+    "created_at": "2025-06-21T15:32:24.751Z",
+    "updated_at": "2025-07-31T11:53:12.928Z"
+  }
+},
+{
+  "model": "types_document.typedocument",
+  "pk": 2,
+  "fields": {
+    "libelle": "Mémoire de Master",
+    "slug": "programmation-en-python-2",
+    "user": null,
+    "created_at": "2025-06-21T15:33:15.056Z",
+    "updated_at": "2025-07-02T11:09:53.064Z"
+  }
+},
+{
+  "model": "types_document.typedocument",
+  "pk": 3,
+  "fields": {
+    "libelle": "Thèse de Doctorat",
+    "slug": "programmation-oriente-objet-3",
+    "user": null,
+    "created_at": "2025-06-21T15:34:46.554Z",
+    "updated_at": "2025-07-02T11:09:32.059Z"
+  }
+},
+{
+  "model": "types_document.typedocument",
+  "pk": 5,
+  "fields": {
+    "libelle": "Articles Scientifiques",
+    "slug": "python-5",
+    "user": null,
+    "created_at": "2025-06-21T15:35:15.713Z",
+    "updated_at": "2025-08-04T11:16:26.988Z"
+  }
+}
+]
