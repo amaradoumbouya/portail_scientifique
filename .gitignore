@@ -9,6 +9,7 @@ settings.py
 # Dossiers
 media/
 node_modules/
+backup_portail/
 
 # Fichiers Python
 __pycache__/
