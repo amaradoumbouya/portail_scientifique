@@ -1,233 +1,249 @@
 {% extends "index.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
+{% block title %}
+<title>Detail publication - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+
+{% endblock style %}
 
 
 {% block content %}
-<div class="page-heading contact-heading header-text">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-content">
-                    <h4>Detail Publication</h4>
-                    <!-- <h2>Restons en contact</h2> -->
+<!-- Start Page Title Area -->
+<div class="banner-area news-details">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Détail de la publication</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active"> Détail</p>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<div class="find-us">
+<!-- End Page Title Area -->
+<!-- News Details -->
+<section class="single-news-area">
     <div class="container">
         <div class="row">
-            <!-- Titre principal -->
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Détail Publication</h2>
-                </div>
-            </div>
+            <div class="col-lg-8 col-md-7">
 
-            <!-- Détail de la publication -->
-            <div class="col-md-8">
-                <!-- detail publication -->
-                <div class="publication-detail">
-                    <!-- Image de la publication -->
-                    <img height="700px" width="400px" src="{{ publication.ImageUrl }}" alt="{{ publication.titre }}"
-                        class="img-fluid mb-3">
+                <div class="news-slider owl-carousel owl-theme">
+                    <div class="single-slider">
+                        <div class="event-img">
+                            <img src="{% static 'front/assets/images/news/news11.png' %}" alt="news" />
+                        </div>
 
-                    <h3>{{ publication.titre }}</h3> <br>
-                    <p>
-                        <strong>Auteur(s) :</strong>
-                        <br>
-                        {% for auteur in publication.auteurs.all %}
-                        <a href="{% url 'portail_site:detail_auteur' auteur.slug %}">{{ auteur.prenoms }} {{ auteur.nom}}</a><br>
-                        {% empty %}
-                        Aucun auteur
-                        {% endfor %}
-                        <br>
+                        <div class="content">
+                            <!-- TITRE -->
+                            <h2 class="mb-3">
+                                Impact de l'intelligence artificielle sur l'indexation automatique des publications
+                                scientifiques
+                            </h2>
 
-                        <strong>Encadreur(s) :</strong>
-                        <br>
-                        {% for encadreur in publication.encadreurs.all %}
-                        <a href="{% url 'portail_site:detail_encadreur' encadreur.slug %}">{{ encadreur.grade }} {{encadreur.prenoms }} {{ encadreur.nom }}</a><br>
-                        {% empty %}
-                        Aucun encadreur
-                        {% endfor %}
-                        <br>
+                            <!-- AUTEURS -->
+                            <p><strong>Auteurs :</strong> Amara DOUMBOUYA, Mamadou Diallo</p>
 
-                        <strong>Domaine :</strong>
-                        {{ publication.domaine }}
-                        <br><br>
+                            <!-- ENCADREURS -->
+                            <p><strong>Encadreurs :</strong> Dr. Ibrahima Camara</p>
 
-                        <strong>Mots-clés :</strong>
-                        {{ publication.mots_cles }}
-                        <br><br>
+                            <!-- DATE -->
+                            <p><strong>Date de publication :</strong> 12 Mars 2026</p>
 
-                        <strong>Date de publication :</strong>
-                        {{ publication.date_publication }}
-                        <br><br>
+                            <!-- DOMAINE -->
+                            <p><strong>Domaine :</strong> Intelligence Artificielle / Systèmes d'information</p>
 
-                        <strong>Langue :</strong>
-                        {{ publication.langue }}
-                    </p>
-                    <p><strong>Résumé :</strong> {{ publication.resume }}</p>
+                            <!-- DOI -->
+                            <p>
+                                <strong>DOI :</strong>
+                                <a href="#" target="_blank">10.1234/guinee.2026.001</a>
+                            </p>
 
-                    <!-- Bouton de téléchargement du PDF -->
-                    {% if publication.fichier_pdf %}
-                    <a href="{{ publication.fichier_pdf.url }}" class="btn btn-outline-dark mt-2" download>
-                        <i class="fa fa-download"></i> Télécharger le PDF
-                    </a>
-                    {% endif %}
-
-                    <!-- Boutons d'interaction -->
-                    <div class="publication-actions mt-3">
-                        <button class="btn btn-primary btn-like">
-                            <i class="fa fa-thumbs-up"></i> Liker
-                            <span class="like-count">{{ publication.likes.count }}</span>
-                        </button> <button class="btn btn-secondary"><i class="fa fa-comment"></i> Commenter</button>
-                    </div>
-
-
-                    <!-- Section de commentaires -->
-                    <div class="comments-section mt-4">
-                        <h4>Commentaires</h4>
-                        <div class="comments">
-                            <div class="comments-list">
-                                {% for comment in comments %}
-                                <p><strong>{{ comment.user.full_name }}</strong> : {{ comment.contenu }} <small>{{ comment.created_at|date:"d/m/Y H:i" }}</small></p>
-                                {% empty %}
-                                <p>Aucun commentaire</p>
-                                {% endfor %}
+                            <!-- RÉSUMÉ -->
+                            <div class="resume mt-4">
+                                <h4>Résumé</h4>
+                                <p>
+                                    Cet article présente une approche innovante basée sur le traitement automatique du
+                                    langage naturel (NLP)
+                                    pour améliorer l'indexation des publications scientifiques. L'objectif est
+                                    d'automatiser l'extraction
+                                    des mots-clés, la classification des documents et la suggestion de domaines
+                                    scientifiques.
+                                </p>
                             </div>
 
-                        </div>
-                        <div class="comment-form mt-3">
-                            <form method="post">
-                                {% csrf_token %}
-                                <textarea class="form-control" placeholder="Laissez un commentaire..."></textarea>
-                                <button type="submit" class="btn btn-primary mt-2">Envoyer</button>
-                            </form>
-                        </div>
-                    </div>
+                            <!-- MOTS-CLÉS -->
+                            <div class="keywords mt-3">
+                                <strong>Mots-clés :</strong>
+                                <span class="badge bg-primary">IA</span>
+                                <span class="badge bg-primary">NLP</span>
+                                <span class="badge bg-primary">Indexation</span>
+                                <span class="badge bg-primary">Recherche scientifique</span>
+                            </div>
 
-                    <!-- Réseaux sociaux -->
-                    <div class="social-icons mt-4">
-                        <h4>Partager</h4>
-                        <ul class="list-inline">
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fa fa-envelope"></i></a></li>
-                        </ul>
+                            <!-- BOUTON PDF -->
+                            <div class="mt-4">
+                                <a href="#" class="btn btn-success" target="_blank">
+                                    📄 Télécharger l'article
+                                </a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="single-slider">
+                        <div class="news-img">
+                            <img src="{% static 'front/assets/images/news/news11.png' %}" alt="event" />
+                        </div>
+
+                        <div class="content">
+                            <!-- TITRE -->
+                            <h2 class="mb-3">
+                                Impact de l'intelligence artificielle sur l'indexation automatique des publications
+                                scientifiques
+                            </h2>
+
+                            <!-- AUTEURS -->
+                            <p><strong>Auteurs :</strong> Amara DOUMBOUYA, Mamadou Diallo</p>
+
+                            <!-- ENCADREURS -->
+                            <p><strong>Encadreurs :</strong> Dr. Ibrahima Camara</p>
+
+                            <!-- DATE -->
+                            <p><strong>Date de publication :</strong> 12 Mars 2026</p>
+
+                            <!-- DOMAINE -->
+                            <p><strong>Domaine :</strong> Intelligence Artificielle / Systèmes d'information</p>
+
+                            <!-- DOI -->
+                            <p>
+                                <strong>DOI :</strong>
+                                <a href="#" target="_blank">10.1234/guinee.2026.001</a>
+                            </p>
+
+                            <!-- RÉSUMÉ -->
+                            <div class="resume mt-4">
+                                <h4>Résumé</h4>
+                                <p>
+                                    Cet article présente une approche innovante basée sur le traitement automatique du
+                                    langage naturel (NLP)
+                                    pour améliorer l'indexation des publications scientifiques. L'objectif est
+                                    d'automatiser l'extraction
+                                    des mots-clés, la classification des documents et la suggestion de domaines
+                                    scientifiques.
+                                </p>
+                            </div>
+
+                            <!-- MOTS-CLÉS -->
+                            <div class="keywords mt-3">
+                                <strong>Mots-clés :</strong>
+                                <span class="badge bg-primary">IA</span>
+                                <span class="badge bg-primary">NLP</span>
+                                <span class="badge bg-primary">Indexation</span>
+                                <span class="badge bg-primary">Recherche scientifique</span>
+                            </div>
+
+                            <!-- BOUTON PDF -->
+                            <div class="mt-4">
+                                <a href="#" class="btn btn-success" target="_blank">
+                                    📄 Télécharger l'article
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                <!-- fin detail publication -->
-            </div>
 
-            <!-- Section catégorie -->
-            <div class="col-md-4">
-                <div class="left-content">
-                    <h4>Catégorie : {{ publication.domaine }}</h4>
-
-                    <!-- catégorie publication -->
-                    <ul class="list-group mt-3">
-                        {% for pub in publications_categorie %}
-                        <li class="list-group-item">
-                            <a href="{% url 'portail_site:detail_publication' pub.slug %}">{{ pub.titre }}</a>
+                <div class="share">
+                    <ul class="share-list">
+                        <li>
+                            <p class="share-p">Partager</p>
                         </li>
-                        {% empty %}
-                        <li class="list-group-item">Aucune autre publication dans cette catégorie.</li>
-                        {% endfor %}
+                        <li>
+                            <a href="" target="_blank"><i class="flaticon-facebook"></i></a>
+                        </li>
+                        <li>
+                            <a href="" target="_blank"><i class="flaticon-twitter"></i></a>
+                        </li>
+                        <li>
+                            <a href=""><i class="flaticon-envelope"></i></a>
+                        </li>
+                        <li>
+                            <a href="" target="_blank"><i class="flaticon-google-plus"></i></a>
+                        </li>
                     </ul>
-                    <!-- fin catégorie publication -->
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-md-5">
+                <div class="news-content-right">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control about-search" placeholder="Recherche..." />
+                        </div>
+                        <button type="submit" class="search-btn"> <i class="flaticon-search"></i></button>
+                    </form>
+
+                    <p class="visit">Publications de même domaine</p>
+
+                    <ul class="class-list">
+
+                        <li>
+                            <a href="{% url 'portail_site:detail_publication' %}">
+                                <i class="flaticon-next"></i>Analyse des données massives en Afrique</a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'portail_site:detail_publication' %}">
+                                <i class="flaticon-next"></i>Utilisation du NLP pour la classification des articles scientifiques</a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'portail_site:detail_publication' %}">
+                                <i class="flaticon-next"></i>Systèmes intelligents pour la gestion documentaire</a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'portail_site:detail_publication' %}">
+                                <i class="flaticon-next"></i>Apprentissage automatique appliqué à la recherche scientifique</a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'portail_site:detail_publication' %}">
+                                <i class="flaticon-next"></i>Indexation automatique des publications académiques</a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'portail_site:detail_publication' %}">
+                                <i class="flaticon-next"></i>Apprentissage automatique appliqué à la recherche scientifique</a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'portail_site:detail_publication' %}">
+                                <i class="flaticon-next"></i>Analyse des données massives en Afrique</a>
+                        </li>
+
+                    </ul>
+
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<!-- End News Area -->
 
 
-
-<div class="happy-clients">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Partenaires de recherche</h2>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="owl-clients owl-carousel">
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="1">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="2">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="3">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="4">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="5">
-                    </div>
-
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="6">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock content %}
 
 {% block scripts %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(function () {
-        // Like
-        $('.btn-like').click(function () {
-            $.post("{% url 'portail_site:like_publication' publication.pk %}", {
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            }, function (data) {
-                if (data.liked) {
-                    $('.btn-like').addClass('btn-success').removeClass('btn-primary');
-                } else {
-                    $('.btn-like').addClass('btn-primary').removeClass('btn-success');
-                }
-                $('.btn-primary').find('span.like-count').text(data.like_count);
-            });
-        });
 
-        // Comment
-        $('.comment-form form').submit(function (e) {
-            e.preventDefault();
-            var textarea = $(this).find('textarea');
-            $.post("{% url 'portail_site:comment_publication' publication.pk %}", {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                content: textarea.val()
-            }, function (data) {
-                $('.comments-list').append(
-                    `<p><strong>${data.user}</strong> : ${data.content} <small>${data.created_at}</small></p>`
-                );
-                textarea.val(''); // Vide le champ après soumission
-            });
-        });
-
-        // Download
-        $('.btn-outline-dark').click(function (e) {
-            $.post("{% url 'portail_site:download_publication' publication.pk %}", {
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            });
-            // Le téléchargement se fait normalement via le lien
-        });
-    });
-</script>
 {% endblock scripts %}

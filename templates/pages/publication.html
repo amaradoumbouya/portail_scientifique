@@ -1,91 +1,18 @@
 {% extends "index.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
+{% block title %}
+<title>Toutes les publications - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+
+{% endblock style %}
 
 
 {% block content %}
-<div class="page-heading products-heading header-text">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-content">
-                    <h4>Publications</h4>
-                    <h2>Portail Scientifique</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
-<div class="products">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="filters">
-                    <ul>
-                        <li class="active" data-filter="*">Toutes les publications</li>
-                        <li data-filter=".des">A la une</li>
-                        <li data-filter=".dev">Flash Deals</li>
-                        <li data-filter=".gra">Dernière minute</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="filters-content">
-                    <div class="row grid">
-                        {% for publications in request.page_obj %}
-                        <div class="col-lg-4 col-md-4 all des">
-                            <div class="product-item">
-                                <a href="{% url 'portail_site:detail_publication' publications.slug %}"><img height="200" width="200" src="{{publications.ImageUrl}}" alt=""></a>
-                                <div class="down-content">
-                                    <a href="{% url 'portail_site:detail_publication' publications.slug %}">
-                                        <h4> {{publications.titre}} </h4>
-                                    </a>
-                                    <!-- <h6>$18.25</h6> -->
-                                    <p>{{publications.resume|safe|truncatechars:'70'}}.</p>
-                                    <ul class="stars">
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                    </ul>
-                                    <span>Reviews (12)</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                {% if request.page_obj.has_other_pages %}
-                <ul class="pages">
-                    {% if request.page_obj.has_previous %}
-                    <li><a href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
-                    {% endif %}
-
-                    {% for i in request.page_obj.paginator.page_range %}
-                    {% if request.page_obj.number == i %}
-                    <li><a href="">{{ i }}</a></li>
-                    {% else %}
-                    <li><a href="?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
-                    {% endfor %}
-
-                    {% if request.page_obj.has_next %}
-                    <li><a href="?page={{ request.page_obj.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
-                    {% endif %}
-                </ul>
-                {% endif %}
-            </div>
-
-        </div>
-    </div>
-</div>
 {% endblock content %}
 
 {% block scripts %}

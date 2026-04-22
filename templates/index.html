@@ -11,7 +11,7 @@
     
 
     {% block style %}
-        <style>
+    <style>
         /* Barre de recherche principale */
         .search-bar-container {
             max-width: 700px;
@@ -237,7 +237,7 @@
                                 Étude sur l’utilisation du traitement automatique du langage pour l’indexation des
                                 publications scientifiques.
                             </p>
-                            <a href="#" class="border-btn">Lire l’article</a>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="border-btn">Lire l’article</a>
                         </div>
                     </div>
                 </div>
@@ -254,7 +254,7 @@
                                 Conception d’un portail intelligent pour la gestion et la diffusion des publications
                                 scientifiques.
                             </p>
-                            <a href="#" class="border-btn">Lire l’article</a>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="border-btn">Lire l’article</a>
                         </div>
                     </div>
                 </div>
@@ -271,7 +271,7 @@
                                 Analyse des données scientifiques pour améliorer la visibilité et l’impact des
                                 recherches académiques.
                             </p>
-                            <a href="#" class="border-btn">Lire l’article</a>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="border-btn">Lire l’article</a>
                         </div>
                     </div>
                 </div>
@@ -422,8 +422,10 @@
             <div class="home-course-slider owl-carousel owl-theme">
 
                 <div class="single-home-special-course">
+                    
                     <div class="course-img">
                         <img src="{% static 'front/assets/images/courses/chercheur_1.png' %}" alt="publication" />
+
                         <div class="course-content">
                             <h2>IA & Traitement du langage</h2>
                             <p>
@@ -436,6 +438,7 @@
                 </div>
 
                 <div class="single-home-special-course">
+
                     <div class="course-img">
                         <img src="{% static 'front/assets/images/courses/chercheur_2.png' %}" alt="publication" />
                         <div class="course-content">
@@ -449,6 +452,7 @@
                 </div>
 
                 <div class="single-home-special-course">
+
                     <div class="course-img">
                         <img src="{% static 'front/assets/images/courses/chercheur_3.png' %}" alt="publication" />
                         <div class="course-content">
@@ -462,6 +466,7 @@
                 </div>
 
                 <div class="single-home-special-course">
+
                     <div class="course-img">
                         <img src="{% static 'front/assets/images/courses/chercheur_4.png' %}" alt="publication" />
                         <div class="course-content">
@@ -472,6 +477,7 @@
                             <a href="#" class="box-btn">Lire la publication</a>
                         </div>
                     </div>
+
                 </div>
 
             </div>
@@ -787,7 +793,7 @@
                             <li><a href="#"><i class="flaticon-next"></i> Opportunités de recherche</a></li>
                             <li><a href="#"><i class="flaticon-next"></i> Chercheurs & auteurs</a></li>
                             <li><a href="#"><i class="flaticon-next"></i> Institutions partenaires</a></li>
-                            <li><a href="#"><i class="flaticon-next"></i> Contact</a></li>
+                            <li><a href="{% url 'portail_site:contact' %}"><i class="flaticon-next"></i> Contact</a></li>
                         </ul>
                     </div>
                 </div>
@@ -797,10 +803,10 @@
                     <div class="footer-content fml-15">
                         <h2>Navigation</h2>
                         <ul>
-                            <li><a href="index.html"><i class="flaticon-next"></i> Accueil</a></li>
+                            <li><a href="{% url 'portail_site:index' %}"><i class="flaticon-next"></i> Accueil</a></li>
                             <li><a href="#"><i class="flaticon-next"></i> Publications</a></li>
                             <li><a href="#"><i class="flaticon-next"></i> Recherches</a></li>
-                            <li><a href="#"><i class="flaticon-next"></i> À propos</a></li>
+                            <li><a href="{% url 'portail_site:a_propos' %}"><i class="flaticon-next"></i> À propos</a></li>
                             <li><a href="#"><i class="flaticon-next"></i> FAQ</a></li>
                         </ul>
                     </div>
@@ -811,8 +817,8 @@
                     <div class="footer-content fml-15 fml-20">
                         <h2>Contact</h2>
                         <ul>
-                            <li><a href="tel:+224000000000"><i class="flaticon-next"></i> +224 XX XX XX XX</a></li>
-                            <li><a href="tel:+224000000001"><i class="flaticon-next"></i> +224 XX XX XX XX</a></li>
+                            <li><a href="tel:+224000000000"><i class="flaticon-next"></i> +224 612 18 64 56</a></li>
+                            <li><a href="tel:+224000000001"><i class="flaticon-next"></i> +224 612 18 64 56</a></li>
                             <li><a href="mailto:contact@portailscientifique.crict.edu.gn"><i class="flaticon-next"></i>
                                     contact@portailscientifique.crict.edu.gn</a></li>
                             <li><a href="#"><i class="flaticon-next"></i> portailscientifique.crict.edu.gn</a></li>

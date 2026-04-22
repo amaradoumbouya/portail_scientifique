@@ -1,91 +1,157 @@
 {% extends "index.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
+{% block title %}
+<title>Les publications de la catégorie - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+
+{% endblock style %}
 
 
 {% block content %}
-<div class="page-heading products-heading header-text">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-content">
-                    <!-- <h4>Publications</h4> -->
-                    <h2>{{type_document.libelle}}</h2>
+<!-- Start Page Title Area -->
+<div class="banner-area special-class">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Publications scientifiques</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active">Scientifiques publications</p>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- End Page Title Area -->
 
-
-<div class="products">
+<!--Specail Class -->
+<section class="special-single-class">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <div class="filters">
-                    <ul>
-                        <li class="active" data-filter="*">Toutes les publications</li>
-                        <li data-filter=".des">A la une</li>
-                        <li data-filter=".dev">Flash Deals</li>
-                        <li data-filter=".gra">Dernière minute</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="filters-content">
-                    <div class="row grid">
-                        {% for publications in page_obj %}
-                        <div class="col-lg-4 col-md-4 all des">
-                            <div class="product-item">
-                                <a href="{% url 'portail_site:detail_publication' publications.slug %}"><img height="200" width="200" src="{{publications.ImageUrl}}" alt=""></a>
-                                <div class="down-content">
-                                    <a href="{% url 'portail_site:detail_publication' publications.slug %}">
-                                        <h4> {{publications.titre}} </h4>
-                                    </a>
-                                    <!-- <h6>$18.25</h6> -->
-                                    <p>{{publications.resume|safe|truncatechars:'70'}}.</p>
-                                    <ul class="stars">
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                    </ul>
-                                    <span>Reviews (12)</span>
-                                </div>
-                            </div>
+
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-sp-class">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_1.png' %}" alt="course" />
+                        <div class="course-content">
+                            <h2>IA & Traitement du langage</h2>
+                            <p>
+                                Étude sur l’utilisation du NLP pour l’analyse et l’indexation des documents
+                                scientifiques.
+                            </p>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="box-btn">Lire la publication</a>
+
                         </div>
-                        {% endfor %}
-
-
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-12">
-                {% if page_obj.has_other_pages %}
-                <ul class="pages">
-                    {% if page_obj.has_previous %}
-                    <li><a href="?page=1"><i class="fa fa-angle-double-left"></i></a></li>
-                    {% endif %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-sp-class">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_2.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>Systèmes d’Information</h2>
+                            <p>
+                                Conception de plateformes intelligentes pour la gestion des données scientifiques.
+                            </p>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
 
-                    {% for i in page_obj.paginator.page_range %}
-                    {% if page_obj.number == i %}
-                    <li><a href="">{{ i }}</a></li>
-                    {% else %}
-                    <li><a href="?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
-                    {% endfor %}
+                </div>
+            </div>
 
-                    {% if page_obj.has_next %}
-                    <li><a href="?page={{ page_obj.paginator.num_pages }}"><i class="fa fa-angle-double-right"></i></a></li>
-                    {% endif %}
-                </ul>
-                {% endif %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-sp-class">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_3.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>Data Science</h2>
+                            <p>
+                                Analyse des données de recherche pour améliorer la visibilité scientifique.
+                            </p>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-sp-class">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_4.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>Innovation Académique</h2>
+                            <p>
+                                Nouvelles approches pour la diffusion et la valorisation des travaux scientifiques.
+                            </p>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-sp-class">
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_1.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>IA & Traitement du langage</h2>
+                            <p>
+                                Étude sur l’utilisation du NLP pour l’analyse et l’indexation des documents
+                                scientifiques.
+                            </p>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-sp-class">
+
+                    <div class="course-img">
+                        <img src="{% static 'front/assets/images/courses/chercheur_2.png' %}" alt="publication" />
+                        <div class="course-content">
+                            <h2>Systèmes d’Information</h2>
+                            <p>
+                                Conception de plateformes intelligentes pour la gestion des données scientifiques.
+                            </p>
+                            <a href="{% url 'portail_site:detail_publication' %}" class="box-btn">Lire la publication</a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href=""><i
+                                class="flaticon-left-arrow"></i></a></li>
+                    <li class="page-item active"><a class="page-link" href="">1</a></li>
+                    <li class="page-item"><a class="page-link" href="">2</a></li>
+                    <li class="page-item"><a class="page-link" href="">3</a></li>
+                    <li class="page-item"><a class="page-link" href=""><i
+                                class="flaticon-next"></i></a></li>
+                </ul>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+<!-- End Specail Class -->
+
+
 {% endblock content %}
 
 {% block scripts %}
