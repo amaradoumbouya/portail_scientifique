@@ -1,0 +1,45 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action=" {% url 'soutenance:modal_planifier_soutenance' demande.slug %} " method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+
+        <div class="row">
+
+
+            <div class="form-group col-md-6">
+                {{form_soutenance.date|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_soutenance.heure|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-12">
+                {{form_soutenance.lieu|as_crispy_field}}
+            </div>
+
+
+
+            <div class="form-group col-md-12">
+                <!--  -->
+                <button type="button" id="add-jury" class="btn btn-primary btn-block waves-effect waves-light">Cliquez
+                    pour ajouter un jury <i class="mdi mdi-plus"></i></button>
+
+                <!-- Zone jury -->
+                <div id="jury-container"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+
+    </div>
+
+</form>

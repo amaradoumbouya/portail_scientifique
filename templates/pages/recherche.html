@@ -1,0 +1,32 @@
+<form method="GET" action="{% url 'publications:recherche_publications' %}">
+    
+    <input
+        type="text"
+        name="q"
+        placeholder="Rechercher une publication..."
+    >
+
+    <button type="submit">
+        Rechercher
+    </button>
+
+</form>
+
+
+{% for publication in publications %}
+
+    <h3>
+        {{ publication.titre }}
+    </h3>
+
+    <p>
+        {{ publication.resume|truncatewords:40 }}
+    </p>
+
+{% empty %}
+
+    <p>
+        Aucun résultat trouvé.
+    </p>
+
+{% endfor %}

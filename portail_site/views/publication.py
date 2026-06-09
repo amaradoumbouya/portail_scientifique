@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView
 from types_document.models import TypeDocument
-from publications.models import Publication
+from publications.models.publication import Publication
 from django.core.paginator import Paginator
 from auteurs.models import Auteur
 from encadreurs.models import Encadreur
 from django.contrib.auth.decorators import login_required
-from publications.forms import PublicationForm
+from publications.forms.publication_forms import PublicationForm
 from django.shortcuts import redirect
 
 

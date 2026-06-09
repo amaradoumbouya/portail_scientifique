@@ -8,6 +8,7 @@ import random
 from django.conf import settings
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
+from projets_detudes.models.candidate import Candidate
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -55,25 +56,28 @@ class CustumerUser(AbstractBaseUser, PermissionsMixin):
             self.slug = slugify(self.full_name) + '-' + get_random_string(5)
         super(CustumerUser, self).save(*args, **kwargs)
     
-
-
     USERNAME_FIELD = "email"
     objects = MyUserManager()
             
     def has_perm(self, perm, obj=None):
         return self.is_staff
     
+    @property
+    def role(self):
+        if hasattr(self, 'profile'):
+            return self.profile.role
+        return None
     
 
 class UserProfile(models.Model):
     ROLES = (
-        ('masterant', 'Masterant'),
-        ('doctorant', 'Doctorant'),
-        ('encadreur', 'Encadreur'),
+        # ('master', 'Master'),
+        # ('doctorat', 'Doctorat'),
+        # ('encadrant', 'Encadrant'),
         ('enseignant', 'Enseignant'),
         ('enseignant chercheur', 'Enseignant chercheur'),
         ('responsable institution', "Responsable d'institution"),
-        ('admin', 'Administrateur'),
+        # ('admin', 'Administrateur'),
     )
     GRADE = (
         ('Assistant', 'Assistant'),
@@ -98,13 +102,14 @@ class UserProfile(models.Model):
     fonction_poste         = models.CharField(max_length=150, blank=True, null=True, verbose_name='Fonction/postale :')
     grade                  = models.CharField(max_length=150, blank=True, null=True, choices=GRADE, verbose_name='Grade :')
     specialite             = models.CharField(max_length=150, blank=True, null=True, choices=SPECIALITE, verbose_name='Spécialité :')
-    orcid                  = models.CharField(max_length=150, blank=True, null=True, verbose_name='ORCID :')
+    orcid                  = models.CharField(max_length=150, verbose_name='ORCID :')
     role                   = models.CharField(max_length=150, blank=True, null=True, choices=ROLES, verbose_name='Rôle :')
     photo                  = models.ImageField(upload_to='accounts', blank=True, null=True, verbose_name='Photo :')
     reseau_social_facebook = models.URLField(blank=True, null=True, verbose_name= "Facebook")
     reseau_social_twitter  = models.URLField(blank=True, null=True, verbose_name= "Twitter")
     reseau_social_linkedin = models.URLField(blank=True, null=True, verbose_name= "LinkedIn")
     reseau_social_youtube  = models.URLField(blank=True, null=True, verbose_name= "YouTube")
+    site_web               = models.URLField(blank=True, null=True, verbose_name="Site web")
     slug                   = models.SlugField(max_length=255, unique=True, editable=False)
     created_at             = models.DateTimeField(auto_now_add=True)
     updated_at             = models.DateTimeField(auto_now=True)
@@ -153,31 +158,43 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 class User_biography(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='biographie')
-    biographie = models.TextField(blank=True, null=True, verbose_name='Biographie :')
+    user         = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='biographie')
+    biographie   = models.TextField(blank=True, null=True, verbose_name='Biographie :')
     is_published = models.BooleanField(default=False, verbose_name='Publié :')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    slug         = models.SlugField(max_length=255, unique=True, editable=False ,blank=True, null=True,)
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Biographie de {self.user}"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+        super(User_biography, self).save(*args, **kwargs)
 
 class User_emploi(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='emploi')
-    nom_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
-    ville_emploi = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'emploi :")
-    region_emploi = models.CharField(max_length=150, blank=True, null=True, verbose_name="Région de l'emploi :")
-    pays_emploi = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pays de l'emploi :")
+    user               = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='emploi')
+    nom_institution    = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
+    ville_emploi       = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'emploi :")
+    region_emploi      = models.CharField(max_length=150, blank=True, null=True, verbose_name="Région de l'emploi :")
+    pays_emploi        = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pays de l'emploi :")
     departement_emploi = models.CharField(max_length=150, blank=True, null=True, verbose_name='Département :')
-    poste_occupe = models.CharField(max_length=150, blank=True, null=True, verbose_name='Poste occupé :')
-    date_debut_emploi = models.DateField(blank=True, null=True, verbose_name='Date de début :')
-    date_fin_emploi = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
-    is_published = models.BooleanField(default=False, verbose_name='Publié :')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    poste_occupe       = models.CharField(max_length=150, blank=True, null=True, verbose_name='Poste occupé :')
+    date_debut_emploi  = models.DateField(blank=True, null=True, verbose_name='Date de début :')
+    date_fin_emploi    = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
+    is_published       = models.BooleanField(default=False, verbose_name='Publié :')
+    slug               = models.SlugField(max_length=255, unique=True, editable=False ,blank=True, null=True,)
+    created_at         = models.DateTimeField(auto_now_add=True)
+    updated_at         = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Emploi de {self.user}"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+        super(User_emploi, self).save(*args, **kwargs)
 
 class User_etude_academique(models.Model):
     TYPE_FORMATION = (
@@ -187,50 +204,69 @@ class User_etude_academique(models.Model):
         ('Professionnelle', 'Professionnelle'),
     )
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='etude_academique')
-    type_formation = models.CharField(max_length=150, blank=True, null=True, choices=TYPE_FORMATION, verbose_name='Type de formation :')
-    nom_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
-    ville_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'institution :")
+    user               = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='etude_academique')
+    type_formation     = models.CharField(max_length=150, blank=True, null=True, choices=TYPE_FORMATION, verbose_name='Type de formation :')
+    nom_institution    = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
+    ville_institution  = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'institution :")
     region_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Région de l'institution :")
-    pays_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pays de l'institution :")
-    departement_etude = models.CharField(max_length=150, blank=True, null=True, verbose_name='Département :')
-    diplome_obtenu = models.CharField(max_length=150, blank=True, null=True, verbose_name='Diplôme obtenu :')
-    date_debut_etude = models.DateField(blank=True, null=True, verbose_name='Date de début :')
-    date_fin_etude = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
-    is_published = models.BooleanField(default=False, verbose_name='Publié :')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    pays_institution   = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pays de l'institution :")
+    departement_etude  = models.CharField(max_length=150, blank=True, null=True, verbose_name='Département :')
+    diplome_obtenu     = models.CharField(max_length=150, blank=True, null=True, verbose_name='Diplôme obtenu :')
+    date_debut_etude   = models.DateField(blank=True, null=True, verbose_name='Date de début :')
+    date_fin_etude     = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
+    is_published       = models.BooleanField(default=False, verbose_name='Publié :')
+    slug               = models.SlugField(max_length=255, unique=True, editable=False ,blank=True, null=True,)
+    created_at         = models.DateTimeField(auto_now_add=True)
+    updated_at         = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Etude académique de {self.user}"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+        super(User_etude_academique, self).save(*args, **kwargs)
 
 class User_experience_professionnelle(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='experience_professionnelle')
-    nom_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
-    poste_occupe = models.CharField(max_length=150, blank=True, null=True, verbose_name='Poste occupé :')
+    user                  = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='experience_professionnelle')
+    nom_institution       = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
+    poste_occupe          = models.CharField(max_length=150, blank=True, null=True, verbose_name='Poste occupé :')
     date_debut_experience = models.DateField(blank=True, null=True, verbose_name='Date de début :')
-    date_fin_experience = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
-    is_published = models.BooleanField(default=False, verbose_name='Publié :')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    date_fin_experience   = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
+    is_published          = models.BooleanField(default=False, verbose_name='Publié :')
+    slug                  = models.SlugField(max_length=255, unique=True, editable=False ,blank=True, null=True,)
+    created_at            = models.DateTimeField(auto_now_add=True)
+    updated_at            = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Expérience professionnelle de {self.user}"
+    
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+        super(User_experience_professionnelle, self).save(*args, **kwargs)
 
 class User_travaux_recherche(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='travaux_recherche')
-    nom_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
-    ville_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'institution :")
-    region_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Région de l'institution :")
-    pays_institution = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pays de l'institution :")
-    departement_recherche = models.CharField(max_length=150, blank=True, null=True, verbose_name='Département de recherche :')
-    poste_occupe = models.CharField(max_length=150, blank=True, null=True, verbose_name='Poste occupé :')
+    user                    = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='travaux_recherche')
+    nom_institution         = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
+    ville_institution       = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'institution :")
+    region_institution      = models.CharField(max_length=150, blank=True, null=True, verbose_name="Région de l'institution :")
+    pays_institution        = models.CharField(max_length=150, blank=True, null=True, verbose_name="Pays de l'institution :")
+    departement_recherche   = models.CharField(max_length=150, blank=True, null=True, verbose_name='Département de recherche :')
+    poste_occupe            = models.CharField(max_length=150, blank=True, null=True, verbose_name='Poste occupé :')
     titre_domaine_recherche = models.CharField(max_length=150, blank=True, null=True, verbose_name='Titre/Domaine :')
-    date_de_debut_travaux = models.DateField(blank=True, null=True, verbose_name='Date de début :')
-    date_de_fin_travaux = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
-    is_published = models.BooleanField(default=False, verbose_name='Publié :')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    date_de_debut_travaux   = models.DateField(blank=True, null=True, verbose_name='Date de début :')
+    date_de_fin_travaux     = models.DateField(blank=True, null=True, verbose_name='Date de fin :')
+    is_published            = models.BooleanField(default=False, verbose_name='Publié :')
+    slug                    = models.SlugField(max_length=255, unique=True, editable=False ,blank=True, null=True,)
+    created_at              = models.DateTimeField(auto_now_add=True)
+    updated_at              = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Travaux de recherche de {self.user}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+        super(User_travaux_recherche, self).save(*args, **kwargs)

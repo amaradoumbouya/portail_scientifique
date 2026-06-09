@@ -113,7 +113,7 @@ a:focus {
 }
 .social-links li a {
   -webkit-border-radius: 50%;
-  background: #03a9f4;
+  background: #3c72fc; /* Ancienne couleur: #03a9f4 */
   border-radius: 50%;
   color: #ffffff;
   display: inline-block;
@@ -193,7 +193,7 @@ a:focus {
   padding: 6px 20px;
 }
 .bg-primary {
-  background-color: #03a9f4 !important;
+  background-color: #3c72fc !important; /* Ancienne couleur: #03a9f4 */
 }
 .bg-success {
   background-color: #01ba9a !important;
@@ -285,7 +285,7 @@ a:focus {
   border-radius: 3px;
 }
 .label-primary {
-  background-color: #03a9f4;
+  background-color: #3c72fc; /* Ancienne couleur:#03a9f4 */
 }
 .label-success {
   background-color: #01ba9a;
@@ -319,7 +319,7 @@ a:focus {
   transform: translate(0, -2px);
 }
 .badge-primary {
-  background-color: #03a9f4;
+  background-color: #03a9f4; /* Ancienne couleur:#03a9f4 */
 }
 .badge-success {
   background-color: #01ba9a;
@@ -355,8 +355,8 @@ a:focus {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #03a9f4;
-  border-color: #03a9f4;
+  background-color: #3c72fc; /* Ancienne couleur: #03a9f4 */
+  border-color: #3c72fc; /* Ancienne couleur:#03a9f4 */
 }
 .tabs {
   background-color: #ffffff;
@@ -386,10 +386,10 @@ a:focus {
   width: 100%;
 }
 .tabs li.tab a.active {
-  color: #03a9f4 !important;
+  color: #3c72fc !important; /* Ancienne couleur:#03a9f4 */
 }
 .tabs .indicator {
-  background-color: #03a9f4;
+  background-color: #03a9f4; /* Ancienne couleur:#03a9f4 */
   bottom: 0;
   height: 2px;
   position: absolute;
@@ -447,7 +447,7 @@ a:focus {
 }
 .nav.nav-tabs > li > a:hover,
 .nav.tabs-vertical > li > a:hover {
-  color: #03a9f4 !important;
+  color: #3c72fc !important; /* Ancienne couleur: #03a9f4 */
 }
 .tab-content {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -472,7 +472,7 @@ a:focus {
 .tabs-vertical > li.active > a,
 .tabs-vertical > li.active > a:focus,
 .tabs-vertical > li.active > a:hover {
-  color: #03a9f4 !important;
+  color: #3c72fc !important; /* Ancienne couleur: #03a9f4 */
 }
 /* Dropcap */
 .dropcap {
@@ -585,7 +585,7 @@ a:focus {
   z-index: 2;
 }
 .list-group-item.active:hover .list-group-item-text {
-  color: #03a9f4;
+  color: #3c72fc; /* Ancienne couleur: #03a9f4 */
 }
 .list-group-item.active:focus {
   background-color: #dddddd;
@@ -1254,5 +1254,5 @@ a:focus {
   margin-bottom: 30px;
 }
 .icon-demo-content .col-sm-6:hover i {
-  color: #03a9f4;
+  color: #3c72fc; /* Ancienne couleur:#03a9f4 */
 }

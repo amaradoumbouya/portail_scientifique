@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.utils import timezone
-from publications.models import Publication, Auteur, Encadreur, Institution, PublicationLike, PublicationComment, PublicationDownload
+from publications.models.publication import Publication, Auteur, Encadreur, Institution, PublicationLike, PublicationComment, PublicationDownload
 
 # Fonction permettant de formater la durée en mois, jours, heures, minutes et secondes
 def format_duration(seconds):

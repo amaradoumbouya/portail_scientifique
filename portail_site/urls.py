@@ -24,6 +24,7 @@ urlpatterns = [
     path('inscription/', views.inscriptionTemplateView, name='inscription'),
     path('compte-institution/', views.inscription_compte_institution, name='inscription_institution'),
     path('compte-enseignant/', views.inscription_compte_enseignant, name='inscription_enseignant'),
+    path('compte-etudiant/', views.inscription_compte_etudiant, name='inscription_etudiant'),
     path('activation/<uidb64>/<token>/', activate_account, name='activation'),
     path('mon-profil/', login_required(MonprofilTemplateView.as_view()), name='mon_profil'),
     path('mes-publications/',login_required(MespublicationsTemplateView.as_view()), name='mes_publications'),

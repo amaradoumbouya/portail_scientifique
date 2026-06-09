@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'contact_us',
     'encadreurs',
     'partenaires',
+    'projets_detudes',
+    'evaluation',
+    'soutenance',
 ]
 
 MIDDLEWARE = [

@@ -54,11 +54,17 @@
                                 <div class="form-group">
                                     <select class="form-control" id="typeCompte">
                                         <option value="">Sélectionnez votre type de compte</option>
+                                        
+                                        <option value="{% url 'portail_site:inscription_etudiant' %}">
+                                            Etudiant (Master/Doctorat)</option>
+
+                                        <option value="{% url 'portail_site:inscription_enseignant' %}">
+                                            Enseignant/Enseignant chercheur</option>
+
                                         <option value="{% url 'portail_site:inscription_institution' %}">
                                             Université/Institution
                                         </option>
-                                        <option value="{% url 'portail_site:inscription_enseignant' %}">
-                                            Enseignant/Enseignant chercheur</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -72,6 +78,7 @@
                     </form>
                 </div>
             </div>
+            
         </div>
     </div>
 </section>

@@ -2,8 +2,8 @@
     <div class="navbar-area">
         <div class="mobile-nav">
             <a href="" class="logo">
-                <img src="{% static 'front/assets/images/logo1.png' %}" class="main-logo" alt="logo" />
-                <img src="{% static 'front/assets/images/logo2.png' %}" class="white-logo" alt="logo" />
+                <img src="{% static 'front/assets/images/logo_4.png' %}" class="main-logo" alt="logo" />
+                <img src="{% static 'front/assets/images/logo_5.png' %}" class="white-logo" alt="logo" />
             </a>
         </div>
 
@@ -11,8 +11,8 @@
             <div class="container">
                 <nav class="navbar navbar-expand-md navbar-light">
                     <a class="navbar-brand" href=" {% url 'portail_site:index' %} ">
-                        <img src="{% static 'front/assets/images/logo1.png' %}" class="main-logo" alt="logo" />
-                        <img src="{% static 'front/assets/images/logo2.png' %}" class="white-logo" alt="logo" />
+                        <img src="{% static 'front/assets/images/logo_4.png' %}" class="main-logo" alt="logo" />
+                        <img src="{% static 'front/assets/images/logo_5.png' %}" class="white-logo" alt="logo" />
                     </a>
                     <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
                         <ul class="navbar-nav text-right">
@@ -42,15 +42,15 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="{% url 'portail_site:a_propos' %}" class="nav-link ">A propos</a>
-                            </li>
-
-                            <li class="nav-item">
                                 <a href="{% url 'portail_site:inscription' %}" class="nav-link">S'inscrire</a>
                             </li>
 
                             <li class="nav-item">
                                 <a href="{% url 'portail_site:connexion' %}" class="nav-link">Connexion</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{% url 'portail_site:a_propos' %}" class="nav-link ">A propos</a>
                             </li>
                         </ul>
                     </div>

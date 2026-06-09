@@ -1,0 +1,482 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- DASHBOARD STATISTIQUES -->
+<!-- ========================================= -->
+
+<div class="row">
+
+    <!-- Total enseignants(Enseignants qui n'ont pas le chercheur mais qui sont dans l'institution) -->
+    <div class="col-md-3">
+        <div class="panel panel-primary">
+            <div class="panel-body text-center">
+
+                <i class="fa fa-users fa-3x"></i>
+
+                <h2 style="margin-top:15px;">
+                    {{ total_enseignants }}
+                </h2>
+
+                <h4>
+                    Enseignants
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Enseignants chercheurs -->
+    <div class="col-md-3">
+        <div class="panel panel-success">
+            <div class="panel-body text-center">
+
+                <i class="fa fa-graduation-cap fa-3x"></i>
+
+                <h2 style="margin-top:15px;">
+                    {{ total_chercheurs }}
+                </h2>
+
+                <h4>
+                    Enseignants chercheurs
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Chercheur actifs dans la production scientifique(la publication d'articles scientifiques ou colloque) -->
+    <div class="col-md-3">
+        <div class="panel panel-danger">
+            <div class="panel-body text-center">
+
+                <i class="fa fa-check-circle fa-3x"></i>
+
+                <h2 style="margin-top:15px;">
+                    {{ enseignants_actifs }}
+                </h2>
+
+                <h4>
+                    Chercheurs actifs
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Chercheurs inactifs dans la production scientifique(chercheurs qui ne font pas de publication d'articles scientifiques ou colloque) -->
+    <div class="col-md-3">
+        <div class="panel panel-danger">
+            <div class="panel-body text-center">
+                <i class="fa fa-times-circle fa-3x"></i>
+                <h2 style="margin-top:15px;">
+                    {{ enseignants_inactifs }}
+                </h2>
+
+                <h4>
+                    Chercheurs inactifs
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================================= -->
+<!-- AUTRES STATISTIQUES -->
+<!-- ========================================= -->
+
+<div class="row">
+
+    <!-- Articles scientifiques -->
+    <div class="col-md-3">
+        <div class="panel panel-purple">
+            <div class="panel-body text-center">
+
+                <h2>
+                    {{ total_articles }}
+                </h2>
+
+                <h4>
+                    Articles scientifiques
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Communications colloques -->
+    <div class="col-md-3">
+        <div class="panel panel-warning">
+            <div class="panel-body text-center">
+
+                <h2>
+                    {{ total_communications }}
+                </h2>
+
+                <h4>
+                    Communications colloques
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Production scientifique est l'ensemble des articles scientifiques et communications colloque donc la somme des deux -->
+    <div class="col-md-3">
+        <div class="panel panel-success">
+            <div class="panel-body text-center">
+
+                <h2>
+                    {{ total_production_scientifique }}
+                </h2>
+
+                <h4>
+                    Production scientifique
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Publications scientifiques reconnues à l'internations au compte de l'institution -->
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-body text-center">
+
+                <h2 style="margin-top:15px;">
+                    {{ total_publications }}
+                </h2>
+
+                <h4>
+                    Publications scientifiques
+                </h4>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- ========================================= -->
+<!-- TOP ENSEIGNANTS CHERCHEURS -->
+<!-- ========================================= -->
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Top enseignants chercheurs
+                </h3>
+            </div>
+
+            <div class="panel-body">
+
+                <table class="table table-bordered table-striped">
+
+                    <thead>
+                        <tr>
+                            <th style="width:5%">N°</th>
+                            <th>Nom complet</th>
+                            <th>Grade</th>
+                            <th>Spécialité</th>
+                            <th>Articles</th>
+                            <th>Colloques</th>
+                            <th>Productions scient</th>
+                            <th style="width:5%">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for chercheur in top_chercheurs %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+                                {{ chercheur.user.full_name }}
+                            </td>
+
+                            <td>
+                                {{ chercheur.grade }}
+                            </td>
+
+                            <td>
+                                {{ chercheur.specialite }}
+                            </td>
+
+                            <td>
+                                <span class="badge badge-success">
+
+                                    {{ chercheur.nbre_articles }}
+
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge badge-success">
+
+                                    {{ chercheur.nbre_colloques }}
+
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <span class="badge badge-info">
+
+                                    {{ chercheur.nbre_publications }}
+
+                                </span>
+
+                            </td>
+
+                            <!-- Actions -->
+                            <td>
+
+                                <!-- Voir -->
+                                <a href="" class="btn btn-success btn-sm">
+
+                                    <i class="ti-eye"></i>
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ========================================= -->
+<!-- LISTE DES ENSEIGNANTS -->
+<!-- ========================================= -->
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Liste des enseignants / chercheurs
+                </h3>
+            </div>
+
+            <div class="panel-body">
+
+                <table id="datatable-buttons" class="table table-striped table-bordered">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width:5%">N°</th>
+
+                            <th>Photo</th>
+
+                            <th>Nom complet</th>
+
+                            <th>Grade</th>
+
+                            <th>Spécialité</th>
+
+                            <th>Articles</th>
+
+                            <th>Colloques</th>
+
+                            <th>Productions scient</th>
+
+                            <th>Statut scientifique</th>
+
+                            <th style="width:5%">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for ens in enseignants %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <!-- Photo -->
+                            <td>
+
+                                {% if ens.photo %}
+
+                                <img src="{{ ens.photo.url }}" width="50" height="50"
+                                    style="border-radius:50%; object-fit:cover;">
+
+                                {% else %}
+
+                                <img src="{% static 'back/images/default.png' %}" width="50" height="50"
+                                    style="border-radius:50%; object-fit:cover;">
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Nom -->
+                            <td>
+                                {{ ens.user.full_name }}
+                            </td>
+
+                            <!-- Grade -->
+                            <td>
+                                {{ ens.grade }}
+                            </td>
+
+                            <!-- Spécialité -->
+                            <td>
+                                {{ ens.specialite }}
+                            </td>
+
+                               <td>
+                                <span class="badge badge-success">
+
+                                    {{ ens.nbre_articles }}
+
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge badge-success">
+
+                                    {{ ens.nbre_colloques }}
+
+                                </span>
+                            </td>
+
+                            <!-- Nombre publications -->
+                            <td>
+
+                                <span class="badge badge-info">
+
+                                    {{ ens.nbre_publications }}
+
+                                </span>
+
+                            </td>
+
+                            <!-- Statut -->
+                            <td>
+
+                                {% if ens.nb_publications > 0 %}
+
+                                <span class="badge badge-success">
+                                    Actif
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge badge-danger">
+                                    Inactif
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Actions -->
+                            <td>
+
+                                <!-- Voir -->
+                                <a href="" class="btn btn-success btn-sm">
+
+                                    <i class="ti-eye"></i>
+
+                                </a>
+
+                                <!-- Modifier -->
+                                <!-- <a href=""
+                                   class="btn btn-primary btn-sm">
+
+                                    <i class="ti-pencil-alt"></i>
+
+                                </a> -->
+
+                                <!-- Supprimer -->
+                                <!-- <form action=""
+                                      method="post"
+                                      style="display:inline;">
+
+
+                                    <button class="btn btn-danger btn-sm delete-confirm"
+                                            type="submit">
+
+                                        <i class="ti-trash"></i>
+
+                                    </button>
+
+                                </form> -->
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+<!-- Parsley -->
+<script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}">
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('form').parsley();
+
+    });
+
+</script>
+
+{% endblock scripts %}

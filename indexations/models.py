@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
-from publications.models import Publication
+from django.utils.crypto import get_random_string
+from publications.models.publication import Publication
 
 class Indexation(models.Model):
     publication = models.OneToOneField(Publication, on_delete=models.CASCADE)
@@ -18,8 +19,7 @@ class Indexation(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            last_pk = Indexation.objects.order_by('pk').last()
-            self.slug = slugify(self.publication.titre) + '-' + str(last_pk.pk + 1) if last_pk else '1'
+            self.slug = slugify(self.publication.titre) + '-' + get_random_string(5)
         super(Indexation, self).save(*args, **kwargs)
 
     class Meta:

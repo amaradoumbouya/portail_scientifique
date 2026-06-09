@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from publications.models import Publication, PublicationLike, PublicationComment, PublicationDownload
+from publications.models.publication import Publication, PublicationLike, PublicationComment, PublicationDownload
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required

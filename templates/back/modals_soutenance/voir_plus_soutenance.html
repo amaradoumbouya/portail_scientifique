@@ -1,0 +1,378 @@
+<div class="container-fluid">
+
+    <!-- En-tête -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+
+                <i class="ti-write"></i>
+
+                Demande d'Autorisation de Soutenance
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="alert alert-info">
+
+                <i class="ti-info-alt"></i>
+
+                Cette demande est soumise par l'étudiant pour solliciter
+                l'autorisation de soutenir son mémoire ou sa thèse devant
+                un jury académique.
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Informations étudiant -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title">
+
+                <i class="ti-user"></i>
+
+                Informations de l'étudiant
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Nom et prénom :</strong>
+                        {{ candidat.prenoms }} {{ candidat.nom }}
+                    </p>
+
+                    <p>
+                        <strong>Matricule :</strong>
+                        {{ candidat.matricule }}
+                    </p>
+
+                    <p>
+                        <strong>Email :</strong>
+                        {{ candidat.email }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Téléphone :</strong>
+                        {{ candidat.telephone }}
+                    </p>
+
+                    <p>
+                        <strong>Filière :</strong>
+                        {{ candidat.filiere }}
+                    </p>
+
+                    <p>
+                        <strong>Niveau :</strong>
+                        {{ candidat.niveau }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Mémoire / Thèse -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title">
+
+                <i class="ti-book"></i>
+
+                Informations du travail scientifique
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <p>
+
+                <strong>Type :</strong>
+
+                <span class="label label-primary">
+                    {{ projet.get_type_projet_display }}
+                </span>
+
+            </p>
+
+            <p>
+
+                <strong>Titre :</strong>
+
+                {{ projet.titre }}
+
+            </p>
+
+            <p>
+
+                <strong>Domaine de recherche :</strong>
+
+                {{ projet.domaine }}
+
+            </p>
+
+            <p>
+
+                <strong>Résumé :</strong>
+
+            </p>
+
+            <div class="well">
+
+                {{ projet.resume }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Encadrement -->
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title">
+
+                        <i class="ti-medall"></i>
+
+                        Directeur
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <p>
+                        <strong>Nom :</strong>
+                        {{ directeur.user.full_name }}
+                    </p>
+
+                    <p>
+                        <strong>Grade :</strong>
+                        {{ directeur.grade }}
+                    </p>
+
+                    <p>
+                        <strong>Institution :</strong>
+                        {{ directeur.institution }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title">
+
+                        <i class="ti-crown"></i>
+
+                        Co-directeur
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    {% if codirecteur %}
+
+                        <p>
+                            <strong>Nom :</strong>
+                            {{ codirecteur.user.full_name }}
+                        </p>
+
+                        <p>
+                            <strong>Grade :</strong>
+                            {{ codirecteur.grade }}
+                        </p>
+
+                        <p>
+                            <strong>Institution :</strong>
+                            {{ codirecteur.institution }}
+                        </p>
+
+                    {% else %}
+
+                        <p class="text-muted">
+
+                            Aucun co-directeur désigné
+
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Déclaration -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title">
+
+                <i class="ti-pencil-alt"></i>
+
+                Déclaration de l'étudiant
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <p style="text-align: justify; line-height: 28px;">
+
+                Je certifie avoir achevé les travaux de recherche
+                relatifs à ce mémoire / cette thèse et sollicite
+                l'autorisation de soutenir publiquement devant un jury.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Avis directeur -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title">
+
+                <i class="ti-check-box"></i>
+
+                Avis du Directeur
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <p>
+
+                <strong>Décision :</strong>
+
+                {% if demande.validation_directeur %}
+
+                    <span class="label label-success">
+                        Prêt pour soutenance
+                    </span>
+
+                {% else %}
+
+                    <span class="label label-danger">
+                        Corrections requises
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+            <p>
+
+                <strong>Observations :</strong>
+
+            </p>
+
+            <div class="well">
+
+                {{ demande.observations_directeur }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Validation administrative -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title">
+
+                <i class="ti-stamp"></i>
+
+                Validation Administrative
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <p>
+
+                <strong>Statut :</strong>
+
+                <span class="label label-primary">
+
+                    {{ demande.get_statut_display }}
+
+                </span>
+
+            </p>
+
+            <p>
+
+                <strong>Observations :</strong>
+
+            </p>
+
+            <div class="well">
+
+                {{ demande.observations_responsable }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

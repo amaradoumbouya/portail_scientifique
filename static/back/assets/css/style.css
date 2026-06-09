@@ -1337,8 +1337,8 @@ File: Components
   border: 1px solid rgba(42, 50, 60, 0.2) !important;
 }
 .btn-primary {
-  background-color: #03a9f4 !important; /* Ancienne couleure du template :  */
-  border: 1px solid #03a9f4 !important; /* Ancienne couleure du template :  */
+  background-color: #3c72fc !important; /* Ancienne couleure du template :#03a9f4  */
+  border: 1px solid #3c72fc !important; /* Ancienne couleure du template :#03a9f4  */
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -2264,7 +2264,7 @@ table.dataTable {
   height: auto;
 }
 .select2-results .select2-highlighted {
-  background-color: #03a9f4; /* Ancienne couleure du template :  */
+  background-color: #3c72fc; /* Ancienne couleure du template : #03a9f4  */
 }
 .select2-drop-active {
   border: 1px solid #e3e3e3 !important;

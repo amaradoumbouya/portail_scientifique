@@ -1,0 +1,438 @@
+{% extends "index.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+<title> Compte etudiant - Portail Scientifique </title>
+{% endblock title %}
+
+{% block style %}
+
+<style>
+    /* Indicateurs d'étapes */
+    .step-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #6c757d;
+        transition: all 0.3s ease;
+    }
+
+    .step-indicator.active {
+        color: #3c72fc;
+    }
+
+    .step-indicator.completed {
+        color: #28a745;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .step-indicator.active .step-number {
+        background: #3c72fc;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .step-indicator.completed .step-number {
+        background: #28a745;
+        color: white;
+    }
+
+    .step-line {
+        width: 60px;
+        height: 2px;
+        background: #e9ecef;
+        margin: 20px 10px 0 10px;
+        transition: all 0.3s ease;
+    }
+
+    .step-line.active {
+        background: #3c72fc;
+    }
+
+    @keyframes shake {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-10px);
+        }
+
+        75% {
+            transform: translateX(10px);
+        }
+    }
+
+    .form-step {
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+</style>
+{% endblock style %}
+
+
+{% block content %}
+<!-- Start Page Title Area -->
+<div class="banner-area signup">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Compte Etudiant</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active"> Inscription </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Page Title Area -->
+
+<!-- Start Content -->
+<div class="register-form py-5">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+                <div class="sign-up-img">
+                    <img src="{% static 'front/assets/images/signupp.png' %}" alt="singup">
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h3>Vous êtes etudiant en master ou doctorat ?</h3>
+                        <p style="color: white;">Complétez les informations ci-dessous pour commencer</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center mb-4">
+                            <div class="step-indicator active" id="indicator1">
+                                <small>
+                                    <span class="step-number">1</span>
+                                    <span class="step-label">Infos personnelles</span>
+                                </small>
+
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step-indicator" id="indicator2">
+                                <small>
+                                    <span class="step-number">2</span>
+                                    <span class="step-label">Coordonnées</span>
+                                </small>
+
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step-indicator" id="indicator3">
+                                <small>
+                                    <span class="step-number">3</span>
+                                    <span class="step-label">Infos institutionnelles</span>
+                                </small>
+
+                            </div>
+
+                            <div class="step-line"></div>
+                            <div class="step-indicator" id="indicator4">
+                                <small>
+                                    <span class="step-number">4</span>
+                                    <span class="step-label">Reseaux sociaux</span>
+                                </small>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step-indicator" id="indicator5">
+                                <small>
+                                    <span class="step-number">5</span>
+                                    <span class="step-label">Sécurité</span>
+                                </small>
+                            </div>
+
+                        </div>
+                        <!-- Barre de progression -->
+                        <div class="progress mb-4" style="height: 25px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                                id="progressBar" role="progressbar" style="width: 33%">Étape 1 sur 5</div>
+                        </div>
+
+                        <h6 class="card-title text-center mb-3" id="stepTitle">Informations personnelles</h6>
+
+                        <form action="" method="post" id="multiStepForm">
+                            {% csrf_token %}
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                    <div class="alert alert-success" role="alert">
+                                        <strong>{{ message }}</strong>
+                                    </div>
+                                    </li>
+                                    {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            {% if form_custumer.errors %}
+                            <div class="alert alert-danger">
+                                {{ form_custumer.errors }}
+                            </div>
+                            {% endif %}
+
+                            {% if form_user_profile.errors %}
+                            <div class="alert alert-danger">
+                                {{ form_user_profile.errors }}
+                            </div>
+                            {% endif %}
+
+                            <!-- ÉTAPE 1 : Informations personnelles -->
+                            <div class="form-step" id="step1">
+                                <div class="form-group">
+                                    {{form_custumer.prenoms|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_custumer.nom|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_custumer.sexe|as_crispy_field}}
+                                </div>
+                            </div>
+
+                            <!-- ÉTAPE 2 : Contact -->
+                            <div class="form-step d-none" id="step2">
+                                <div class="form-group">
+                                    {{form_candidate.adresse|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_custumer.email|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_custumer.tel|as_crispy_field}}
+                                </div>
+                            </div>
+
+                            <!-- ÉTAPE 3 : Infos institutionnelles -->
+                            <div class="form-step d-none" id="step3">
+                                <div class="form-group">
+                                    {{form_candidate.institution|as_crispy_field}}
+                                    <small class="form-text text-muted">Si votre institution n'est pas répertoriée,
+                                        veuillez l'enregistrer.</small>
+                                </div>
+                                <div class="form-group">
+                                    {{form_candidate.matricule|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_candidate.niveau|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_candidate.domaine|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_candidate.sujet_recherche|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_candidate.annee_inscription|as_crispy_field}}
+                                </div>
+                            </div>
+
+                            <!-- ÉTAPE 4 : Réseaux sociaux -->
+                            <div class="form-step d-none" id="step4">
+                                <div class="form-group">
+                                    <label class="control-label">Réseaux sociaux (optionnel)</label>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <div class="input-group">
+                                                {{form_candidate.reseau_social_facebook|as_crispy_field}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <div class="input-group">
+                                                {{form_candidate.reseau_social_linkedin|as_crispy_field}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <div class="input-group">
+                                                {{form_candidate.reseau_social_twitter|as_crispy_field}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <div class="input-group">
+                                                {{form_candidate.reseau_social_youtube|as_crispy_field}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ÉTAPE 5 : Sécurité -->
+                            <div class="form-step d-none" id="step5">
+                                <div class="form-group">
+                                    {{form_custumer.password1|as_crispy_field}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_custumer.password2|as_crispy_field}}
+                                </div>
+                            </div>
+
+                            <!-- Boutons de navigation -->
+                            <div class="text-center mt-4 d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)"
+                                    style="display: none;">
+                                    ← Précédent
+                                </button>
+                                <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+                                    Étape suivante →
+                                </button>
+                                <button type="submit" class="btn btn-success d-none" id="submitBtn">
+                                    ✓ S'inscrire
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <small><a href="{% url 'portail_site:inscription_institution' %}">Inscrivez-vous via votre
+                                institution</a></small> <br>
+                        <small>Vous avez déjà un compte ? <a
+                                href="{% url 'portail_site:connexion' %}">Connectez-vous</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Content -->
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    const stepTitles = {
+        1: "Informations personnelles",
+        2: "Coordonnées",
+        3: "Infos institutionnelles",
+        4: "Reseaux sociaux",
+        5: "Sécurité du compte"
+    };
+
+    function changeStep(direction) {
+        // Validation de l'étape actuelle avant de passer
+        if (direction === 1 && !validateStep(currentStep)) {
+            return;
+        }
+
+        // Cacher l'étape actuelle
+        document.getElementById(`step${currentStep}`).classList.add('d-none');
+
+        // Mettre à jour l'étape
+        currentStep += direction;
+
+        // Afficher la nouvelle étape
+        document.getElementById(`step${currentStep}`).classList.remove('d-none');
+
+        // Mettre à jour l'interface
+        updateUI();
+    }
+
+    function validateStep(step) {
+        const stepDiv = document.getElementById(`step${step}`);
+        const inputs = stepDiv.querySelectorAll('input, select, textarea');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (input.required && !input.value.trim()) {
+                input.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        if (!isValid) {
+            // Animation de secousse pour indiquer l'erreur
+            stepDiv.style.animation = 'shake 0.5s';
+            setTimeout(() => stepDiv.style.animation = '', 500);
+        }
+
+        return isValid;
+    }
+
+    function updateUI() {
+        // Mettre à jour le titre
+        document.getElementById('stepTitle').textContent = stepTitles[currentStep];
+
+        // Mettre à jour la barre de progression
+        const progress = (currentStep / totalSteps) * 100;
+        const progressBar = document.getElementById('progressBar');
+        progressBar.style.width = `${progress}%`;
+        progressBar.textContent = `Étape ${currentStep} sur ${totalSteps}`;
+
+        // Indicateurs visuels
+        document.getElementById('indicator1').className = 'step-indicator' + (currentStep >= 1 ? ' completed' : '') + (currentStep === 1 ? ' active' : '');
+        document.getElementById('indicator2').className = 'step-indicator' + (currentStep >= 2 ? ' completed' : '') + (currentStep === 2 ? ' active' : '');
+        document.getElementById('indicator3').className = 'step-indicator' + (currentStep >= 3 ? ' completed' : '') + (currentStep === 3 ? ' active' : '');
+        document.getElementById('indicator4').className = 'step-indicator' + (currentStep >= 4 ? ' completed' : '') + (currentStep === 4 ? ' active' : '');
+        document.getElementById('indicator5').className = 'step-indicator' + (currentStep >= 5 ? ' completed' : '') + (currentStep === 5 ? ' active' : '');
+
+
+        // Gérer les boutons
+        document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'block';
+
+        if (currentStep === totalSteps) {
+            document.getElementById('nextBtn').classList.add('d-none');
+            document.getElementById('submitBtn').classList.remove('d-none');
+
+        } else {
+            document.getElementById('nextBtn').classList.remove('d-none');
+            document.getElementById('submitBtn').classList.add('d-none');
+
+        }
+    }
+
+    // Validation en temps réel
+    document.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('blur', function () {
+            if (this.required && !this.value.trim()) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+</script>
+
+{% endblock scripts %}

@@ -1,0 +1,51 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% url 'projets_detudes:modal_these' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <input type="text" class="form-control hidden" id="nom_institution" name="type_document" hidden>
+
+            <div class="form-group">
+                {{form_these.titre|as_crispy_field}}
+            </div>
+
+            <div class="form-group">
+                {{form_these.description|as_crispy_field}}
+                <small>Faites une description détaillée du thème du projet</small>
+            </div>
+
+            <div class="form-group col-md-6">
+                <!--  -->
+                <button type="button" id="add-auteur" class="btn btn-primary btn-block waves-effect waves-light">Cliquez
+                    pour ajouter un auteur <i class="mdi mdi-plus"></i></button>
+
+                <!-- Zone auteurs -->
+                <div id="auteurs-container"></div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <!--  -->
+                <button type="button" id="add-encadreur"
+                    class="btn btn-primary btn-block waves-effect waves-light">Cliquez pour ajouter un encadreur <i
+                        class="mdi mdi-plus"></i></button>
+
+                <!-- Zone encadreurs -->
+                <div id="encadreurs-container"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+
+    </div>
+
+</form>

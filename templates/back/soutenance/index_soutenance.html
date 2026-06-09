@@ -1,0 +1,487 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+<title>Soutenance - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock style %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- HEADER -->
+<!-- ========================================= -->
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel" style="border-top:4px solid #6f42c1;
+                    box-shadow:0 2px 10px rgba(0,0,0,.08);">
+
+            <div class="panel-body">
+
+                <div class="row">
+
+                    <div class="col-md-8">
+
+                        <h2>
+
+                            <i class="fa fa-graduation-cap"></i>
+
+                            Gestion des Soutenances
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Suivi, planification et gestion des soutenances.
+
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-4 text-right">
+
+                        <h3>
+
+                            {{ total_soutenances }}
+
+                        </h3>
+
+                        <small>
+
+                            Soutenances enregistrées
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================= -->
+<!-- STATISTIQUES -->
+<!-- ========================================= -->
+
+<div class="row">
+
+    <div class="col-md-4">
+
+        <div class="panel text-center">
+
+            <div class="panel-body" style="background:#4e73df;color:white;border-radius:10px;">
+
+                <i class="fa fa-calendar fa-3x"></i>
+
+                <h3 style="color: white;">{{ total_soutenances }}</h3>
+
+                <h5 style="color: white;">Total soutenances</h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="panel text-center">
+
+            <div class="panel-body" style="background:#1cc88a;color:white;border-radius:10px;">
+
+                <i class="fa fa-clock-o fa-3x"></i>
+
+                <h3 style="color: white;">{{ soutenances_planifiees }}</h3>
+
+                <h5 style="color: white;">Planifiées</h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="panel text-center">
+
+            <div class="panel-body" style="background:#36b9cc;color:white;border-radius:10px;">
+
+                <i class="fa fa-check-circle fa-3x"></i>
+
+                <h3 style="color: white;">{{ soutenances_realisees }}</h3>
+
+                <h5 style="color: white;">Terminées</h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================= -->
+<!-- TABLEAU -->
+<!-- ========================================= -->
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-purple">
+
+            <div class="panel-heading">
+
+                <h3 class="panel-title">
+
+                    Liste des soutenance
+
+                </h3>
+
+            </div>
+
+            <div class="panel-body">
+
+                <table id="datatable-buttons" class="table table-bordered table-hover table-striped">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>N°</th>
+                            <th>Candidat</th>
+                            <th>Projet</th>
+                            <th>Date</th>
+                            <th>Heure</th>
+                            <th>Lieu</th>
+                            <th>Directeur</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for soutenance in soutenances %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ forloop.counter }}
+
+                            </td>
+
+                            <td>
+
+                                {{ soutenance.projet.candidate.user.full_name }}
+
+                            </td>
+
+                            <td>
+
+                                {{ soutenance.projet.titre }}
+
+                            </td>
+
+                            <td>
+
+                                {{ soutenance.date|date:"d/m/Y" }}
+
+                            </td>
+
+                            <td>
+
+                                {{ soutenance.heure }}
+
+                            </td>
+
+                            <td>
+
+                                {{ soutenance.lieu }}
+
+                            </td>
+
+                            <td>
+
+                                {{ soutenance.responsable_planification.full_name }}
+
+                            </td>
+
+                            <td>
+
+                                {% if soutenance.statut == "Planifiée" %}
+
+                                <span class="label label-info">
+
+                                    {{ soutenance.statut }}
+
+                                </span>
+
+                                {% elif soutenance.statut == "Terminée" %}
+
+                                <span class="label label-success">
+
+                                    {{ soutenance.statut }}
+
+                                </span>
+
+                                {% elif soutenance.statut == "Annulée" %}
+
+                                <span class="label label-danger">
+
+                                    {{ soutenance.statut }}
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <div class="dropdown">
+
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+
+                                        Actions
+
+                                        <span class="caret"></span>
+
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+
+                                        <li>
+
+                                            <a href="javascript:void(0);"
+                                            data-url="{% url 'soutenance:voir_plus_deliberation' soutenance.slug %}"
+                                            data-title="Détails de la délibération soutenance {{ soutenance.projet.candidate.user.full_name }}"
+                                            onclick="openModal(this.dataset.url, this.dataset.title)">
+
+                                                <i class="ti-eye"></i>
+
+                                                Voir détails
+
+                                            </a>
+
+                                        </li>
+
+                                        <!-- <li>
+
+                                            <a href="javascript:void(0);">
+
+                                                <i class="ti-id-badge"></i>
+
+                                                Jury
+
+                                            </a>
+
+                                        </li> -->
+
+                                        <li>
+                                            <a href="javascript:void(0);"
+                                            data-url="{% url 'soutenance:ajouter_deliberation' soutenance.slug %}"
+                                            data-title="Délibération soutenance {{ soutenance.projet.candidate.user.full_name }}"
+                                            onclick="openModal(this.dataset.url, this.dataset.title)">
+
+                                                <i class="ti-agenda"></i>
+
+                                                Délibération
+
+                                            </a>
+
+                                        </li>
+
+                                        <li>
+
+                                            <a href="javascript:void(0);">
+
+                                                <i class="ti-medall"></i>
+
+                                                Résultat final
+
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="9" class="text-center text-danger">
+
+                                Aucune soutenance enregistrée.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================= -->
+<!-- MODAL -->
+<!-- ========================================= -->
+
+<div class="row">
+
+    <div class="col-xs-6 col-sm-3">
+
+        <div id="main-modal-deliberation" class="modal fade" tabindex="-1" role="dialog">
+
+            <div class="modal-dialog" style="width:60%;">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <button type="button" class="close" data-dismiss="modal">
+
+                            ×
+
+                        </button>
+
+                        <h4 id="modal-title">
+
+                            Chargement...
+
+                        </h4>
+
+                    </div>
+
+                    <div id="modal-body" class="modal-body">
+
+                        Chargement...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script>
+
+    function openModal(url, title = "") {
+
+        document.getElementById("modal-title").innerText = title;
+
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+
+        fetch(url)
+
+            .then(response => response.text())
+
+            .then(data => {
+
+                document.getElementById("modal-body").innerHTML = data;
+
+                $('#main-modal-deliberation').modal('show');
+
+            })
+
+            .catch(error => {
+
+                document.getElementById("modal-body").innerHTML =
+                    "Erreur de chargement";
+
+            });
+    }
+
+
+    // JavaScript Pour l'ajout dynamique des jurys dans le modal de planification de soutenance
+    let juryIndex = 0;
+
+    document.addEventListener("click", function (e) {
+
+        // 🔒 Vérifier qu'on est DANS le modal actif
+        const modal = document.getElementById("main-modal-deliberation");
+
+        if (!modal || !modal.contains(e.target)) return;
+
+        // ===== AJOUT AUTEUR =====
+        if (e.target.id === "add-jury" || e.target.closest("#add-jury")) {
+
+            let container = modal.querySelector("#jury-container");
+            if (!container) return;
+
+            let html = `
+            <div class="border p-3 mt-2"><br>
+                <input type="text" name="juries[${juryIndex}][nom]" class="form-control mb-2" placeholder="Nom jury"><br>
+                <input type="text" name="juries[${juryIndex}][prenoms]" class="form-control mb-2" placeholder="Prénom jury"><br>
+                <input type="email" name="juries[${juryIndex}][email]" class="form-control mb-2" placeholder="Email jury"><br>
+                <input type="tel" name="juries[${juryIndex}][tel]" class="form-control mb-2" placeholder="Téléphone jury"><br>
+                <select name="juries[${juryIndex}][role]" class="form-control">
+                    <option value="">Sélectionnez le rôle du jury</option>
+                    <option value="president">Président</option>
+                    <option value="rapporteur">Rappoeteur</option>
+                    <option value="examinateur">Examinateur</option>
+                    <option value="directeur">Directeur</option>
+                    <option value="co-directeur">Co-directeur</option>
+                </select><br>
+                <button type="button" class="btn btn-danger btn-sm remove">Supprimer</button><br>
+            </div>
+        `;
+
+            container.insertAdjacentHTML("beforeend", html);
+            auteurIndex++;
+        }
+
+        // ===== SUPPRESSION =====
+        if (e.target.classList.contains("remove")) {
+            e.target.closest(".border").remove();
+        }
+
+    });
+
+
+</script>
+
+{% endblock scripts %}

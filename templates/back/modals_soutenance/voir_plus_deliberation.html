@@ -1,0 +1,407 @@
+{% load static %}
+
+<div class="container-fluid">
+
+    <!-- HEADER -->
+    <div class="panel panel-success">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title" style="color: white;">
+
+                <i class="ti-cup"></i>
+
+                Délibération de Soutenance
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body text-center">
+
+            <h1 style="margin-bottom:20px;">
+
+                {{ deliberation.note_finale }}/20
+
+            </h1>
+
+            <h3>
+
+                {% if deliberation.decision == "admis" %}
+
+                    <span class="label label-success">
+
+                        {{ deliberation.get_decision_display }}
+
+                    </span>
+
+                {% elif deliberation.decision == "admis_corrections" %}
+
+                    <span class="label label-warning">
+
+                        {{ deliberation.get_decision_display }}
+
+                    </span>
+
+                {% else %}
+
+                    <span class="label label-danger">
+
+                        {{ deliberation.get_decision_display }}
+
+                    </span>
+
+                {% endif %}
+
+            </h3>
+
+            <br>
+
+            <h4>
+
+                Mention :
+
+                <strong>
+
+                    {{ deliberation.mention }}
+
+                </strong>
+
+            </h4>
+
+        </div>
+
+    </div>
+
+    <!-- INFORMATIONS CANDIDAT -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title">
+
+                <i class="ti-user"></i>
+
+                Informations du candidat
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <p>
+
+                        <strong>Nom complet :</strong>
+
+                        {{ deliberation.soutenance.projet.candidate.user.full_name }}
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <p>
+
+                        <strong>Email :</strong>
+
+                        {{ deliberation.soutenance.projet.candidate.user.email }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- INFORMATIONS PROJET -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title">
+
+                <i class="ti-book"></i>
+
+                Travail Scientifique
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <p>
+
+                        <strong>Type :</strong>
+
+                        <span class="label label-info">
+
+                            {{ deliberation.soutenance.projet.get_type_projet_display }}
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <p>
+
+                        <strong>Statut :</strong>
+
+                        <span class="label label-success">
+
+                            {{ deliberation.soutenance.projet.get_statut_display }}
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <p>
+
+                <strong>Titre :</strong>
+
+            </p>
+
+            <div class="well">
+
+                {{ deliberation.soutenance.projet.titre }}
+
+            </div>
+
+            <p>
+
+                <strong>Description :</strong>
+
+            </p>
+
+            <div class="well">
+
+                {{ deliberation.soutenance.projet.description }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- DETAILS DELIBERATION -->
+    <div class="panel panel-success">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title" style="color: white;">
+
+                <i class="ti-medall"></i>
+
+                Résultat de la Délibération
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <table class="table table-bordered table-striped">
+
+                <tbody>
+
+                    <tr>
+
+                        <th width="35%">
+
+                            Note Finale
+
+                        </th>
+
+                        <td>
+
+                            {{ deliberation.note_finale }}/20
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+
+                            Mention
+
+                        </th>
+
+                        <td>
+
+                            {{ deliberation.mention }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+
+                            Décision
+
+                        </th>
+
+                        <td>
+
+                            {{ deliberation.get_decision_display }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+
+                            Directeur
+
+                        </th>
+
+                        <td>
+
+                            {{ deliberation.saisi_par.full_name }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>
+
+                            Date de délibération
+
+                        </th>
+
+                        <td>
+
+                            {{ deliberation.date_deliberation|date:"d/m/Y H:i" }}
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- OBSERVATIONS -->
+    <div class="panel panel-warning">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title" style="color: white;">
+
+                <i class="ti-comment-alt"></i>
+
+                Observations du Jury
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="well">
+
+                {% if deliberation.observations %}
+
+                    {{ deliberation.observations }}
+
+                {% else %}
+
+                    <span class="text-muted">
+
+                        Aucune observation enregistrée.
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PUBLICATION -->
+    <div class="panel panel-info">
+
+        <div class="panel-heading">
+
+            <h4 class="panel-title" style="color: white;">
+
+                <i class="ti-announcement"></i>
+
+                Publication du Résultat
+
+            </h4>
+
+        </div>
+
+        <div class="panel-body">
+
+            {% if deliberation.resultat_publie %}
+
+                <div class="alert alert-success">
+
+                    <i class="ti-check-box"></i>
+
+                    Résultat officiellement publié.
+
+                </div>
+
+                <p>
+
+                    <strong>Date de publication :</strong>
+
+                    {{ deliberation.date_publication|date:"d/m/Y H:i" }}
+
+                </p>
+
+            {% else %}
+
+                <div class="alert alert-warning " >
+
+                    <i class="ti-time"></i>
+
+                    Résultat non encore publié.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>

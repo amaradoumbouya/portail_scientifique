@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from publications.models import Publication
+from publications.models.publication import Publication
 from types_document.models import TypeDocument
 
 

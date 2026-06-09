@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.utils.crypto import get_random_string
 
 
 class Newsletter(models.Model):
@@ -13,8 +14,7 @@ class Newsletter(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            last_pk = Newsletter.objects.order_by('pk').last()
-            self.slug = slugify(self.email) + '-' + str(last_pk.pk + 1) if last_pk else '1'
+            self.slug = slugify(self.email) + '-' + get_random_string(5)
         super(Newsletter, self).save(*args, **kwargs)
 
     class Meta:

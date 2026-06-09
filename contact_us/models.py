@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.utils.crypto import get_random_string
 from django.contrib.auth import  get_user_model
 
 User = get_user_model()
@@ -19,7 +20,7 @@ class ContactUs(models.Model):
 
     @property
     def full_name(self):
-        return {self.nom_complet}
+        return self.nom_complet
 
     def __str__(self):
         return self.full_name
@@ -27,8 +28,7 @@ class ContactUs(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            last_pk = ContactUs.objects.order_by('pk').last()
-            self.slug = slugify(self.full_name) + '-' + str(last_pk.pk + 1) if last_pk else '1'
+            self.slug = slugify(self.nom_complet) + '-' + get_random_string(5)
         super(ContactUs, self).save(*args, **kwargs)
 
     class Meta:

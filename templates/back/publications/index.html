@@ -6,111 +6,48 @@
 <!-- Page-Title -->
 <div class="row">
     <div class="col-sm-12">
+
         <div class="page-header-title">
             <h4 class="pull-left page-title">Publications</h4>
             <ol class="breadcrumb pull-right">
                 <!-- Custom width modal -->
-                <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
-                    data-target="#custom-width-modal">Faire une publication</button>
+
             </ol>
             <div class="clearfix"></div>
         </div>
-    </div>
-</div>
 
+        <!-- Les boutons modals -->
+        <div class="row">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Choisissez le type de publication</h3>
+                </div>
+                <div class="panel-body">
 
-<!-- Modal Start -->
-<div class="row">
-    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
-        <!-- sample modal content -->
-        <div id="custom-width-modal" class="modal fade" tabindex="-1" role="dialog"
-            aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none">
-            <div class="modal-dialog" style="width:55%">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="custom-width-modalLabel">Formulaire d'ajout d'une publication</h4>
-                    </div>
-                    <form action="{% url 'publications:index' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
+                    <!-- <button class="btn btn-default waves-effect waves-light"
+                        data-url=""
+                        data-title="Publication d'un memoire de master"
+                        onclick="">Memoire de master</button>
+                    <button class="btn btn-primary waves-effect waves-light"
+                        data-url="" data-title="Publication d'une thèse de doctorat"
+                        onclick="">Thèse (Doctorat)</button> -->
 
-                        <div class="modal-body">
-
-                            <div class="row">
-
-                                <div id="field_type_document" class="form-group col-md-12">
-                                    {{form.type_document|as_crispy_field}}
-                                </div>
-
-                                <div id="field_photo" class="form-group col-md-12">
-                                    {{form.photo|as_crispy_field}}
-                                </div>
-
-                                <div id="field_titre" class="form-group col-md-6">
-                                    {{form.titre|as_crispy_field}}
-                                </div>
-
-                                <div id="field_auteurs" class="form-group col-md-6">
-                                    {{form.auteurs|as_crispy_field}}
-                                </div>
-
-                                <div id="field_encadreurs" class="form-group col-md-6">
-                                    {{form.encadreurs|as_crispy_field}}
-                                </div>
-
-                                <div id="field_date_publication" class="form-group col-md-6">
-                                    {{form.date_publication|as_crispy_field}}
-                                </div>
-
-                                <div id="field_fichier_pdf" class="form-group col-md-6">
-                                    {{form.fichier_pdf|as_crispy_field}}
-                                </div>
-
-                                <div id="field_langue" class="form-group col-md-6">
-                                    {{form.langue|as_crispy_field}}
-                                </div>
-
-                                <div id="field_institutions_contributrices" class="form-group col-md-6">
-                                    {{form.institutions_contributrices|as_crispy_field}}
-                                </div>
-
-                                <div id="field_doi" class="form-group col-md-6">
-                                    {{form.doi|as_crispy_field}}
-                                </div>
-
-                                <div id="field_orcid" class="form-group col-md-6">
-                                    {{form.orcid_auteur_principal|as_crispy_field}}
-                                </div>
-
-                                <div id="field_nom_revue" class="form-group col-md-6">
-                                    {{form.nom_revue|as_crispy_field}}
-                                </div>
-
-                                <div id="field_nom_colloque" class="form-group col-md-12">
-                                    {{form.nom_colloque|as_crispy_field}}
-                                </div>
-
-                                <div id="field_lien_article" class="form-group col-md-12">
-                                    {{form.lien_article|as_crispy_field}}
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
-                            <button type="button" class="btn btn-default waves-effect"
-                                data-dismiss="modal">Fermer</button>
-
-                        </div>
-
-                    </form>
+                    <button class="btn btn-success waves-effect waves-light"
+                        data-url="{% url 'publications:modal_article_scientifique' %}"
+                        data-title="Publication d'un article scientifique"
+                        onclick="openModal(this.dataset.url, this.dataset.title)">Article scientifique</button>
+                    <button class="btn btn-warning waves-effect waves-light"
+                        data-url="{% url 'publications:modal_communication_colloque' %}"
+                        data-title="Publication d'une communication de colloque"
+                        onclick="openModal(this.dataset.url, this.dataset.title)">Communication de
+                        colloque</button>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
+
 
 <!-- Liste Start -->
 <div class="row">
@@ -128,7 +65,6 @@
                             <th>Photo</th>
                             <th>Titre</th>
                             <th>Auteur</th>
-                            <th>Encadreur</th>
                             <th>Inst Contributrice</th>
                             <th>Statut indexation</th>
                             <th>Publié</th>
@@ -138,71 +74,190 @@
 
 
                     <tbody>
-                        {% for pub in publications %}
+
+                        {% for pub in user_publications %}
+
                         <tr>
-                            <td>{{forloop.counter}}</td>
+
+                            <!-- Numero -->
                             <td>
-                                <img height="100" width="100" src=" {{ pub.ImageUrl }} " alt="">
+                                {{ forloop.counter }}
                             </td>
-                            <td>{{pub.titre}}</td>
+
+                            <!-- Image -->
                             <td>
-                                {% for auteur in pub.auteurs.all %}
-                                {{ auteur.prenoms }} {{ auteur.nom }}{% if not forloop.last %}, {% endif %}
-                                {% empty %}
-                                Aucun auteur
-                                {% endfor %}
+
+                                <img height="100" width="100" src="{{ pub.ImageUrl }}" alt="">
+
                             </td>
+
+                            <!-- Titre -->
                             <td>
-                                {% for encadreur in pub.encadreurs.all %}
-                                {{ encadreur.prenoms }} {{ encadreur.nom }}{% if not forloop.last %}, {% endif %}
-                                {% empty %}
-                                Aucun encadreur
-                                {% endfor %}
+                                {{ pub.titre }}
                             </td>
+
+                            <!-- Auteurs -->
                             <td>
-                                {% for institution in pub.institutions_contributrices.all %}
-                                {{ institution.nom }}{% if not forloop.last %}, {% endif %}
-                                {% empty %}
-                                Aucune institution
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% if pub.statut_indexation == 'Indexée' %}
-                                <span style="color:green;">✔ Indexée</span>
-                                {% elif pub.statut_indexation == 'Rejetée' %}
-                                <span style="color:red;">✘ Rejetée</span>
-                                {% else %}
-                                <span style="color:orange;">⏳ En attente</span>
+
+                                {% for aut in pub.publicationauteur_set.all %}
+
+                                <strong>
+
+                                    {{ aut.auteur.first_name }}
+                                    {{ aut.auteur.last_name }}
+
+                                </strong>
+
+                                {% if aut.role %}
+
+                                ({{ aut.role }})
+
                                 {% endif %}
+
+                                {% if not forloop.last %}
+
+                                <br>
+
+                                {% endif %}
+
+                                {% empty %}
+
+                                Aucun auteur
+
+                                {% endfor %}
+
                             </td>
+
+                            <!-- Institutions -->
                             <td>
+
+                                {% for aut in pub.publicationauteur_set.all %}
+
+                                {% if aut.auteur.profile.institution %}
+
+                                {{ aut.auteur.profile.institution.nom_institution }}
+
+                                {% else %}
+
+                                Aucune institution
+
+                                {% endif %}
+
+                                {% if not forloop.last %}
+
+                                <br>
+
+                                {% endif %}
+
+                                {% empty %}
+
+                                Aucune institution
+
+                                {% endfor %}
+
+                            </td>
+
+                            <!-- Statut indexation -->
+                            <td>
+
+                                {% if pub.statut_indexation == 'Indexée' %}
+
+                                <span style="color:green;">
+
+                                    ✔ Indexée
+
+                                </span>
+
+                                {% elif pub.statut_indexation == 'Rejetée' %}
+
+                                <span style="color:red;">
+
+                                    ✘ Rejetée
+
+                                </span>
+
+                                {% else %}
+
+                                <span style="color:orange;">
+
+                                    ⏳ En attente
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Statut publication -->
+                            <td>
+
                                 <form action="{% url 'publications:statut_publication' %}" method="post">
+
                                     {% csrf_token %}
-                                    <input type="text" name="statut_publication" value="{{pub.statut_publication}}"
+
+                                    <input type="text" name="statut_publication" value="{{ pub.statut_publication }}"
                                         hidden>
-                                    <input type="text" name="idpublier" value="{{pub.id}}" hidden>
+
+                                    <input type="text" name="idpublier" value="{{ pub.id }}" hidden>
+
                                     {% if pub.statut_publication and pub.statut_indexation == 'Acceptée' %}
-                                    <button type="submit" class="btn btn-primary btn-sm">OUI</button>
-                                    {% else %}
-                                    <button type="submit" class="btn btn-danger btn-sm">NON</button>
-                                    {% endif %}
-                                </form>
-                            </td>
-                            <td>
-                                <a href="{% url 'publications:detail' pub.slug %}" class="btn btn-info btn-sm"><i
-                                        class="ti-eye"></i></a>&nbsp;&nbsp;&nbsp;
-                                <a href="{% url 'publications:update' pub.slug %}" class="btn btn-success btn-sm "><i
-                                        class="ti-pencil-alt"></i></a>&nbsp;&nbsp;&nbsp;
-                                <form action="{% url 'publications:delete' pub.slug %}" method="post"
-                                    style="display: inline" data-bs-placement="top" data-bs-toggle="tooltip"
-                                    title="Supprimer">
-                                    {% csrf_token %}
-                                    <button class="btn  btn-sm btn-danger delete-confirm" type="submit">
-                                        <i class="ti-trash"></i>
+
+                                    <button type="submit" class="btn btn-primary btn-sm">
+
+                                        OUI
+
                                     </button>
+
+                                    {% else %}
+
+                                    <button type="submit" class="btn btn-danger btn-sm">
+
+                                        NON
+
+                                    </button>
+
+                                    {% endif %}
+
                                 </form>
+
                             </td>
+
+                            <!-- Actions -->
+                            <td>
+
+                                <!-- Voir -->
+                                <a href="{% url 'publications:detail' pub.slug %}" class="btn btn-info btn-sm">
+
+                                    <i class="ti-eye"></i>
+
+                                </a>
+
+                                <!-- Modifier -->
+                                <a href="{% url 'publications:update' pub.slug %}" class="btn btn-success btn-sm">
+
+                                    <i class="ti-pencil-alt"></i>
+
+                                </a>
+
+                                <!-- Supprimer -->
+                                <form action="{% url 'publications:delete' pub.slug %}" method="post"
+                                    style="display:inline" data-bs-placement="top" data-bs-toggle="tooltip"
+                                    title="Supprimer">
+
+                                    {% csrf_token %}
+
+                                    <button class="btn btn-danger btn-sm delete-confirm" type="submit">
+
+                                        <i class="ti-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
                         </tr>
+
                         {% endfor %}
 
                     </tbody>
@@ -213,6 +268,33 @@
     </div>
 
 </div> <!-- End Row -->
+
+<!-- Main_modal Start -->
+<div class="row">
+    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
+        <!-- sample modal content -->
+        <div id="main-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+            aria-hidden="true" style="display: none">
+
+            <div class="modal-dialog" style="width:55%">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-title">Chargement...</h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+                        <p>Chargement...</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main_modal End -->
 
 {% endblock content %}
 
@@ -225,61 +307,64 @@
     });
 </script>
 
-<!-- JavaScripts permettant de changer dynamiquement les champs en fonction du type de document-->
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const select = document.getElementById("id_type_document");
 
-        const fields = {
-            photo: "field_photo",
-            titre: "field_titre",
-            auteurs: "field_auteurs",
-            encadreurs: "field_encadreurs",
-            date_publication: "field_date_publication",
-            fichier_pdf: "field_fichier_pdf",
-            langue: "field_langue",
-            institutions_contributrices: "field_institutions_contributrices",
-            doi: "field_doi",
-            orcid: "field_orcid",
-            nom_revue: "field_nom_revue",
-            nom_colloque: "field_nom_colloque",
-            lien_article: "field_lien_article"
-        };
+    // JavaScript du main modal pour charger dynamiquement les contenus des modals spécifiques
+    function openModal(url, title = "") {
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+        // console.log("Fetching modal content from:", url);
 
-        const hideAll = () => {
-            for (let key in fields) {
-                const el = document.getElementById(fields[key]);
-                if (el) el.style.display = "none";
-            }
-        };
-
-        const showFields = (fieldList) => {
-            fieldList.forEach(f => {
-                const el = document.getElementById(fields[f]);
-                if (el) el.style.display = "block";
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("modal-body").innerHTML = data;
+                $('#main-modal').modal('show');
+            })
+            .catch(error => {
+                document.getElementById("modal-body").innerHTML = "Erreur de chargement";
             });
-        };
+    }
 
-        const updateForm = () => {
-            const selected = select.value;
+    // JavaScript Pour l'ajout dynamique des auteurs et encadreurs
+    let auteurIndex = 0;
+    let encadreurIndex = 0;
 
-            hideAll();
+    document.addEventListener("click", function (e) {
 
-            if (selected === "1") { // Communication Scientifique
-                showFields(["photo", "titre", "auteurs", "nom_colloque", "date_publication", "fichier_pdf"]);
-            } else if (selected === "5") { // Article Scientifique
-                showFields(["photo", "titre", "auteurs", "lien_article", "nom_revue", "fichier_pdf"]);
-            } else if (selected === "3" || selected === "2") { // Thèse ou Mémoire
-                showFields(["photo", "titre", "auteurs", "encadreurs", "date_publication", "langue", "institutions_contributrices", "doi", "orcid", "fichier_pdf"]);
-            }
-        };
+        // 🔒 Vérifier qu'on est DANS le modal actif
+        const modal = document.getElementById("main-modal");
 
-        // Initialisation
-        updateForm();
+        if (!modal || !modal.contains(e.target)) return;
 
-        // Événement lors du changement
-        select.addEventListener("change", updateForm);
+        // ===== AJOUT AUTEUR =====
+        if (e.target.id === "add-auteur" || e.target.closest("#add-auteur")) {
+
+            let container = modal.querySelector("#auteurs-container");
+            if (!container) return;
+
+            let html = `
+            <div class="border p-3 mt-2"><br>
+                <input type="text" name="auteurs[${auteurIndex}][nom]" class="form-control mb-2" placeholder="Nom co-auteur"><br>
+                <input type="text" name="auteurs[${auteurIndex}][prenoms]" class="form-control mb-2" placeholder="Prénom co-auteur"><br>
+                <input type="email" name="auteurs[${auteurIndex}][email]" class="form-control mb-2" placeholder="Email co-auteur"><br>
+                <input type="tel" name="auteurs[${auteurIndex}][tel]" class="form-control mb-2" placeholder="Téléphone co-auteur"><br>
+                <button type="button" class="btn btn-danger btn-sm remove">Supprimer</button><br>
+            </div>
+        `;
+
+            container.insertAdjacentHTML("beforeend", html);
+            auteurIndex++;
+        }
+
+        // ===== SUPPRESSION =====
+        if (e.target.classList.contains("remove")) {
+            e.target.closest(".border").remove();
+        }
+
     });
+
 </script>
 
 {% endblock scripts %}

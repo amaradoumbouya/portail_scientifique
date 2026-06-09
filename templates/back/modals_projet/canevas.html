@@ -1,0 +1,35 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% url 'projets_detudes:modal_canevas' projet.slug %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <div class="form-group">
+                {{canevas_form.titre|as_crispy_field}}
+            </div>
+
+            <div class="form-group">
+                {{canevas_form.canevas_pdf|as_crispy_field}}
+            </div>
+
+            <div class="form-group">
+                {{canevas_form.description|as_crispy_field}}
+                <small>Faites une description détaillée du canevas</small>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+
+    </div>
+
+</form>

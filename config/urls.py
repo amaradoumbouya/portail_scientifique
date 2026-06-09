@@ -35,4 +35,7 @@ urlpatterns = [
     path('contact_us/', include('contact_us.urls')),
     path('encadreurs/', include('encadreurs.urls')),
     path('partenaires/', include('partenaires.urls')),
+    path('projets_detudes/', include('projets_detudes.urls')),
+    path('evaluation/', include('evaluation.urls')),
+    path('soutenance/', include('soutenance.urls')),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

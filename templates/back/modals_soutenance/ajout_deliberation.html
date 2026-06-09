@@ -1,0 +1,33 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% url 'soutenance:ajouter_deliberation' soutenance.slug %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <div class="form-group col-md-12">
+                {{deliberation_form.note_finale|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-12">
+                {{deliberation_form.decision|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-12">
+                {{deliberation_form.observations|as_crispy_field}}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+
+    </div>
+
+</form>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from auteurs.models import Auteur
-from publications.models import Publication
+from publications.models.publication import Publication
 from auteurs.forms import AuteurForm
 from accounts.models import CustumerUser
 from institutions.models import Institution
@@ -17,23 +17,6 @@ class AuteurCreateView(CreateView):
     template_name = 'back/auteurs/index.html'
     success_url = reverse_lazy("auteurs:index")
 
-    def dispatch(self, request, *args, **kwargs):
-        # Si l'utilisateur n'a pas de rôle, on affiche un autre formulaire
-        if not request.user.is_authenticated or not request.user.role:
-            messages.info(request, "Veuillez compléter votre profil avant de continuer.")
-            form = AuteurForm()
-            return render(request, 'back/auteurs/profil_auteur.html', {'form': form})
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            form.instance.user = self.request.user
-            user_role_to_update = get_object_or_404(CustumerUser, id=self.request.user.id)
-            user_role_to_update.role = 'auteur'
-            user_role_to_update.save()
-        messages.success(self.request, "Auteur ajouté avec succès !")
-        return super().form_valid(form)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -46,7 +29,8 @@ class AuteurCreateView(CreateView):
                 auteurs_lies = Auteur.objects.filter(id__in=publications.values_list('auteurs', flat=True)).distinct().order_by('-id')
                 context['auteurs'] = auteurs_lies
             else:
-                context["auteurs"] = Auteur.objects.filter(user=user).order_by('-id')
+                pass
+                # context["auteurs"] = Auteur.objects.filter(user=user).order_by('-id')
 
         return context
     

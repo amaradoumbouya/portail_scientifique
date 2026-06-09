@@ -1,0 +1,481 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Title -->
+<div class="row">
+
+    <div class="col-sm-12">
+
+        <div class="page-header-title">
+
+            <h4 class="pull-left page-title">
+
+                Gestion des tâches
+
+            </h4>
+
+            <ol class="breadcrumb pull-right">
+
+                <li>
+
+                    <a href="{% url 'projets_detudes:etudiants_a_encadrer'%}">
+
+                        Retour
+
+                    </a>
+
+                </li>
+
+                <li class="active">
+
+                    Liste des tâches
+
+                </li>
+
+            </ol>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Statistiques -->
+<div class="row">
+
+    <!-- Total -->
+    <div class="col-md-3">
+
+        <div class="panel panel-primary">
+
+            <div class="panel-body text-center">
+
+                <i class="ti-agenda fa-3x"></i>
+
+                <h2 style="margin-top: 15px;">
+
+                    {{ total_taches }}
+
+                </h2>
+
+                <h4>
+
+                    Total tâches
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Terminées -->
+    <div class="col-md-3">
+
+        <div class="panel panel-success">
+
+            <div class="panel-body text-center">
+
+                <i class="ti-check-box fa-3x"></i>
+
+                <h2 style="margin-top: 15px;">
+
+                    {{ taches_terminees }}
+
+                </h2>
+
+                <h4>
+
+                    Terminées
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- En cours -->
+    <div class="col-md-3">
+
+        <div class="panel panel-warning">
+
+            <div class="panel-body text-center">
+
+                <i class="ti-reload fa-3x"></i>
+
+                <h2 style="margin-top: 15px;">
+
+                    {{ taches_en_cours }}
+
+                </h2>
+
+                <h4>
+
+                    En cours
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Retard -->
+    <div class="col-md-3">
+
+        <div class="panel panel-danger">
+
+            <div class="panel-body text-center">
+
+                <i class="ti-alert fa-3x"></i>
+
+                <h2 style="margin-top: 15px;">
+
+                    {{ taches_retard }}
+
+                </h2>
+
+                <h4>
+
+                    En retard
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Projet -->
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-info">
+
+            <div class="panel-heading">
+
+                <h3 class="panel-title">
+
+                    <i class="ti-book"></i>
+
+                    {{ projet.titre }}
+
+                </h3>
+
+            </div>
+
+            <div class="panel-body">
+
+                <p>
+
+                    {{ projet.description }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Liste des tâches -->
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+
+                <h3 class="panel-title">
+
+                    <i class="ti-list"></i>
+
+                    Liste des tâches du projet
+
+                </h3>
+
+            </div>
+
+            <div class="panel-body">
+
+                <table id="datatable-buttons"
+                    class="table table-striped table-bordered">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>N°</th>
+
+                            <th>Tâche</th>
+
+                            <th>Canevas</th>
+
+                            <th>Assigné à</th>
+
+                            <th>Début</th>
+
+                            <th>Fin</th>
+
+                            <th>Priorité</th>
+
+                            <th>Statut</th>
+
+                            <th>Progression</th>
+
+                            <th style="width: 14%;">
+
+                                Actions
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for tache in taches %}
+
+                            <tr>
+
+                                <td>
+
+                                    {{ forloop.counter }}
+
+                                </td>
+
+                                <td>
+
+                                    <strong>
+
+                                        {{ tache.titre }}
+
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    {{ tache.canevas.titre }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ tache.assigne_a.full_name }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ tache.date_debut }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ tache.date_fin }}
+
+                                </td>
+
+                                <!-- Priorité -->
+                                <td>
+
+                                    {% if tache.priorite == 'haute' %}
+
+                                        <span class="label label-danger">
+
+                                            Haute
+
+                                        </span>
+
+                                    {% elif tache.priorite == 'moyenne' %}
+
+                                        <span class="label label-warning">
+
+                                            Moyenne
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="label label-info">
+
+                                            Basse
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <!-- Statut -->
+                                <td>
+
+                                    {% if tache.statut == 'termine' %}
+
+                                        <span class="label label-success">
+
+                                            Terminé
+
+                                        </span>
+
+                                    {% elif tache.statut == 'en_cours' %}
+
+                                        <span class="label label-warning">
+
+                                            En cours
+
+                                        </span>
+
+                                    {% elif tache.statut == 'retard' %}
+
+                                        <span class="label label-danger">
+
+                                            Retard
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="label label-default">
+
+                                            En attente
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <!-- Progression -->
+                                <td>
+
+                                    <div class="progress progress-sm">
+
+                                        <div class="progress-bar progress-bar-success"
+                                            role="progressbar"
+                                            aria-valuenow="{{ tache.progression }}"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style="width: {{ tache.progression }}%;">
+
+                                            {{ tache.progression }}%
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <!-- Actions -->
+                                <td>
+
+                                    <!-- Voir -->
+                                    <a href=""
+                                        class="btn btn-info btn-sm">
+
+                                        <i class="ti-eye"></i>
+
+                                    </a>
+
+                                    <!-- Modifier -->
+                                    <a href="javascript:void(0);"
+
+                                        data-url="{% url 'projets_detudes:modal_update_tache' tache.slug %}"
+
+                                        data-title="Modifier la tâche"
+
+                                        onclick="openModal(this.dataset.url, this.dataset.title)"
+
+                                        class="btn btn-primary btn-sm">
+
+                                        <i class="ti-pencil-alt"></i>
+
+                                    </a>
+
+                                    <!-- Télécharger -->
+                                    {% if tache.fichier_pdf_tache %}
+
+                                        <a href="{{ tache.fichier_pdf_tache.url }}"
+                                            target="_blank"
+                                            class="btn btn-success btn-sm">
+
+                                            <i class="ti-download"></i>
+
+                                        </a>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="10"
+                                    class="text-center text-danger">
+
+                                    <i class="ti-alert"></i>
+
+                                    Aucune tâche disponible.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script type="text/javascript"
+    src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('form').parsley();
+
+    });
+
+</script>
+
+{% endblock scripts %}

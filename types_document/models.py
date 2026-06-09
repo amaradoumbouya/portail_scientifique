@@ -1,13 +1,15 @@
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
+from django.utils.crypto import get_random_string
 from django.contrib.auth import  get_user_model
 
 User = get_user_model()
 
 class TypeDocument(models.Model):
-    libelle = models.CharField(max_length=100, verbose_name='Type Document')
-    slug = models.SlugField(max_length=255, unique=True, editable=False)
-    user        = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    libelle    = models.CharField(max_length=100, verbose_name='Type Document')
+    slug       = models.SlugField(max_length=255, unique=True, editable=False)
+    user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='type_document')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -19,8 +21,7 @@ class TypeDocument(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            last_pk = TypeDocument.objects.order_by('pk').last()
-            self.slug = slugify(self.libelle) + '-' + str(last_pk.pk + 1) if last_pk else '1'
+            self.slug = slugify(self.libelle) + '-' + get_random_string(5)
         super(TypeDocument, self).save(*args, **kwargs)
 
     class Meta:

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from encadreurs.models import Encadreur
-from publications.models import Publication
+from publications.models.publication import Publication
 from encadreurs.forms import EncadreurForm
 from auteurs.forms import AuteurForm
 from django.urls import reverse_lazy, reverse
@@ -14,21 +14,6 @@ class EncadreurCreateView(CreateView):
     form_class = EncadreurForm
     template_name = 'back/encadreurs/index.html'
     success_url = reverse_lazy("encadreurs:index")
-
-    def dispatch(self, request, *args, **kwargs):
-        # Si l'utilisateur n'a pas de rôle, on affiche un autre formulaire
-        if not request.user.is_authenticated or not request.user.role:
-            messages.info(request, "Veuillez compléter votre profil avant de continuer.")
-            form = AuteurForm()
-            return render(request, 'back/auteurs/profil_auteur.html', {'form': form})
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            form.instance.user = self.request.user
-            self.object = form.save()
-            messages.success(self.request, "Encadreur ajouté avec succès !")
-        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,8 +31,9 @@ class EncadreurCreateView(CreateView):
                 encadreurs_lies = Encadreur.objects.filter(id__in=publications.values_list('encadreurs', flat=True)).distinct()
                 context['encadreurs'] = encadreurs_lies
             else:
+                pass
                 # Sinon, on affiche les encadreurs que l'utilisateur a créés
-                context['encadreurs'] = Encadreur.objects.filter(user=user).order_by('-id')
+                # context['encadreurs'] = Encadreur.objects.filter(user=user).order_by('-id')
 
         return context
 

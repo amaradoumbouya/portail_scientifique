@@ -8,9 +8,11 @@ from django.utils.crypto import get_random_string
 class Institution(models.Model):
     TYPE_INSTITUTION = (
         ('Université', 'Université'),
-        ('Centre de recherche', 'Centre de recherche'),
+        ('Centre de documentation', 'Centre de documentation'),
+        ('Centre de recherche scientifique', 'Centre de recherche scientifique(CRS/IRS)'),
+        ("Institution d'enseignement supérieur", "Institution d'enseignement supérieur"),
     )
-    type_institution             = models.CharField(max_length=50, blank=True, null=True, choices=TYPE_INSTITUTION, verbose_name= "Type")
+    type_institution             = models.CharField(max_length=50, blank=True, null=True, choices=TYPE_INSTITUTION, verbose_name= "Type d'Institution")
     nom_institution              = models.CharField(max_length=255, verbose_name= "Nom de l'Institution")
     slug                         = models.SlugField(max_length=255, unique=True, editable=False)
     sigle_institution            = models.CharField(max_length=20, verbose_name= "Sigle de l'Institution")
@@ -19,6 +21,7 @@ class Institution(models.Model):
     adresse_institution          = models.CharField(max_length=30, verbose_name= "Adresse de l'Institution")
     ville                        = models.CharField(max_length=20, blank=True, null=True, verbose_name= "Ville")
     pays                         = models.CharField(max_length=20, blank=True, null=True, default='Guinée', verbose_name= "Pays")
+    ror                          = models.CharField(max_length=255, verbose_name= "ROR")
     site_web_institution         = models.URLField(verbose_name= "Site web")
     logo_institution             = models.ImageField(upload_to='institutions/logos/', blank=True, null=True, verbose_name= "Logo de l'Institution")
     reseau_social_facebook_inst  = models.URLField(blank=True, null=True, verbose_name= "Facebook")

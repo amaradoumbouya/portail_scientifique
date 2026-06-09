@@ -1,0 +1,54 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% url 'projets_detudes:modal_tache' projet.slug %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+
+        <div class="row">
+
+            <div class="form-group col-md-4">
+                {{tache_form.canevas|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-4">
+                {{tache_form.titre|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-4">
+                {{tache_form.fichier_pdf_tache|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{tache_form.date_debut|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{tache_form.date_fin|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{tache_form.priorite|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{tache_form.assigne_a|as_crispy_field}}
+            </div>
+
+            <div class="form-group">
+                {{tache_form.description|as_crispy_field}}
+                <small>Faites une explication détaillée de la tâche</small>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+
+    </div>
+
+</form>

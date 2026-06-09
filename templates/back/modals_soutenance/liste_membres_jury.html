@@ -1,0 +1,403 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="container-fluid">
+
+    <!-- Informations de la soutenance -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+
+                <i class="ti-blackboard"></i>
+
+                {{ projet.titre }}
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+
+                <!-- Description -->
+                <div class="col-md-8">
+
+                    <h4>
+
+                        <i class="ti-file"></i>
+
+                        Description du projet
+
+                    </h4>
+
+                    <p style="text-align: justify; line-height: 28px;">
+
+                        {{ projet.description }}
+
+                    </p>
+
+                </div>
+
+                <!-- Informations -->
+                <div class="col-md-4">
+
+                    <div class="well">
+
+                        <h4>
+
+                            <i class="ti-info-alt"></i>
+
+                            Informations
+
+                        </h4>
+
+                        <hr>
+
+                        <p>
+
+                            <strong>Type :</strong>
+
+                            {{ projet.get_type_projet_display }}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Candidat :</strong>
+
+                            {{ candidat }}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Directeur :</strong>
+
+                            {{ directeur.full_name }}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Date de soutenance :</strong>
+
+                            {{ soutenance.date|date:"d/m/Y" }}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Heure :</strong>
+
+                            {{ soutenance.heure|time:"H:i" }}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Lieu :</strong>
+
+                            {{ soutenance.lieu|default:"Non renseigné" }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Composition du Jury -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+
+                <i class="ti-id-badge"></i>
+
+                Composition du Jury
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th width="10%">N°</th>
+
+                            <th width="40%">Nom complet</th>
+
+                            <th width="25%">Fonction</th>
+
+                            <th width="25%">Institution</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for membre in membres_jury %}
+
+                        <tr>
+
+                            <td>{{ forloop.counter }}</td>
+
+                            <td>{{ membre.enseignant.full_name }}</td>
+
+                            <td>
+
+                                <span class="label label-primary">
+
+                                    {{ membre.get_role_display }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                {{ membre.enseignant.profile.institution|default:"Non renseignée" }}
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="4" class="text-center text-danger">
+
+                                Aucun membre du jury enregistré.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Répartition par rôle -->
+    <div class="row">
+
+        <!-- Président -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title">
+
+                        <i class="ti-crown"></i>
+
+                        Président du Jury
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for membre in presidents %}
+
+                        <li class="list-group-item">
+
+                            {{ membre.enseignant.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-danger">
+
+                            Aucun président désigné
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Rapporteurs -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title">
+
+                        <i class="ti-write"></i>
+
+                        Rapporteur(s)
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for membre in rapporteurs %}
+
+                        <li class="list-group-item">
+
+                            {{ membre.enseignant.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-danger">
+
+                            Aucun rapporteur
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <!-- Examinateurs -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title">
+
+                        <i class="ti-search"></i>
+
+                        Examinateur(s)
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for membre in examinateurs %}
+
+                        <li class="list-group-item">
+
+                            {{ membre.enseignant.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-danger">
+
+                            Aucun examinateur
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Membres -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title">
+
+                        <i class="ti-user"></i>
+
+                        Membres du Jury
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for membre in membres_simples %}
+
+                        <li class="list-group-item">
+
+                            {{ membre.enseignant.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-danger">
+
+                            Aucun membre
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,311 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="container-fluid">
+
+    <!-- Header Projet -->
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title">
+
+                <i class="ti-bookmark-alt"></i>
+
+                {{ projet.titre }}
+
+            </h3>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div class="row">
+
+                <!-- Informations générales -->
+                <div class="col-md-8">
+
+                    <h4>
+
+                        <i class="ti-file"></i>
+
+                        Description du projet
+
+                    </h4>
+
+                    <p style="text-align: justify; line-height: 28px;">
+
+                        {{ projet.description }}
+
+                    </p>
+
+                </div>
+
+                <!-- Informations rapides -->
+                <div class="col-md-4">
+
+                    <div class="well">
+
+                        <h4>
+
+                            <i class="ti-info-alt"></i>
+
+                            Informations
+
+                        </h4>
+
+                        <hr>
+
+                        <p>
+
+                            <strong>Type :</strong>
+
+                            {{ projet.get_type_projet_display }}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Statut :</strong>
+
+                            <span class="label label-success">
+
+                                {{ projet.get_statut_display }}
+
+                            </span>
+
+                        </p>
+
+                        <p>
+
+                            <strong>Date :</strong>
+
+                            {{ projet.date_soumission|date:"d/m/Y H:i" }}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Candidat(e):</strong>
+
+                            {{ projet.candidate }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Participants -->
+    <div class="row">
+
+        <!-- Auteurs -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title">
+
+                        <i class="ti-user"></i>
+
+                        Auteur principal
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for auteur in auteurs %}
+
+                        <li class="list-group-item">
+
+                            <i class="ti-angle-right"></i>
+
+                            {{ auteur.user.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-danger">
+
+                            Aucun auteur
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Co-auteurs -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title" style="color: white;">
+
+                        <i class="ti-id-badge"></i>
+
+                        Co-auteur(s)
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for coauteur in coauteurs %}
+
+                        <li class="list-group-item">
+
+                            <i class="ti-angle-right"></i>
+
+                            {{ coauteur.user.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-danger">
+
+                            Aucun co-auteur
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Encadreurs -->
+    <div class="row">
+
+        <!-- Directeurs -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title" style="color: white;">
+
+                        <i class="ti-medall"></i>
+
+                        Directeurs
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for directeur in directeurs %}
+
+                        <li class="list-group-item">
+
+                            <i class="ti-angle-right"></i>
+
+                            {{ directeur.user.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-danger">
+
+                            Aucun directeur
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Co-directeurs -->
+        <div class="col-md-6">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h4 class="panel-title" style="color: white;">
+
+                        <i class="ti-crown"></i>
+
+                        Co-directeurs
+
+                    </h4>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="list-group">
+
+                        {% for codirecteur in codirecteurs %}
+
+                        <li class="list-group-item">
+
+                            <i class="ti-angle-right"></i>
+
+                            {{ codirecteur.user.full_name }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li class="list-group-item text-primary">
+
+                            Aucun co-directeur
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

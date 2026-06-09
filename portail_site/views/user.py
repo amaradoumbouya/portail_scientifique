@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from accounts.forms import CustumerUserForm, UserProfileForm
 from institutions.forms import InstitutionForm
+from institutions.models import Institution
+from projets_detudes.forms.candidate_forms import CandidateForm
 from accounts.models import CustumerUser
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -77,7 +79,7 @@ def inscriptionTemplateView(request):
 
     return render(request, 'pages/inscription.html', {'form': form})
 
-
+# Vue d'inscription des institutions
 def inscription_compte_institution(request):
     form_institution = InstitutionForm()
     form_custumer = CustumerUserForm()
@@ -122,7 +124,15 @@ def inscription_compte_institution(request):
             elif password1 != password2:
                 messages.error(request, "Les mots de passe ne correspondent pas.")
                 return redirect('portail_site:inscription_institution')
-            
+            elif CustumerUser.objects.filter(email=email).exists() :
+                messages.error(request, "Un compte avec cet email existe déjà.")
+                return redirect('portail_site:inscription_institution')
+            elif Institution.objects.filter(email_institution=data_institution['email_institution']).exists() :
+                messages.error(request, "Un compte avec l'email de l'institution existe déjà.")
+                return redirect('portail_site:inscription_institution')
+            elif Institution.objects.filter(nom_institution=data_institution['nom_institution']).exists() :
+                messages.error(request, "Une institution avec ce nom existe déjà.")
+                return redirect('portail_site:inscription_institution')
             else:
                 with transaction.atomic():
                     new_custumer = CustumerUser.objects.create_user(
@@ -136,6 +146,7 @@ def inscription_compte_institution(request):
                     )
 
                     user_profil = new_custumer.profile  # récupère le profil créé par le signal
+                    user_profil.role = 'responsable institution'  # Assigne le rôle d'institution au profil utilisateur
 
                     # mise à jour des champs
                     for field, value in data_user_profile.items():
@@ -183,8 +194,7 @@ def inscription_compte_institution(request):
 
     return render(request, 'pages/compte_institution.html', {'form_custumer': form_custumer, 'form_institution': form_institution, 'form_user_profile': form_user_profile})
 
-
-
+# Vue d'inscription des enseignants/enseignants chercheurs
 def inscription_compte_enseignant(request):
     form_custumer = CustumerUserForm()
     form_user_profile = UserProfileForm()
@@ -226,7 +236,11 @@ def inscription_compte_enseignant(request):
             elif password1 != password2:
                 messages.error(request, "Les mots de passe ne correspondent pas.")
                 return redirect('portail_site:inscription_enseignant')
-
+            
+            elif CustumerUser.objects.filter(email=email).exists() :
+                messages.error(request, "Un compte avec cet email existe déjà.")
+                return redirect('portail_site:inscription_enseignant')
+                
             else:
                 with transaction.atomic():
                     new_custumer = CustumerUser.objects.create_user(
@@ -242,6 +256,7 @@ def inscription_compte_enseignant(request):
                     user_profil = new_custumer.profile  # récupère le profil créé par le signal
                     institution = data_user_profile['institution']
                     user_profil.institution = institution  # Associe l'institution au profil utilisateur
+                    user_profil.role = 'enseignant'  # Assigne le rôle d'enseignant au profil utilisateur
 
                     # mise à jour des champs
                     for field, value in data_user_profile.items():
@@ -283,7 +298,79 @@ def inscription_compte_enseignant(request):
 
     return render(request, 'pages/compte_enseignant.html', {'form_custumer': form_custumer, 'form_user_profile': form_user_profile })
 
+# Vue d'inscription des etudiants(Master/Doctorat)
+def inscription_compte_etudiant(request):
+    form_custumer = CustumerUserForm()
+    form_candidate = CandidateForm()
 
+    if request.method == 'POST':
+        form_custumer = CustumerUserForm(request.POST)
+        form_candidate = CandidateForm(request.POST, request.FILES)
+
+        if form_custumer.is_valid() and form_candidate.is_valid():
+            
+            data_form_custumer = form_custumer.cleaned_data
+            data_form_candidate = form_candidate.cleaned_data
+
+            password1 = data_form_custumer['password1']
+            password2 = data_form_custumer['password2']
+            email = data_form_custumer['email']
+
+            if password1 != password2:
+                messages.error(request, "Les mots de passe ne correspondent pas.")
+                return redirect('portail_site:inscription_etudiant')
+        
+            elif CustumerUser.objects.filter(email=email).exists() :
+                messages.error(request, "Un compte avec cet email existe déjà.")
+                return redirect('portail_site:inscription_etudiant')
+            else:
+                with transaction.atomic():
+                    new_custumer = CustumerUser.objects.create_user(
+                        prenoms=data_form_custumer['prenoms'],
+                        nom=data_form_custumer['nom'],
+                        email=data_form_custumer['email'],
+                        tel=data_form_custumer['tel'],
+                        sexe=data_form_custumer['sexe'],
+                        password=password1,
+                        is_active=False,
+                    )
+
+                    candidate = form_candidate.save(commit=False)
+                    candidate.user = new_custumer
+                    candidate.save()
+
+                    # Envoi de l’email d’activation
+                    current_site = get_current_site(request)
+                    mail_subject = 'Activation de votre compte'
+                    uid = urlsafe_base64_encode(force_bytes(new_custumer.pk))
+                    token = default_token_generator.make_token(new_custumer)
+                    activation_link = reverse('portail_site:activation', kwargs={'uidb64': uid, 'token': token})
+                    activation_url = f"http://{current_site.domain}{activation_link}"
+
+                    message = render_to_string('emails/activation_email.html', {
+                        'user': new_custumer,
+                        'activation_url': activation_url,
+                    })
+
+                    send_mail(
+                        mail_subject,
+                        message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [new_custumer.email],
+                        fail_silently=False,
+                    )
+
+                    messages.success(request, "Inscription réussie. Veuillez vérifier votre email pour activer votre compte.")
+                    return redirect('portail_site:connexion')
+        else:
+            print("Formulaire CustumerUser:", form_custumer.errors)
+            print("Formulaire Candidate:", form_candidate.errors)
+
+    else:
+        form_custumer = CustumerUserForm()
+        form_candidate = CandidateForm()
+
+    return render(request, 'pages/compte_etudiant.html', {'form_custumer': form_custumer, 'form_candidate': form_candidate })
 
 # La vue d'activation du compte au portail
 def activate_account(request, uidb64, token):
@@ -301,10 +388,7 @@ def activate_account(request, uidb64, token):
     else:
         messages.error(request, "Le lien d’activation est invalide ou a expiré.")
         return redirect('portail_site:inscription')
-
-
-
-
+ 
 # La vue de connexion au portail 
 def user_login_view(request, *args, **kwargs):
     
