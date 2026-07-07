@@ -12,6 +12,10 @@ media/
 db_seeds/
 node_modules/
 backup_portail/
+autoevaluation/
+autoevaluation_irs/
+cd/
+portailscientifique/
 
 # Fichiers Python
 __pycache__/
