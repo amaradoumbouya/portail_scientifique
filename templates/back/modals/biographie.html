@@ -1,29 +1,21 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<form action="" method="post" enctype="multipart/form-data">
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="modal-body">
-
         <div class="row">
-
             <div class="form-group col-md-12">
-                <label for="">Biographie</label>
-                <textarea class="form-control" id="biographie" name="biographie" placeholder="Biographie" rows="4">
-                    Amara M'balou DOUMBOUYA est un ingénieur spécialisé dans les technologies de l'information.
-                </textarea>
-                <small class="form-text text-muted">La biographie doit être concise et informative, mettant en avant les réalisations académiques et professionnelles de l'enseignant. Elle peut inclure des informations sur les domaines de recherche, les publications, les projets, et les contributions à la communauté scientifique.</small>   
+                {{ form.biographie|as_crispy_field }}
+                <small class="form-text text-muted">La biographie doit être concise et informative, mettant en avant les réalisations académiques et professionnelles.</small>   
             </div>
-
         </div>
-
     </div>
 
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
-
     </div>
 
 </form>

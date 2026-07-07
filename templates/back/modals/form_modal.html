@@ -1,0 +1,11 @@
+{% load crispy_forms_tags %}
+<form action="{{ action_url }}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-body">
+        {{ form|crispy }}
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+    </div>
+</form>

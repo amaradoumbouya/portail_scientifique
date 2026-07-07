@@ -1,0 +1,24 @@
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="text-primary m-t-0">{{ item.poste_occupe }}</h4>
+            <p class="text-muted"><i class="fa fa-university"></i> {{ item.nom_institution }}</p>
+            <hr>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><strong><i class="fa fa-map-marker"></i> Ville :</strong> {{ item.ville_emploi|default:"-" }}</p>
+                    <p><strong><i class="fa fa-globe"></i> Pays :</strong> {{ item.pays_emploi|default:"-" }}</p>
+                    <p><strong><i class="fa fa-building"></i> Département :</strong> {{ item.departement_emploi|default:"-" }}</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><strong><i class="fa fa-calendar"></i> Début :</strong> {{ item.date_debut_emploi|date:"d F Y" }}</p>
+                    <p><strong><i class="fa fa-calendar"></i> Fin :</strong> {{ item.date_fin_emploi|date:"d F Y"|default:"Présent" }}</p>
+                    <p><strong><i class="fa fa-info-circle"></i> Statut :</strong> {% if item.is_published %}<span class="label label-success">Publié</span>{% else %}<span class="label label-warning">Privé</span>{% endif %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+</div>

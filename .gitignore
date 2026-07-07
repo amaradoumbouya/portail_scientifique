@@ -1,5 +1,4 @@
 # Fichiers sensibles
-.env
 db.sqlite3
 *.sql
 *.gz
@@ -10,9 +9,41 @@ settings.py
 
 # Dossiers
 media/
+db_seeds/
 node_modules/
 backup_portail/
 
 # Fichiers Python
 __pycache__/
 *.pyc
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+
+# Environment variables
+.env
+.env.*
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

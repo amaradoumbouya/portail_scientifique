@@ -6,6 +6,7 @@ from portail_site.views import *
 
 
 app_name = 'portail_site'
+
 urlpatterns = [
     path('', IndexTemplateView.as_view(), name='index'),
     path('dashboard/', login_required(DashboardTemplateView.as_view()), name='dashboard'),
@@ -38,14 +39,23 @@ urlpatterns = [
     path('connexion/', views.user_login_view, name='connexion'),
     path('deconnexion/',auth_views.LogoutView.as_view(),name="deconnexion"),
 
-    # URLs pour les modals
-    path('modal/profil/', views.modal_profil, name='modal_profil'),
-    path('modal/biographie/', views.modal_biographie, name='modal_biographie'),
-    path('modal/emploi/', views.modal_emploi, name='modal_emploi'),
-    path('modal/education-qualification/', views.modal_education_qualification, name='modal_education_qualification'),
-    path('modal/experience-professionnelle/', views.modal_experience_professionnelle, name='modal_experience_professionnelle'),
-    path('modal/travaux-recherche/', views.modal_travaux_recherche, name='modal_travaux_recherche'),
-    path('modal/reseaux-sociaux/', views.modal_reseaux_sociaux, name='modal_reseaux_sociaux'),
-
+    # URLs pour les modals avec slugs et pk optionnel
+    path('modal/profil/<slug:slug>/', views.modal_profil, name='modal_profil'),
+    path('modal/biographie/<slug:slug>/', views.modal_biographie, name='modal_biographie'),
+    path('modal/details/<str:model_name>/<int:pk>/', views.modal_detail_activite, name='details_activite'),
     
+    path('modal/emploi/<slug:slug>/', views.modal_emploi, name='modal_emploi'),
+    path('modal/emploi/<slug:slug>/<int:pk>/', views.modal_emploi, name='modal_emploi_edit'),
+    
+    path('modal/education-qualification/<slug:slug>/', views.modal_education_qualification, name='modal_education_qualification'),
+    path('modal/education-qualification/<slug:slug>/<int:pk>/', views.modal_education_qualification, name='modal_education_qualification_edit'),
+    
+    path('modal/experience-professionnelle/<slug:slug>/', views.modal_experience_professionnelle, name='modal_experience_professionnelle'),
+    path('modal/experience-professionnelle/<slug:slug>/<int:pk>/', views.modal_experience_professionnelle, name='modal_experience_professionnelle_edit'),
+    
+    path('modal/travaux-recherche/<slug:slug>/', views.modal_travaux_recherche, name='modal_travaux_recherche'),
+    path('modal/travaux-recherche/<slug:slug>/<int:pk>/', views.modal_travaux_recherche, name='modal_travaux_recherche_edit'),
+    
+    path('modal/reseaux-sociaux/<slug:slug>/', views.modal_reseaux_sociaux, name='modal_reseaux_sociaux'),
+
 ]

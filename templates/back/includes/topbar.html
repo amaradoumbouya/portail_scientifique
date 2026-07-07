@@ -4,8 +4,8 @@
     <!-- LOGO -->
     <div class="topbar-left">
         <div class="text-center">
-            <a href="#" class="logo"><img src="{% static 'back/assets/images/logo.png' %}" height="50"></a>
-            <a href="#" class="logo-sm"><img src="{% static 'back/assets/images/logo_sm.png' %}" height="36"></a>
+            <a href="#" class="logo"><img src="{% static 'back/assets/images/logo_mesrs_1.png' %}" height="59"></a>
+            <a href="#" class="logo-sm"><img src="{% static 'back/assets/images/logo_mesrs.png' %}" height="36"></a>
         </div>
     </div>
     <!-- Button mobile view to collapse sidebar menu -->
@@ -80,7 +80,7 @@
 
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown"
-                            aria-expanded="true"><img src="{{ user.ImageUrl }}"
+                            aria-expanded="true"><img src="{{ user.profile.ImageUrl }}"
                                 alt="{{user.prenoms|slice:'1'}} {{user.nom|slice:'1'}}"
                                 alt="{{user.prenoms|slice:'1'}} {{user.nom|slice:'1'}}" class="img-circle"> </a>
 

@@ -2,14 +2,14 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-
 {% block title %}
-<title>Profil Utilisateur - Portail Scientifique</title>
+<title>Profil Utilisateur - Sira</title>
 {% endblock title %}
 
 {% block style %}
 <style>
     /* Carte ORCID principale */
+
     .orcid-card {
         border: 2px solid #3c72fc;
         border-radius: 8px;
@@ -215,12 +215,37 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 2px solid #eee;
         margin-bottom: 20px;
+        padding-bottom: 10px;
     }
 
     .activities-header h3 {
         margin: 0;
-        font-weight: bold;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .activities-global-actions {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .activities-global-actions .separator {
+        color: #ccc;
+        font-size: 12px;
+    }
+
+    .activities-global-actions .btn-link {
+        color: #2196F3;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0;
+    }
+
+    .activities-global-actions .btn-link:hover {
+        text-decoration: underline;
     }
 
     .collapse-all {
@@ -381,6 +406,23 @@
     .print-link i {
         margin-right: 5px;
     }
+
+    /* Style pour les détails en collapse */
+    .detail-collapse-container {
+        border-top: 1px solid #eee;
+        padding: 0;
+        /* On laisse le padding au contenu interne pour plus de contrôle */
+        background-color: #fcfcfc;
+    }
+
+    .detail-collapse-content {
+        padding: 20px;
+    }
+
+    /* Animation du chevron pour l'état ouvert/fermé */
+    .activity-actions .glyphicon-eye-open.active {
+        color: #3c72fc !important;
+    }
 </style>
 {% endblock style %}
 
@@ -396,6 +438,7 @@
             <div class="panel-body">
 
                 <div class="row">
+
                     <!-- Section INC ID -->
                     <div class="col-sm-3">
                         <!-- Section ORCID ID -->
@@ -404,7 +447,7 @@
                             <div class="card-body text-center">
                                 <small>INC: Identifiant National de Chercheur</small>
                                 <h5 class="orcid-url">https://inc.org/</h5>
-                                <h3 class="orcid-id">INC-0005-6108-8274</h3>
+                                <h3 class="orcid-id">{{ user.profile.profil_inc|default:"Non renseigné" }}</h3>
                             </div>
                         </div>
 
@@ -412,98 +455,178 @@
                         <div class="card info-card">
                             <div class="card-header-custom">
                                 <h4 class="card-title">Coordonnées</h4>
-                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/profil/', 'Modifier le profil')">
-                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                <button class="btn waves-effect waves-light"
+                                    data-url="{% url 'portail_site:modal_profil' user.profile.slug %}"
+                                    data-title="Modifier le profil"
+                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                    <i class="glyphicon glyphicon-pencil edit-icon"></i>
                                 </button>
                             </div>
                             <div class="card-body-custom">
                                 <h5 class="section-title">Adresse/Localisation</h5>
-                                <p class="text-muted italic">Kobayah/Sonfonia</p>
+                                <p class="text-muted italic">{{ user.profile.adresse|default:"Non renseignée" }}</p>
                                 <h5 class="section-title">Adresses e-mail</h5>
                                 <ul class="list-unstyled info-list">
                                     <li>
-                                        <span>a.doumbouya@crict.edu.gn</span>
+                                        <span>{{ user.email }}</span>
                                     </li>
                                 </ul>
 
                                 <h5 class="section-title">Téléphone</h5>
-                                <p class="text-muted italic">+224 621 63 56 10</p>
+                                <p class="text-muted italic">{{ user.tel|default:"Non renseigné" }}</p>
                             </div>
                         </div>
 
                         <!-- Section Sites Internet et liens sociaux -->
                         <div class="card info-card">
+
                             <div class="card-header-custom">
                                 <h4 class="card-title">Sites Internet et Réseaux sociaux</h4>
-                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/reseaux-sociaux/', 'Modifier les réseaux sociaux')">
-                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                <button class="btn waves-effect waves-light"
+                                    data-url="{% url 'portail_site:modal_reseaux_sociaux' user.profile.slug %}"
+                                    data-title="Modifier les réseaux sociaux"
+                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                    <i class="glyphicon glyphicon-pencil edit-icon"></i>
                                 </button>
                             </div>
+
                             <div class="card-body-custom">
                                 <div class="info-item">
-                                    <a href="#" class="info-link">Linkedin</a>
+
+                                    {% if user.profile.site_web %}
+                                    <a href="{{ user.profile.site_web }}" target="_blank" class="info-link">Site
+                                        Web</a><br>
+                                    {% endif %}
+
+                                    {% if user.profile.reseau_social_linkedin %}
+                                    <a href="{{ user.profile.reseau_social_linkedin }}" target="_blank"
+                                        class="info-link">Linkedin</a><br>
+                                    {% endif %}
+
+                                    {% if user.profile.reseau_social_facebook %}
+                                    <a href="{{ user.profile.reseau_social_facebook }}" target="_blank"
+                                        class="info-link">Facebook</a><br>
+                                    {% endif %}
+
+                                    {% if user.profile.reseau_social_twitter %}
+                                    <a href="{{ user.profile.reseau_social_twitter }}" target="_blank"
+                                        class="info-link">Twitter</a><br>
+                                    {% endif %}
+
+                                    {% if not user.profile.site_web and not user.profile.reseau_social_linkedin and not user.profile.reseau_social_facebook and not user.profile.reseau_social_twitter %}
+
+                                    <p class="text-muted italic">Aucun lien renseigné</p>
+
+                                    {% endif %}
+                                    
                                 </div>
                             </div>
+
                         </div>
+
+                        <!-- Section Institution de rattachement -->
+                        {% if user.profile.institution %}
+                        <div class="card info-card">
+
+                            <div class="card-header-custom">
+                                <h4 class="card-title">Institution</h4>
+                            </div>
+
+                            <div class="card-body-custom">
+                                <h5 class="section-title">Nom</h5>
+                                <p class="text-muted italic">{{ user.profile.institution.nom_institution }}</p>
+
+                                <h5 class="section-title">Contact Institution</h5>
+                                <p class="text-muted small">Email: {{ user.profile.institution.email_institution }}</p>
+                                <p class="text-muted small">Tel: {{ user.profile.institution.telephone_institution }}
+                                </p>
+
+                                <h5 class="section-title">Réseaux Sociaux Inst.</h5>
+
+                                <div class="info-item">
+                                    {% if user.profile.institution.reseau_social_facebook_inst %}
+                                    <a href="{{ user.profile.institution.reseau_social_facebook_inst }}" target="_blank"
+                                        class="info-link">Facebook</a><br>
+                                    {% endif %}
+                                    {% if user.profile.institution.reseau_social_linkedin_inst %}
+                                    <a href="{{ user.profile.institution.reseau_social_linkedin_inst }}" target="_blank"
+                                        class="info-link">LinkedIn</a><br>
+                                    {% endif %}
+                                    {% if user.profile.institution.reseau_social_youtube_inst %}
+                                    <a href="{{ user.profile.institution.reseau_social_youtube_inst }}" target="_blank"
+                                        class="info-link">YouTube</a><br>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        {% endif %}
 
                         <!-- Section Mots clés -->
                         <div class="card info-card">
+
                             <div class="card-header-custom">
                                 <h4 class="card-title">Resumé de la biographie</h4>
                             </div>
+
                             <div class="card-body-custom">
                                 <ul class="list-unstyled info-list">
+                                    {% if user.profile.mots_cles %}
+                                    {% for tag in user.profile.mots_cles.split %}
                                     <li>
-                                        <span>cybersécurité</span>
+                                        <span>{{ tag|cut:"," }}</span>
                                         <i class="glyphicon glyphicon-eye-open public-icon"></i>
                                     </li>
-                                    <li>
-                                        <span>Intelligence Artificielle</span>
-                                        <i class="glyphicon glyphicon-eye-open public-icon"></i>
-                                    </li>
-                                    <li>
-                                        <span>Transformation Digitale</span>
-                                        <i class="glyphicon glyphicon-eye-open public-icon"></i>
-                                    </li>
-                                    <li>
-                                        <span>Réseaux, Systèmes</span>
-                                        <i class="glyphicon glyphicon-eye-open public-icon"></i>
-                                    </li>
+                                    {% endfor %}
+                                    {% else %}
+                                    <li class="text-muted italic">Aucun mot-clé renseigné</li>
+                                    {% endif %}
                                 </ul>
                             </div>
+
                         </div>
                     </div>
 
                     <!-- Section CV -->
                     <div class="col-sm-9">
+
                         <!-- Version imprimable -->
                         <div class="text-right m-b-20">
-                            <a href="#" class="print-link">
+                            <a href="javascript:window.print()" class="print-link">
                                 <i class="glyphicon glyphicon-print"></i> Version imprimable
                             </a>
                         </div>
+
                         <br>
 
                         <!-- Section Profil -->
                         <div class="panel panel-default orcid-panel">
+
                             <div class="panel-heading orcid-panel-heading">
                                 <h3 class="panel-title">Nom complet</h3>
                                 <!-- Profil-modal bouton -->
-                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/profil/', 'Modifier le profil')">
-                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                <button class="btn waves-effect waves-light"
+                                    data-url="{% url 'portail_site:modal_profil' user.profile.slug %}"
+                                    data-title="Modifier le profil"
+                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                    <i class="glyphicon glyphicon-pencil edit-icon"></i>
                                 </button>
                             </div>
+
                             <div class="panel-body orcid-panel-body">
                                 <div class="info-row">
                                     <div class="info-label">Nom complet</div>
-                                    <div class="info-value">Amara DOUMBOUYA</div>
+                                    <div class="info-value">{{ user.prenoms }} {{ user.nom }}</div>
                                 </div>
                                 <i class="glyphicon glyphicon-eye-open public-icon"></i>
                             </div>
+
                         </div>
 
-                        <!-- Section Biographie -->
+                        
                         <div class="panel panel-default orcid-panel">
+
+                            <!-- Section Biographie -->
                             <div class="panel-heading orcid-panel-heading">
                                 <h3 class="panel-title">Biographie</h3>
                                 <div class="heading-actions">
@@ -514,557 +637,418 @@
                                                 class="caret"></span>
                                         </button>
                                     </div>
-                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/biographie/', 'Modifier la biographie')">
-                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                </button>
+                                    <button class="btn waves-effect waves-light"
+                                        data-url="{% url 'portail_site:modal_biographie' user.profile.slug %}"
+                                        data-title="Modifier la biographie"
+                                        onclick="openModal(this.dataset.url, this.dataset.title)">
+                                        <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="panel-body orcid-panel-body bio-text">
-                                <b>Amara DOUMBOUYA</b> est un ingénieur en Réseaux et Télécommunications spécialisé dans
-                                le
-                                développement web, avec plusieurs années d’expérience. Il conçoit des applications et
-                                plateformes numériques en utilisant des technologies comme Django et les architectures
-                                modernes.
-
-                                Il travaille notamment sur des projets innovants tels qu’un portail de gestion des
-                                publications scientifiques avec indexation automatique et une plateforme multiservices
-                                adaptée aux réalités africaines. Curieux et passionné, il s’intéresse aussi aux
-                                technologies émergentes comme l’intelligence artificielle, la réalité virtuelle et la
-                                modélisation 3D.
-                            </div>
-                        </div>
-
-                        <!-- Section Activités -->
-                        <div class="activities-section">
-                            <div class="activities-header">
-                                <h3>Activités</h3>
-                                <a href="#" class="collapse-all">Tout réduire</a>
-                            </div>
-
-                            <!-- Emploi -->
-                            <div class="activity-category">
-                                <div class="category-header">
-                                    <div class="category-title" data-toggle="collapse" data-target="#emploi-content">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                        Emploi <span class="count">(1)</span>
-                                    </div>
-                                    <div class="category-actions">
-                                        <button class="btn btn-link" onclick="openModal('/modal/emploi/', 'Ajouter un emploi')">
-                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
-                                        </button>
-                                    </div>
+                                <div class="bio-content">
+                                    {% if user.biographie.biographie %}
+                                    {{ user.biographie.biographie|linebreaks }}
+                                    {% else %}
+                                    <p class="text-muted">Aucune biographie renseignée.</p>
+                                    {% endif %}
                                 </div>
-                                <div id="emploi-content" class="collapse in">
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-star star-icon"></i>
-                                                <span class="org-name">Université gamal abdel nasser de conakry:
-                                                    Conakry, Conakry, GN</span>
-                                            </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                            </div>
-                                        </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2019-01 jusqu'à présent | Developpeur full
-                                                stack
-                                                (Centre de Recherche en Informatique et Cyber-Technologie)</div>
-                                            <div class="activity-type">Emploi</div>
-                                            <a href="#" class="details-link">Afficher plus de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Formation et qualifications -->
-                            <div class="activity-category">
-                                <div class="category-header">
+                                <div class="activities-section">
 
-                                    <div class="category-title" data-toggle="collapse"
-                                        data-target="#formation-qualifications-content">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                        Formation et qualifications <span class="count">(5)</span>
-                                    </div>
-
-                                    <div class="category-actions">
-                                        <button class="btn btn-link" onclick="openModal('/modal/education-qualification/', 'Ajouter une formation ou une qualification')">
-                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
-                                        </button>
-                                    </div>
-                                </div>
-                                <div id="formation-qualifications-content" class="collapse in">
-
-                                    <!-- Formation 1 -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-link org-icon"></i>
-                                                <span class="org-name">Centre de Recherche en Informatique et
-                                                    Cyber-Technologie: Conakry, GN</span>
-                                            </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                            </div>
-                                        </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2025-01-18 jusqu'à présent | Développeur full
-                                                stack
-                                            </div>
-                                            <div class="activity-type">Position invitée</div>
-                                            <a href="#" class="details-link">Afficher plus de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
-                                            </div>
+                                    <div class="activities-header">
+                                        <h3>Activités</h3>
+                                        <div class="activities-global-actions">
+                                            <button id="btn-show-all" class="btn btn-link btn-xs"
+                                                onclick="toggleAllActivities(true)">Tout afficher</button>
+                                            <button id="btn-hide-all" class="btn btn-link btn-xs" style="display:none"
+                                                onclick="toggleAllActivities(false)">Tout réduire</button>
                                         </div>
                                     </div>
 
-                                    <!-- Activité 2 - avec détails étendus -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
-                                                <span class="org-name">RISTEL (Réseau d'information Scientifique et de
-                                                    Télécommunication): Conakry, GN</span>
+                                    <!-- Emploi -->
+                                    <div class="activity-category">
+
+                                        <div class="category-header">
+                                            <div class="category-title" data-toggle="collapse"
+                                                data-target="#emploi-content">
+                                                <i class="glyphicon glyphicon-chevron-down"></i>
+                                                Emploi <span class="count">({{ user.emploi.count }})</span>
                                             </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            <div class="category-actions">
+                                                <button class="btn btn-link"
+                                                    data-url="/modal/emploi/{{ user.profile.slug }}/"
+                                                    data-title="Ajouter un emploi"
+                                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                    <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2021-01 jusqu'à 2024-12 | Développeur full
-                                                stack
-                                            </div>
-                                            <div class="activity-type">Service</div>
 
-                                            <!-- Détails étendus -->
-                                            <div class="extended-details">
-                                                <div class="detail-row">
-                                                    <strong>URL de la page d'accueil</strong>
-                                                    <a href="http://www.crict.edu.gn"
-                                                        class="detail-link">http://www.crict.edu.gn</a>
+                                        <div id="emploi-content" class="collapse in">
+                                            {% for item in user.emploi.all %}
+                                            <div class="activity-card">
+                                                <div class="activity-header">
+                                                    <div class="activity-org">
+                                                        <i class="glyphicon glyphicon-star star-icon"></i>
+                                                        <span class="org-name">{{ item.nom_institution }} ({{item.ville_emploi }}, {{ item.pays_emploi }})</span>
+                                                    </div>
+                                                    <div class="activity-actions">
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="{% url 'portail_site:details_activite' 'emploi' item.id %}"
+                                                            onclick="toggleActivityDetails(this, 'emploi', '{{ item.id }}')">
+                                                            <i class="glyphicon glyphicon-eye-open text-info"></i>
+                                                        </button>
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="/modal/emploi/{{ user.profile.slug }}/{{ item.id }}/"
+                                                            data-title="Modifier l’emploi"
+                                                            onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                            <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <div class="detail-row">
-                                                    <strong>Ajouté</strong>
-                                                    <div>2025-12-19</div>
-                                                </div>
-                                                <div class="detail-row">
-                                                    <strong>Dernière modification</strong>
-                                                    <div>2025-12-22</div>
-                                                </div>
-                                            </div>
 
-                                            <a href="#" class="details-link">Afficher moins de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                                <div class="activity-body">
+                                                    <div class="activity-period">{{ item.date_debut_emploi|date:"Y-m" }} - {{ item.date_fin_emploi|date:"Y-m"|default:"présent" }} | {{item.poste_occupe }} ({{ item.departement_emploi }})</div>
+                                                    <div class="activity-type">Emploi</div>
+                                                </div>
+                                                <div id="details-emploi-{{ item.id }}"
+                                                    class="collapse detail-collapse-container"></div>
                                             </div>
+                                            {% empty %}
+                                            <div class="p-20 text-muted italic">Aucun emploi renseigné.</div>
+                                            {% endfor %}
                                         </div>
                                     </div>
 
-                                    <!-- Activité 3 -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
-                                                <span class="org-name">CEDIG: Conakry, GN</span>
+                                    <!-- Formation et qualifications -->
+                                    <div class="activity-category">
+
+                                        <div class="category-header">
+
+                                            <div class="category-title" data-toggle="collapse"
+                                                data-target="#formation-qualifications-content">
+                                                <i class="glyphicon glyphicon-chevron-down"></i>
+                                                Formation et qualifications <span class="count">({{user.etude_academique.count }})</span>
                                             </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
+
+                                            <div class="category-actions">
+                                                <button class="btn btn-link"
+                                                    data-url="/modal/education-qualification/{{ user.profile.slug }}/"
+                                                    data-title="Ajouter une formation"
+                                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                    <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                        <div id="formation-qualifications-content" class="collapse in">
+                                            {% for item in user.etude_academique.all %}
+
+                                            <div class="activity-card">
+
+                                                <div class="activity-header">
+
+                                                    <div class="activity-org">
+                                                        <i class="glyphicon glyphicon-star star-icon"></i>
+                                                        <span class="org-name">{{ item.nom_institution }} ({{item.ville_institution }}, {{ item.pays_institution}})</span>
+                                                    </div>
+
+                                                    <div class="activity-actions">
+
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="{% url 'portail_site:details_activite' 'education' item.id %}"
+                                                            onclick="toggleActivityDetails(this, 'education', '{{ item.id }}')">
+                                                            <i class="glyphicon glyphicon-eye-open text-info"></i>
+                                                        </button>
+
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="/modal/education-qualification/{{ user.profile.slug }}/{{ item.id }}/"
+                                                            data-title="Modifier la formation"
+                                                            onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                            <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                                        </button>
+
+                                                    </div>
+
                                                 </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+
+                                                <div class="activity-body">
+                                                    <div class="activity-period">{{ item.date_debut_etude|date:"Y-m" }} - {{ item.date_fin_etude|date:"Y-m"|default:"présent" }} | {{item.diplome_obtenu }} ({{ item.type_formation }})</div>
+                                                    <div class="activity-type">Formation</div>
+                                                </div>
+
+                                                <div id="details-education-{{ item.id }}"
+                                                    class="collapse detail-collapse-container"></div>
                                             </div>
+
+                                            {% empty %}
+                                            <div class="p-20 text-muted italic">Aucune formation renseignée.</div>
+                                            {% endfor %}
                                         </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2024-01 jusqu'à 2024-11 | Développeur full
-                                                stack</div>
-                                            <div class="activity-type">Service</div>
-                                            <a href="#" class="details-link">Afficher plus de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+
+                                    </div>
+
+                                    <!-- Activités professionnelles -->
+                                    <div class="activity-category">
+
+                                        <div class="category-header">
+
+                                            <div class="category-title" data-toggle="collapse"
+                                                data-target="#activites-pro-content">
+                                                <i class="glyphicon glyphicon-chevron-down"></i>
+                                                Expériences professionnelles <span class="count">({{user.experience_professionnelle.count }})</span>
                                             </div>
+
+                                            <div class="category-actions">
+                                                <button class="btn btn-link"
+                                                    data-url="/modal/experience-professionnelle/{{ user.profile.slug }}/"
+                                                    data-title="Ajouter une expérience"
+                                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                    <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                        <div id="activites-pro-content" class="collapse in">
+
+                                            {% for item in user.experience_professionnelle.all %}
+
+                                            <div class="activity-card">
+
+                                                <div class="activity-header">
+
+                                                    <div class="activity-org">
+                                                        <i class="glyphicon glyphicon-star star-icon"></i>
+                                                        <span class="org-name">{{ item.nom_institution }}</span>
+                                                    </div>
+
+                                                    <div class="activity-actions">
+
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="{% url 'portail_site:details_activite' 'experience' item.id %}"
+                                                            onclick="toggleActivityDetails(this, 'experience', '{{ item.id }}')">
+                                                            <i class="glyphicon glyphicon-eye-open text-info"></i>
+                                                        </button>
+
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="/modal/experience-professionnelle/{{ user.profile.slug }}/{{ item.id }}/"
+                                                            data-title="Modifier l’expérience"
+                                                            onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                            <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="activity-body">
+                                                    <div class="activity-period">{{item.date_debut_experience|date:"Y-m" }} - {{item.date_fin_experience|date:"Y-m"|default:"présent" }} | {{item.poste_occupe }}</div>
+                                                    <div class="activity-type">Expérience professionnelle</div>
+                                                </div>
+
+                                                <div id="details-experience-{{ item.id }}"class="collapse detail-collapse-container"></div>
+                                            </div>
+                                            {% empty %}
+                                            <div class="p-20 text-muted italic">Aucune expérience professionnelle
+                                                renseignée.</div>
+                                            {% endfor %}
                                         </div>
                                     </div>
 
-                                </div>
-                            </div>
-
-
-                            <!-- Activités professionnelles -->
-                            <div class="activity-category">
-                                <div class="category-header">
-                                    <div class="category-title" data-toggle="collapse"
-                                        data-target="#activites-pro-content">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                        Activités professionnelles <span class="count">(9)</span>
-                                    </div>
-                                    <div class="category-actions">
-                                        <button class="btn btn-link" onclick="openModal('/modal/experience-professionnelle/', 'Ajouter une activité professionnelle')">
-                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
-                                        </button>
-                                    </div>
-                                </div>
-                                <div id="activites-pro-content" class="collapse in">
-
-                                    <!-- Activité 1 -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-link org-icon"></i>
-                                                <span class="org-name">Centre de Recherche en Informatique et
-                                                    Cyber-Technologie: Conakry, GN</span>
+                                    <!-- Travaux de recherche -->
+                                    <div class="activity-category">
+                                        <div class="category-header">
+                                            <div class="category-title" data-toggle="collapse"
+                                                data-target="#travaux-content">
+                                                <i class="glyphicon glyphicon-chevron-down"></i>
+                                                Travaux de recherche <span class="count">({{user.travaux_recherche.count }})</span>
                                             </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            <div class="category-actions">
+                                                <button class="btn btn-link"
+                                                    data-url="/modal/travaux-recherche/{{ user.profile.slug }}/"
+                                                    data-title="Ajouter des travaux"
+                                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                    <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2025-01-18 jusqu'à présent | Développeur full
-                                                stack
-                                            </div>
-                                            <div class="activity-type">Position invitée</div>
-                                            <a href="#" class="details-link">Afficher plus de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <div id="travaux-content" class="collapse in">
 
-                                    <!-- Activité 2 - avec détails étendus -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
-                                                <span class="org-name">RISTEL (Réseau d'information Scientifique et de
-                                                    Télécommunication): Conakry, GN</span>
-                                            </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                            </div>
-                                        </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2021-01 jusqu'à 2024-12 | Développeur full
-                                                stack
-                                            </div>
-                                            <div class="activity-type">Service</div>
+                                            {% for item in user.travaux_recherche.all %}
 
-                                            <!-- Détails étendus -->
-                                            <div class="extended-details">
-                                                <div class="detail-row">
-                                                    <strong>URL de la page d'accueil</strong>
-                                                    <a href="http://www.crict.edu.gn"
-                                                        class="detail-link">http://www.crict.edu.gn</a>
-                                                </div>
-                                                <div class="detail-row">
-                                                    <strong>Ajouté</strong>
-                                                    <div>2025-12-19</div>
-                                                </div>
-                                                <div class="detail-row">
-                                                    <strong>Dernière modification</strong>
-                                                    <div>2025-12-22</div>
-                                                </div>
-                                            </div>
+                                            <div class="activity-card">
 
-                                            <a href="#" class="details-link">Afficher moins de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                                <div class="activity-header">
+
+                                                    <div class="activity-org">
+                                                        <i class="glyphicon glyphicon-star star-icon"></i>
+                                                        <span class="org-name">{{ item.nom_institution }} ({{item.ville_institution }}, {{ item.pays_institution}})</span>
+                                                    </div>
+
+                                                    <div class="activity-actions">
+
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="{% url 'portail_site:details_activite' 'travaux' item.id %}"
+                                                            onclick="toggleActivityDetails(this, 'travaux', '{{ item.id }}')">
+                                                            <i class="glyphicon glyphicon-eye-open text-info"></i>
+                                                        </button>
+
+                                                        <button class="btn btn-link btn-xs"
+                                                            data-url="/modal/travaux-recherche/{{ user.profile.slug }}/{{ item.id }}/"
+                                                            data-title="Modifier les travaux"
+                                                            onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                            <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                                        </button>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="activity-body">
+
+                                                    <div class="activity-period">{{item.date_de_debut_travaux|date:"Y-m" }} - {{item.date_de_fin_travaux|date:"Y-m"|default:"présent" }} | {{item.titre_domaine_recherche }}</div>
+                                                    <div class="activity-type">Travail de recherche</div>
+
+                                                </div>
+
+                                                <div id="details-travaux-{{ item.id }}"
+                                                    class="collapse detail-collapse-container"></div>
                                             </div>
+                                            {% empty %}
+                                            <div class="p-20 text-muted italic">Aucun travail de recherche renseigné.
+                                            </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
-
-                                    <!-- Activité 3 -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
-                                                <span class="org-name">ANAQ: Conakry, GN</span>
-                                            </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                            </div>
-                                        </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2024-01 jusqu'à 2024-11 | Développeur full
-                                                stack</div>
-                                            <div class="activity-type">Service</div>
-                                            <a href="#" class="details-link">Afficher plus de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <!-- Travaux -->
-                            <div class="activity-category">
-                                <div class="category-header">
-                                    <div class="category-title" data-toggle="collapse" data-target="#travaux-content">
-                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                        Travaux <span class="count">(9)</span>
-                                    </div>
-                                    <div class="category-actions">
-                                        <button class="btn btn-link" onclick="openModal('/modal/travaux-recherche/', 'Ajouter un travail de recherche')">
-                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
-                                        </button>
-                                    </div>
-                                </div>
-                                <div id="travaux-content" class="collapse in">
-
-                                    <!-- Activité 1 -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-link org-icon"></i>
-                                                <span class="org-name">Centre de Recherche en Informatique et
-                                                    Cyber-Technologie: Conakry, GN</span>
-                                            </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                            </div>
-                                        </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2025-01-18 jusqu'à présent | Directeur Général
-                                            </div>
-                                            <div class="activity-type">Position invitée</div>
-                                            <a href="#" class="details-link">Afficher plus de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Activité 2 - avec détails étendus -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
-                                                <span class="org-name">RISTEL (Réseau d'information Scientifique et de
-                                                    Télécommunication): Conakry, GN</span>
-                                            </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                            </div>
-                                        </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2021-01 jusqu'à 2024-12 | Développeur full
-                                                stack
-                                            </div>
-                                            <div class="activity-type">Service</div>
-
-                                            <!-- Détails étendus -->
-                                            <div class="extended-details">
-                                                <div class="detail-row">
-                                                    <strong>URL de la page d'accueil</strong>
-                                                    <a href="http://www.crict.edu.gn"
-                                                        class="detail-link">http://www.crict.edu.gn</a>
-                                                </div>
-                                                <div class="detail-row">
-                                                    <strong>Ajouté</strong>
-                                                    <div>2025-12-19</div>
-                                                </div>
-                                                <div class="detail-row">
-                                                    <strong>Dernière modification</strong>
-                                                    <div>2025-12-22</div>
-                                                </div>
-                                            </div>
-
-                                            <a href="#" class="details-link">Afficher moins de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Activité 3 -->
-                                    <div class="activity-card">
-                                        <div class="activity-header">
-                                            <div class="activity-org">
-                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
-                                                <span class="org-name">CEDIG: Conakry, GN</span>
-                                            </div>
-                                            <div class="activity-actions">
-                                                <div class="dropdown visibility-dropdown">
-                                                    <button class="btn btn-default dropdown-toggle" type="button"
-                                                        data-toggle="dropdown">
-                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
-                                                            class="caret"></span>
-                                                    </button>
-                                                </div>
-                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
-                                            </div>
-                                        </div>
-                                        <div class="activity-body">
-                                            <div class="activity-period">2024-01 jusqu'à 2024-11 | Développeur full
-                                                stack</div>
-                                            <div class="activity-type">Service</div>
-                                            <a href="#" class="details-link">Afficher plus de détails</a>
-                                        </div>
-                                        <div class="activity-footer">
-                                            <div class="source">
-                                                <strong>Source:</strong>
-                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
-
             </div>
-        </div>
-    </div>
-</div> <!-- End Row -->
+        </div> <!-- End Row -->
 
 
-<!-- Main_modal Start -->
-<div class="row">
-    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
-        <!-- sample modal content -->
-        <div id="main-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
-            aria-hidden="true" style="display: none">
+        <!-- Main_modal Start -->
+        <div class="row">
+            <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
+                <!-- sample modal content -->
+                <div id="main-modal" class="modal fade" tabindex="-1" role="dialog"
+                    aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none">
 
-            <div class="modal-dialog" style="width:55%">
+                    <div class="modal-dialog" style="width:55%">
 
-                <div class="modal-content">
+                        <div class="modal-content">
 
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="modal-title">Chargement...</h4>
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title" id="modal-title">Chargement...</h4>
+                            </div>
+
+                            <div class="modal-body" id="modal-body">
+                                <p>Chargement...</p>
+                            </div>
+
+                        </div>
                     </div>
-
-                    <div class="modal-body" id="modal-body">
-                        <p>Chargement...</p>
-                    </div>
-
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- Main_modal End -->
+        <!-- Main_modal End -->
 
-{% endblock content %}
+        {% endblock content %}
 
-{% block scripts %}
-<!-- Parsleyjs -->
-<script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('form').parsley();
-    });
+        {% block scripts %}
+        <!-- Parsleyjs -->
+        <script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
+        <script type="text/javascript">
 
-
-    // JavaScript du main modal pour charger dynamiquement les contenus des modals spécifiques
-    function openModal(url, title = "") {
-        document.getElementById("modal-title").innerText = title;
-        document.getElementById("modal-body").innerHTML = "Chargement...";
-        // console.log("Fetching modal content from:", url);
-
-        fetch(url)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("modal-body").innerHTML = data;
-                $('#main-modal').modal('show');
-            })
-            .catch(error => {
-                document.getElementById("modal-body").innerHTML = "Erreur de chargement";
+            $(document).ready(function () {
+                $('form').parsley();
             });
-    }
-</script>
 
-{% endblock scripts %}
+            function toggleAllActivities(show) {
+
+                if (show) {
+                    $('.activities-section .collapse').collapse('show');
+                    $('.activities-section .glyphicon-chevron-right').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+                    $('#btn-show-all').hide();
+                    $('#btn-hide-all').show();
+                } else {
+                    $('.activities-section .collapse').collapse('hide');
+                    $('.activities-section .glyphicon-chevron-down').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+                    $('#btn-show-all').show();
+                    $('#btn-hide-all').hide();
+                }
+            }
+
+            /**
+             * Basculer l'affichage des détails d'une activité en mode inline (collapse)
+             */
+            function toggleActivityDetails(btn, modelName, itemId) {
+                const targetId = `details-${modelName}-${itemId}`;
+                const $target = $(`#${targetId}`);
+                const url = $(btn).data('url');
+                const $icon = $(btn).find('i');
+
+                // Si le contenu est vide, on le charge via AJAX
+                if ($target.is(':empty')) {
+                    $target.html('<div class="detail-collapse-content text-center text-muted"><i class="fa fa-spinner fa-spin"></i> Chargement des détails...</div>');
+
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) throw new Error("Erreur " + response.status);
+                            return response.text();
+                        })
+                        .then(data => {
+                            // Nettoyage du contenu : on ne garde que ce qui est utile pour un affichage inline
+                            const $temp = $('<div>').html(data);
+
+                            // On retire le footer du modal qui contient un bouton fermer inutile ici
+                            $temp.find('.modal-footer').remove();
+
+                            // On enlève les marges excessives si présentes
+                            $temp.find('.modal-body').css({ 'padding': '0', 'margin': '0' });
+
+                            // Injection dans le conteneur final
+                            $target.html('<div class="detail-collapse-content">' + $temp.html() + '</div>');
+                        })
+                        .catch(error => {
+                            console.error("Erreur toggleActivityDetails:", error);
+                            $target.html('<div class="detail-collapse-content text-danger">Une erreur est survenue lors du chargement des détails.</div>');
+                        });
+                }
+
+                // Basculer l'état du collapse Bootstrap
+                $target.collapse('toggle');
+
+                // Gérer l'état actif de l'icône
+                $target.on('shown.bs.collapse', function () {
+                    $icon.addClass('active');
+                }).on('hidden.bs.collapse', function () {
+                    $icon.removeClass('active');
+                });
+            }
+
+
+            // JavaScript du main modal pour charger dynamiquement les contenus des modals spécifiques
+            function openModal(url, title = "") {
+                document.getElementById("modal-title").innerText = title;
+                document.getElementById("modal-body").innerHTML = "Chargement...";
+                // console.log("Fetching modal content from:", url);
+
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("modal-body").innerHTML = data;
+                        $('#main-modal').modal('show');
+                    })
+                    .catch(error => {
+                        document.getElementById("modal-body").innerHTML = "Erreur de chargement";
+                    });
+            }
+        </script>
+        {% endblock scripts %}

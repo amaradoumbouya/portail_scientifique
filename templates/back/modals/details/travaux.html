@@ -1,0 +1,24 @@
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="text-primary m-t-0">{{ item.titre_domaine_recherche }}</h4>
+            <p class="text-muted"><i class="fa fa-flask"></i> {{ item.nom_institution }}</p>
+            <hr>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><strong><i class="fa fa-tag"></i> Poste :</strong> {{ item.poste_occupe|default:"-" }}</p>
+                    <p><strong><i class="fa fa-building"></i> Département :</strong> {{ item.departement_recherche|default:"-" }}</p>
+                    <p><strong><i class="fa fa-map-marker"></i> Ville :</strong> {{ item.ville_institution|default:"-" }}</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><strong><i class="fa fa-calendar"></i> Début :</strong> {{ item.date_de_debut_travaux|date:"d F Y" }}</p>
+                    <p><strong><i class="fa fa-calendar"></i> Fin :</strong> {{ item.date_de_fin_travaux|date:"d F Y"|default:"Présent" }}</p>
+                    <p><strong><i class="fa fa-globe"></i> Pays :</strong> {{ item.pays_institution|default:"-" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+</div>

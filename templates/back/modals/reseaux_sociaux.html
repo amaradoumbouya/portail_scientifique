@@ -1,47 +1,37 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<form action="" method="post" enctype="multipart/form-data">
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="modal-body">
-
         <div class="row">
-
             <div class="form-group col-md-12">
-                <label class="control-label">Réseaux sociaux (optionnel)</label>
+                <label class="control-label">Réseaux sociaux</label>
                 <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <div class="input-group">
-
-                        </div>
+                    <div class="col-md-6">
+                        {{ form.reseau_social_facebook|as_crispy_field }}
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <div class="input-group">
-
-                        </div>
+                    <div class="col-md-6">
+                        {{ form.reseau_social_twitter|as_crispy_field }}
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <div class="input-group">
-
-                        </div>
+                    <div class="col-md-6">
+                        {{ form.reseau_social_linkedin|as_crispy_field }}
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <div class="input-group">
-
-                        </div>
+                    <div class="col-md-6">
+                        {{ form.reseau_social_youtube|as_crispy_field }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form.site_web|as_crispy_field }}
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
-
     </div>
 
 </form>

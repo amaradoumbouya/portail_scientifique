@@ -1,65 +1,54 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<form action="" method="post" enctype="multipart/form-data">
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="modal-body">
-
         <div class="row">
 
-            <div class="form-group col-md-6">
-                <label for="">Nom de l'institution</label>
-                <input type="text" class="form-control" id="nom_institution" name="nom_institution"
-                    placeholder="Nom de l'institution" value="Université de Kindia">
+            <div class="form-group col-md-12">
+                {{ form.nom_institution|as_crispy_field }}
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">Ville</label>
-                <input type="text" class="form-control" id="ville" name="ville" placeholder="Ville" value="Kindia">
+                {{ form.ville_institution|as_crispy_field }}
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">Région</label>
-                <input type="text" class="form-control" id="region" name="region" placeholder="Région" value="Kindia">
+                {{ form.region_institution|as_crispy_field }}
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">Pays</label>
-                <input type="text" class="form-control" id="pays" name="pays" placeholder="Pays" value="Guinée">
+                {{ form.pays_institution|as_crispy_field }}
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">Département</label>
-                <input type="text" class="form-control" id="departement" name="departement" placeholder="Département"
-                    value="Kindia">
+                {{ form.departement_recherche|as_crispy_field }}
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">Rôle</label>
-                <input type="text" class="form-control" id="role" name="role" placeholder="Rôle" value="Enseignant">
+                {{ form.poste_occupe|as_crispy_field }}
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">Date de début</label>
-                <input type="text" class="form-control" id="date_debut" name="date_debut" placeholder="Date de début"
-                    value="2020-01-01">
+                {{ form.titre_domaine_recherche|as_crispy_field }}
             </div>
 
             <div class="form-group col-md-6">
-                <label for="">Date de fin</label>
-                <input type="text" class="form-control" id="date_fin" name="date_fin" placeholder="Date de fin"
-                    value="2021-01-01">
+                {{ form.date_de_debut_travaux|as_crispy_field }}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{ form.date_de_fin_travaux|as_crispy_field }}
             </div>
 
         </div>
-
     </div>
 
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
-
     </div>
 
 </form>

@@ -1,7 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<form action="{% url 'portail_site:modal_profil' %}" method="post" enctype="multipart/form-data">
+<form action="{{ request.path }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="modal-body">
@@ -49,9 +49,13 @@
                 {{form_user_profile.orcid|as_crispy_field}}
             </div>
 
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
                 {{form_user_profile.photo|as_crispy_field}}
                     <small class="form-text text-muted">La photo doit être au format JPG ou PNG et ne doit pas dépasser 2 Mo.</small>
+            </div>
+
+            <div class="form-group col-md-6">
+                {{form_user_profile.site_web|as_crispy_field}}
             </div>
 
         </div>

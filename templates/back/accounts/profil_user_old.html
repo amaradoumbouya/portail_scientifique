@@ -1,0 +1,1070 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+<title>Profil Utilisateur - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    /* Carte ORCID principale */
+    .orcid-card {
+        border: 2px solid #3c72fc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        position: relative;
+        padding-top: 20px;
+    }
+
+    .orcid-badge {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 40px;
+        background: #3c72fc;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .orcid-url {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .orcid-id {
+        margin: 5px 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .orcid-link {
+        color: #337ab7;
+        font-size: 13px;
+        text-decoration: underline;
+    }
+
+    /* Cartes d'information générales */
+    .info-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        background: #fafafa;
+    }
+
+    .card-header-custom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 15px;
+        background: transparent;
+    }
+
+    .card-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .edit-icon {
+        color: #333;
+        cursor: pointer;
+    }
+
+    .card-body-custom {
+        padding: 15px;
+    }
+
+    .section-title {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .info-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-list li:last-child {
+        border-bottom: none;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info-link {
+        color: #337ab7;
+        text-decoration: underline;
+    }
+
+    .public-icon {
+        color: #3c72fc;
+    }
+
+    .private-icon {
+        color: #c9302c;
+    }
+
+    .italic {
+        font-style: italic;
+    }
+
+    /* Panneaux de section CV */
+    .orcid-panel {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+
+    .orcid-panel-heading {
+        background-color: #f0f0f0 !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+    }
+
+    .orcid-panel-heading .panel-title {
+        font-weight: bold;
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .orcid-panel-body {
+        padding: 20px;
+        position: relative;
+    }
+
+    .info-row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .info-label {
+        color: #999;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .public-icon {
+        color: #3c72fc;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+    }
+
+    .heading-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .visibility-dropdown .btn {
+        border: 1px solid #ccc;
+        background: #fff;
+        color: #333;
+    }
+
+    .visibility-dropdown .btn i {
+        color: #3c72fc;
+    }
+
+    .edit-icon {
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .bio-text {
+        line-height: 1.6;
+        color: #333;
+    }
+
+    /* Activités */
+    .activities-section {
+        margin-top: 30px;
+    }
+
+    .activities-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .activities-header h3 {
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .collapse-all {
+        color: #337ab7;
+    }
+
+    /* Category headers (verts) */
+    .activity-category {
+        margin-bottom: 15px;
+    }
+
+    .category-header {
+        background-color: #3c72fc;
+        color: white;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .category-title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .category-title i {
+        margin-right: 10px;
+    }
+
+    .count {
+        font-weight: normal;
+    }
+
+    .category-actions {
+        display: flex;
+        gap: 15px;
+    }
+
+    .category-actions .btn-link {
+        color: white !important;
+        text-decoration: none;
+        padding: 0;
+    }
+
+    .category-actions i {
+        margin-right: 5px;
+    }
+
+    /* Activity cards */
+    .activity-card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-top: 15px;
+        background: #fff;
+    }
+
+    .activity-header {
+        background-color: #f0f0f0;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .activity-org {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .star-icon {
+        color: #f0ad4e;
+    }
+
+    .org-icon {
+        color: #333;
+    }
+
+    .org-name {
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .activity-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .activity-body {
+        padding: 20px;
+    }
+
+    .activity-period {
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .activity-type {
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    .details-link {
+        color: #337ab7;
+        text-decoration: underline;
+    }
+
+    .extended-details {
+        margin: 15px 0;
+    }
+
+    .detail-row {
+        margin-bottom: 10px;
+    }
+
+    .detail-row strong {
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .detail-link {
+        color: #337ab7;
+        text-decoration: underline;
+    }
+
+    .activity-footer {
+        border-top: 1px solid #ddd;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .source {
+        color: #333;
+    }
+
+    .source-icon {
+        color: #3c72fc;
+        margin: 0 5px;
+    }
+
+    .delete-icon {
+        color: #333;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .print-link {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .print-link i {
+        margin-right: 5px;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+
+<!-- Liste Start -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Profile utilisateur</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <!-- Section INC ID -->
+                    <div class="col-sm-3">
+                        <!-- Section ORCID ID -->
+                        <div class="card orcid-card">
+                            <div class="orcid-badge">iD</div>
+                            <div class="card-body text-center">
+                                <small>INC: Identifiant National de Chercheur</small>
+                                <h5 class="orcid-url">https://inc.org/</h5>
+                                <h3 class="orcid-id">INC-0005-6108-8274</h3>
+                            </div>
+                        </div>
+
+                        <!-- Section Coordonnées -->
+                        <div class="card info-card">
+                            <div class="card-header-custom">
+                                <h4 class="card-title">Coordonnées</h4>
+                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/profil/', 'Modifier le profil')">
+                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                </button>
+                            </div>
+                            <div class="card-body-custom">
+                                <h5 class="section-title">Adresse/Localisation</h5>
+                                <p class="text-muted italic">Kobayah/Sonfonia</p>
+                                <h5 class="section-title">Adresses e-mail</h5>
+                                <ul class="list-unstyled info-list">
+                                    <li>
+                                        <span>a.doumbouya@crict.edu.gn</span>
+                                    </li>
+                                </ul>
+
+                                <h5 class="section-title">Téléphone</h5>
+                                <p class="text-muted italic">+224 621 63 56 10</p>
+                            </div>
+                        </div>
+
+                        <!-- Section Sites Internet et liens sociaux -->
+                        <div class="card info-card">
+                            <div class="card-header-custom">
+                                <h4 class="card-title">Sites Internet et Réseaux sociaux</h4>
+                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/reseaux-sociaux/', 'Modifier les réseaux sociaux')">
+                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                </button>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="info-item">
+                                    <a href="#" class="info-link">Linkedin</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section Mots clés -->
+                        <div class="card info-card">
+                            <div class="card-header-custom">
+                                <h4 class="card-title">Resumé de la biographie</h4>
+                            </div>
+                            <div class="card-body-custom">
+                                <ul class="list-unstyled info-list">
+                                    <li>
+                                        <span>cybersécurité</span>
+                                        <i class="glyphicon glyphicon-eye-open public-icon"></i>
+                                    </li>
+                                    <li>
+                                        <span>Intelligence Artificielle</span>
+                                        <i class="glyphicon glyphicon-eye-open public-icon"></i>
+                                    </li>
+                                    <li>
+                                        <span>Transformation Digitale</span>
+                                        <i class="glyphicon glyphicon-eye-open public-icon"></i>
+                                    </li>
+                                    <li>
+                                        <span>Réseaux, Systèmes</span>
+                                        <i class="glyphicon glyphicon-eye-open public-icon"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section CV -->
+                    <div class="col-sm-9">
+                        <!-- Version imprimable -->
+                        <div class="text-right m-b-20">
+                            <a href="#" class="print-link">
+                                <i class="glyphicon glyphicon-print"></i> Version imprimable
+                            </a>
+                        </div>
+                        <br>
+
+                        <!-- Section Profil -->
+                        <div class="panel panel-default orcid-panel">
+                            <div class="panel-heading orcid-panel-heading">
+                                <h3 class="panel-title">Nom complet</h3>
+                                <!-- Profil-modal bouton -->
+                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/profil/', 'Modifier le profil')">
+                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                </button>
+                            </div>
+                            <div class="panel-body orcid-panel-body">
+                                <div class="info-row">
+                                    <div class="info-label">Nom complet</div>
+                                    <div class="info-value">Amara DOUMBOUYA</div>
+                                </div>
+                                <i class="glyphicon glyphicon-eye-open public-icon"></i>
+                            </div>
+                        </div>
+
+                        <!-- Section Biographie -->
+                        <div class="panel panel-default orcid-panel">
+                            <div class="panel-heading orcid-panel-heading">
+                                <h3 class="panel-title">Biographie</h3>
+                                <div class="heading-actions">
+                                    <div class="dropdown visibility-dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button"
+                                            data-toggle="dropdown">
+                                            <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                class="caret"></span>
+                                        </button>
+                                    </div>
+                                <button class="btn waves-effect waves-light" onclick="openModal('/modal/biographie/', 'Modifier la biographie')">
+                                     <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                </button>
+                                </div>
+                            </div>
+                            <div class="panel-body orcid-panel-body bio-text">
+                                <b>Amara DOUMBOUYA</b> est un ingénieur en Réseaux et Télécommunications spécialisé dans
+                                le
+                                développement web, avec plusieurs années d’expérience. Il conçoit des applications et
+                                plateformes numériques en utilisant des technologies comme Django et les architectures
+                                modernes.
+
+                                Il travaille notamment sur des projets innovants tels qu’un portail de gestion des
+                                publications scientifiques avec indexation automatique et une plateforme multiservices
+                                adaptée aux réalités africaines. Curieux et passionné, il s’intéresse aussi aux
+                                technologies émergentes comme l’intelligence artificielle, la réalité virtuelle et la
+                                modélisation 3D.
+                            </div>
+                        </div>
+
+                        <!-- Section Activités -->
+                        <div class="activities-section">
+                            <div class="activities-header">
+                                <h3>Activités</h3>
+                                <a href="#" class="collapse-all">Tout réduire</a>
+                            </div>
+
+                            <!-- Emploi -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" data-toggle="collapse" data-target="#emploi-content">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                        Emploi <span class="count">(1)</span>
+                                    </div>
+                                    <div class="category-actions">
+                                        <button class="btn btn-link" onclick="openModal('/modal/emploi/', 'Ajouter un emploi')">
+                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="emploi-content" class="collapse in">
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-star star-icon"></i>
+                                                <span class="org-name">Université gamal abdel nasser de conakry:
+                                                    Conakry, Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2019-01 jusqu'à présent | Developpeur full
+                                                stack
+                                                (Centre de Recherche en Informatique et Cyber-Technologie)</div>
+                                            <div class="activity-type">Emploi</div>
+                                            <a href="#" class="details-link">Afficher plus de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formation et qualifications -->
+                            <div class="activity-category">
+                                <div class="category-header">
+
+                                    <div class="category-title" data-toggle="collapse"
+                                        data-target="#formation-qualifications-content">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                        Formation et qualifications <span class="count">(5)</span>
+                                    </div>
+
+                                    <div class="category-actions">
+                                        <button class="btn btn-link" onclick="openModal('/modal/education-qualification/', 'Ajouter une formation ou une qualification')">
+                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="formation-qualifications-content" class="collapse in">
+
+                                    <!-- Formation 1 -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-link org-icon"></i>
+                                                <span class="org-name">Centre de Recherche en Informatique et
+                                                    Cyber-Technologie: Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2025-01-18 jusqu'à présent | Développeur full
+                                                stack
+                                            </div>
+                                            <div class="activity-type">Position invitée</div>
+                                            <a href="#" class="details-link">Afficher plus de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Activité 2 - avec détails étendus -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
+                                                <span class="org-name">RISTEL (Réseau d'information Scientifique et de
+                                                    Télécommunication): Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2021-01 jusqu'à 2024-12 | Développeur full
+                                                stack
+                                            </div>
+                                            <div class="activity-type">Service</div>
+
+                                            <!-- Détails étendus -->
+                                            <div class="extended-details">
+                                                <div class="detail-row">
+                                                    <strong>URL de la page d'accueil</strong>
+                                                    <a href="http://www.crict.edu.gn"
+                                                        class="detail-link">http://www.crict.edu.gn</a>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong>Ajouté</strong>
+                                                    <div>2025-12-19</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong>Dernière modification</strong>
+                                                    <div>2025-12-22</div>
+                                                </div>
+                                            </div>
+
+                                            <a href="#" class="details-link">Afficher moins de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Activité 3 -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
+                                                <span class="org-name">CEDIG: Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2024-01 jusqu'à 2024-11 | Développeur full
+                                                stack</div>
+                                            <div class="activity-type">Service</div>
+                                            <a href="#" class="details-link">Afficher plus de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <!-- Activités professionnelles -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" data-toggle="collapse"
+                                        data-target="#activites-pro-content">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                        Activités professionnelles <span class="count">(9)</span>
+                                    </div>
+                                    <div class="category-actions">
+                                        <button class="btn btn-link" onclick="openModal('/modal/experience-professionnelle/', 'Ajouter une activité professionnelle')">
+                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="activites-pro-content" class="collapse in">
+
+                                    <!-- Activité 1 -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-link org-icon"></i>
+                                                <span class="org-name">Centre de Recherche en Informatique et
+                                                    Cyber-Technologie: Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2025-01-18 jusqu'à présent | Développeur full
+                                                stack
+                                            </div>
+                                            <div class="activity-type">Position invitée</div>
+                                            <a href="#" class="details-link">Afficher plus de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Activité 2 - avec détails étendus -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
+                                                <span class="org-name">RISTEL (Réseau d'information Scientifique et de
+                                                    Télécommunication): Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2021-01 jusqu'à 2024-12 | Développeur full
+                                                stack
+                                            </div>
+                                            <div class="activity-type">Service</div>
+
+                                            <!-- Détails étendus -->
+                                            <div class="extended-details">
+                                                <div class="detail-row">
+                                                    <strong>URL de la page d'accueil</strong>
+                                                    <a href="http://www.crict.edu.gn"
+                                                        class="detail-link">http://www.crict.edu.gn</a>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong>Ajouté</strong>
+                                                    <div>2025-12-19</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong>Dernière modification</strong>
+                                                    <div>2025-12-22</div>
+                                                </div>
+                                            </div>
+
+                                            <a href="#" class="details-link">Afficher moins de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Activité 3 -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
+                                                <span class="org-name">ANAQ: Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2024-01 jusqu'à 2024-11 | Développeur full
+                                                stack</div>
+                                            <div class="activity-type">Service</div>
+                                            <a href="#" class="details-link">Afficher plus de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Travaux -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" data-toggle="collapse" data-target="#travaux-content">
+                                        <i class="glyphicon glyphicon-chevron-down"></i>
+                                        Travaux <span class="count">(9)</span>
+                                    </div>
+                                    <div class="category-actions">
+                                        <button class="btn btn-link" onclick="openModal('/modal/travaux-recherche/', 'Ajouter un travail de recherche')">
+                                            <i class="glyphicon glyphicon-plus-sign"></i> Ajouter
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="travaux-content" class="collapse in">
+
+                                    <!-- Activité 1 -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-link org-icon"></i>
+                                                <span class="org-name">Centre de Recherche en Informatique et
+                                                    Cyber-Technologie: Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2025-01-18 jusqu'à présent | Directeur Général
+                                            </div>
+                                            <div class="activity-type">Position invitée</div>
+                                            <a href="#" class="details-link">Afficher plus de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Activité 2 - avec détails étendus -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
+                                                <span class="org-name">RISTEL (Réseau d'information Scientifique et de
+                                                    Télécommunication): Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2021-01 jusqu'à 2024-12 | Développeur full
+                                                stack
+                                            </div>
+                                            <div class="activity-type">Service</div>
+
+                                            <!-- Détails étendus -->
+                                            <div class="extended-details">
+                                                <div class="detail-row">
+                                                    <strong>URL de la page d'accueil</strong>
+                                                    <a href="http://www.crict.edu.gn"
+                                                        class="detail-link">http://www.crict.edu.gn</a>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong>Ajouté</strong>
+                                                    <div>2025-12-19</div>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong>Dernière modification</strong>
+                                                    <div>2025-12-22</div>
+                                                </div>
+                                            </div>
+
+                                            <a href="#" class="details-link">Afficher moins de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Activité 3 -->
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="glyphicon glyphicon-briefcase org-icon"></i>
+                                                <span class="org-name">CEDIG: Conakry, GN</span>
+                                            </div>
+                                            <div class="activity-actions">
+                                                <div class="dropdown visibility-dropdown">
+                                                    <button class="btn btn-default dropdown-toggle" type="button"
+                                                        data-toggle="dropdown">
+                                                        <i class="glyphicon glyphicon-eye-open"></i> Publique <span
+                                                            class="caret"></span>
+                                                    </button>
+                                                </div>
+                                                <i class="glyphicon glyphicon-pencil edit-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">2024-01 jusqu'à 2024-11 | Développeur full
+                                                stack</div>
+                                            <div class="activity-type">Service</div>
+                                            <a href="#" class="details-link">Afficher plus de détails</a>
+                                        </div>
+                                        <div class="activity-footer">
+                                            <div class="source">
+                                                <strong>Source:</strong>
+                                                <i class="glyphicon glyphicon-user source-icon"></i> Amara DOUMBOUYA
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div> <!-- End Row -->
+
+
+<!-- Main_modal Start -->
+<div class="row">
+    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
+        <!-- sample modal content -->
+        <div id="main-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+            aria-hidden="true" style="display: none">
+
+            <div class="modal-dialog" style="width:55%">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-title">Chargement...</h4>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+                        <p>Chargement...</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main_modal End -->
+
+{% endblock content %}
+
+{% block scripts %}
+<!-- Parsleyjs -->
+<script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('form').parsley();
+    });
+
+
+    // JavaScript du main modal pour charger dynamiquement les contenus des modals spécifiques
+    function openModal(url, title = "") {
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+        // console.log("Fetching modal content from:", url);
+
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("modal-body").innerHTML = data;
+                $('#main-modal').modal('show');
+            })
+            .catch(error => {
+                document.getElementById("modal-body").innerHTML = "Erreur de chargement";
+            });
+    }
+</script>
+
+{% endblock scripts %}

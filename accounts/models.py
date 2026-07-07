@@ -170,11 +170,11 @@ class User_biography(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+            self.slug = slugify(self.user.full_name) + '-' + get_random_string(5)
         super(User_biography, self).save(*args, **kwargs)
 
 class User_emploi(models.Model):
-    user               = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='emploi')
+    user               = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='emploi')
     nom_institution    = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
     ville_emploi       = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'emploi :")
     region_emploi      = models.CharField(max_length=150, blank=True, null=True, verbose_name="Région de l'emploi :")
@@ -193,7 +193,7 @@ class User_emploi(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+            self.slug = slugify(self.user.full_name) + '-' + get_random_string(5)
         super(User_emploi, self).save(*args, **kwargs)
 
 class User_etude_academique(models.Model):
@@ -204,7 +204,7 @@ class User_etude_academique(models.Model):
         ('Professionnelle', 'Professionnelle'),
     )
 
-    user               = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='etude_academique')
+    user               = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='etude_academique')
     type_formation     = models.CharField(max_length=150, blank=True, null=True, choices=TYPE_FORMATION, verbose_name='Type de formation :')
     nom_institution    = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
     ville_institution  = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'institution :")
@@ -224,11 +224,11 @@ class User_etude_academique(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+            self.slug = slugify(self.user.full_name) + '-' + get_random_string(5)
         super(User_etude_academique, self).save(*args, **kwargs)
 
 class User_experience_professionnelle(models.Model):
-    user                  = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='experience_professionnelle')
+    user                  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='experience_professionnelle')
     nom_institution       = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
     poste_occupe          = models.CharField(max_length=150, blank=True, null=True, verbose_name='Poste occupé :')
     date_debut_experience = models.DateField(blank=True, null=True, verbose_name='Date de début :')
@@ -244,11 +244,11 @@ class User_experience_professionnelle(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+            self.slug = slugify(self.user.full_name) + '-' + get_random_string(5)
         super(User_experience_professionnelle, self).save(*args, **kwargs)
 
 class User_travaux_recherche(models.Model):
-    user                    = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='travaux_recherche')
+    user                    = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='travaux_recherche')
     nom_institution         = models.CharField(max_length=150, blank=True, null=True, verbose_name="Nom de l'institution :")
     ville_institution       = models.CharField(max_length=150, blank=True, null=True, verbose_name="Ville de l'institution :")
     region_institution      = models.CharField(max_length=150, blank=True, null=True, verbose_name="Région de l'institution :")
@@ -268,5 +268,5 @@ class User_travaux_recherche(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.user.get_full_name()) + '-' + get_random_string(5)
+            self.slug = slugify(self.user.full_name) + '-' + get_random_string(5)
         super(User_travaux_recherche, self).save(*args, **kwargs)
