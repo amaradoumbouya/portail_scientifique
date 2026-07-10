@@ -6,6 +6,67 @@
 {% endblock title %}
 {% block style %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    /* Cartes statistiques : même design que institut_dashboard,
+       la couleur d'accent se règle par carte via --c */
+    .stat-card {
+        position: relative;
+        border: 1px solid #e6ecf7;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #ffffff;
+        color: var(--c, #3c72fc);
+        padding: 22px 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, .14);
+    }
+
+    .stat-card .stat-icon {
+        position: absolute;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        width: 58px;
+        height: 58px;
+        line-height: 58px;
+        text-align: center;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--c, #3c72fc) 14%, #ffffff);
+        color: var(--c, #3c72fc);
+        font-size: 26px;
+    }
+
+    .stat-card .stat-bg-icon {
+        position: absolute;
+        right: -12px;
+        bottom: -18px;
+        font-size: 88px;
+        opacity: .06;
+        color: var(--c, #3c72fc);
+    }
+
+    .stat-card .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.1;
+        color: var(--c, #3c72fc);
+    }
+
+    .stat-card .stat-label {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #6b7a99;
+        margin-top: 6px;
+    }
+</style>
 {% endblock style %}
 
 {% block content %}
@@ -31,46 +92,38 @@
         <div class="row">
 
             <div class="col-md-3 col-sm-6">
-                <div class="panel text-center"
-                    style="border-radius:15px; border:none; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-                    <div class="panel-body" style="background:#4e73df; color:white; border-radius:15px;">
-                        <i class="fa fa-users fa-3x"></i>
-                        <h4 style="margin-top:15px; color: white;">{{ total_etudiants }}</h4>
-                        <h5 style="color: white;">Total Étudiants</h5>
-                    </div>
+                <div class="stat-card" style="--c:#4e73df;">
+                    <div class="stat-icon"><i class="fa fa-users"></i></div>
+                    <i class="fa fa-users stat-bg-icon"></i>
+                    <h2 class="stat-value">{{ total_etudiants }}</h2>
+                    <div class="stat-label">Total Étudiants</div>
                 </div>
             </div>
 
             <div class="col-md-3 col-sm-6">
-                <div class="panel text-center"
-                    style="border-radius:15px; border:none; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-                    <div class="panel-body" style="background:#1cc88a; color:white; border-radius:15px;">
-                        <i class="fa fa-graduation-cap fa-3x"></i>
-                        <h4 style="margin-top:15px; color: white;">{{ total_master }}</h4>
-                        <h5 style="color: white;">Étudiants Master</h5>
-                    </div>
+                <div class="stat-card" style="--c:#1cc88a;">
+                    <div class="stat-icon"><i class="fa fa-graduation-cap"></i></div>
+                    <i class="fa fa-graduation-cap stat-bg-icon"></i>
+                    <h2 class="stat-value">{{ total_master }}</h2>
+                    <div class="stat-label">Étudiants Master</div>
                 </div>
             </div>
 
             <div class="col-md-3 col-sm-6">
-                <div class="panel text-center"
-                    style="border-radius:15px; border:none; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-                    <div class="panel-body" style="background:#36b9cc; color:white; border-radius:15px;">
-                        <i class="fa fa-book fa-3x"></i>
-                        <h4 style="margin-top:15px; color: white;">{{ total_doctorat }}</h4>
-                        <h5 style="color: white;">Étudiants Doctorat</h5>
-                    </div>
+                <div class="stat-card" style="--c:#36b9cc;">
+                    <div class="stat-icon"><i class="fa fa-book"></i></div>
+                    <i class="fa fa-book stat-bg-icon"></i>
+                    <h2 class="stat-value">{{ total_doctorat }}</h2>
+                    <div class="stat-label">Étudiants Doctorat</div>
                 </div>
             </div>
 
             <div class="col-md-3 col-sm-6">
-                <div class="panel text-center"
-                    style="border-radius:15px; border:none; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-                    <div class="panel-body" style="background:#f6c23e; color:white; border-radius:15px;">
-                        <i class="fa fa-folder-open fa-3x"></i>
-                        <h4 style="margin-top:15px; color: white;">{{ total_projets }}</h4>
-                        <h5 style="color: white;">Total Projets</h5>
-                    </div>
+                <div class="stat-card" style="--c:#f6c23e;">
+                    <div class="stat-icon"><i class="fa fa-folder-open"></i></div>
+                    <i class="fa fa-folder-open stat-bg-icon"></i>
+                    <h2 class="stat-value">{{ total_projets }}</h2>
+                    <div class="stat-label">Total Projets</div>
                 </div>
             </div>
 
@@ -80,35 +133,29 @@
         <div class="row">
 
             <div class="col-md-4 col-sm-6">
-                <div class="panel text-center"
-                    style="border-radius:15px; border:none; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-                    <div class="panel-body" style="background:#e74a3b; color:white; border-radius:15px;">
-                        <i class="fa fa-spinner fa-3x"></i>
-                        <h4 style="margin-top:15px; color: white;">{{ projets_en_cours }}</h4>
-                        <h5 style="color: white;">Projets en cours</h5>
-                    </div>
+                <div class="stat-card" style="--c:#e74a3b;">
+                    <div class="stat-icon"><i class="fa fa-spinner"></i></div>
+                    <i class="fa fa-spinner stat-bg-icon"></i>
+                    <h2 class="stat-value">{{ projets_en_cours }}</h2>
+                    <div class="stat-label">Projets en cours</div>
                 </div>
             </div>
 
             <div class="col-md-4 col-sm-6">
-                <div class="panel text-center"
-                    style="border-radius:15px; border:none; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-                    <div class="panel-body" style="background:#28a745; color:white; border-radius:15px;">
-                        <i class="fa fa-check-circle fa-3x"></i>
-                        <h4 style="margin-top:15px; color: white;">{{ projets_termines }}</h4>
-                        <h5 style="color: white;">Projets Terminés</h5>
-                    </div>
+                <div class="stat-card" style="--c:#28a745;">
+                    <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
+                    <i class="fa fa-check-circle stat-bg-icon"></i>
+                    <h2 class="stat-value">{{ projets_termines }}</h2>
+                    <div class="stat-label">Projets Terminés</div>
                 </div>
             </div>
 
             <div class="col-md-4 col-sm-6">
-                <div class="panel text-center"
-                    style="border-radius:15px; border:none; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-                    <div class="panel-body" style="background:#6f42c1; color:white; border-radius:15px;">
-                        <i class="fa fa-calendar fa-3x"></i>
-                        <h4 style="margin-top:15px; color: white;">{{ projets_soutenus }}</h4>
-                        <h5 style="color: white;">Projets Soutenus</h5>
-                    </div>
+                <div class="stat-card" style="--c:#6f42c1;">
+                    <div class="stat-icon"><i class="fa fa-calendar"></i></div>
+                    <i class="fa fa-calendar stat-bg-icon"></i>
+                    <h2 class="stat-value">{{ projets_soutenus }}</h2>
+                    <div class="stat-label">Projets Soutenus</div>
                 </div>
             </div>
 

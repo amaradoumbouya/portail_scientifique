@@ -64,6 +64,8 @@ def modal_soutenance(request):
     demandes_rejetees = (demandes.filter(statut="Rejetée").count())
 
     context = {
+        # Contrôle d'affichage selon le rôle
+        "is_superuser": request.user.is_superuser,
         "demandes": demandes,
         "total_demandes": total_demandes,
         "demandes_en_attente": demandes_en_attente,

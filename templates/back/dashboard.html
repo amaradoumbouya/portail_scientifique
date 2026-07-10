@@ -10,7 +10,106 @@
  {% endblock title %}
 
  {% block style %}
+<style>
+    /* ===== Cartes statistiques modernes ===== */
+    .stat-card {
+        position: relative;
+        border: 1px solid #e9edf5;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+        padding: 20px 18px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
 
+    .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--c, #3c72fc);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, .12);
+    }
+
+    .stat-card .stat-icon {
+        position: absolute;
+        top: 18px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+        text-align: center;
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--c, #3c72fc) 14%, #ffffff);
+        color: var(--c, #3c72fc);
+        font-size: 24px;
+    }
+
+    .stat-card .stat-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #8a95a8;
+        margin: 0 0 6px;
+    }
+
+    .stat-card .stat-value {
+        font-size: 30px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.1;
+        color: #3c72fc;
+    }
+
+    .stat-card .stat-trend {
+        font-size: 12px;
+        color: #8a95a8;
+        margin: 8px 0 0;
+    }
+
+    .stat-card .stat-trend b {
+        color: var(--c, #3c72fc);
+    }
+
+    /* ===== Polish général des panels & tableaux ===== */
+    .content .panel {
+        border-radius: 14px;
+        border: 1px solid #e9edf5;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        overflow: hidden;
+    }
+
+    .content .panel .panel-heading {
+        border-radius: 0;
+        padding: 14px 18px;
+        font-weight: 600;
+    }
+
+    .content .widget-chart li {
+        padding: 0 14px;
+    }
+
+    .content .table thead th {
+        border-top: none;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: #6b7a99;
+    }
+
+    .content .table td {
+        vertical-align: middle;
+    }
+</style>
  {% endblock style %}
 </head>
 
@@ -54,63 +153,47 @@
                     <div class="row">
 
                         <div class="col-sm-6 col-lg-3">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Publications</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_publications}} </b></h3>
-                                    <p class="text-muted"><b>0%</b> {{ time_since_last_publication|default:"Aucune" }}
-                                    </p>
-                                </div>
+                            <div class="stat-card" style="--c:#3c72fc;">
+                                <div class="stat-icon"><i class="mdi mdi-file-document"></i></div>
+                                <p class="stat-label">Publications</p>
+                                <h2 class="stat-value">{{ nb_publications }}</h2>
+                                <p class="stat-trend"><b>0%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Auteurs</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_auteurs}} </b></h3>
-                                    <p class="text-muted"><b>00%</b> {{ time_since_last_auteur|default:"Aucune" }}</p>
-                                </div>
+                            <div class="stat-card" style="--c:#1cc88a;">
+                                <div class="stat-icon"><i class="mdi mdi-account-multiple"></i></div>
+                                <p class="stat-label">Auteurs</p>
+                                <h2 class="stat-value">{{ nb_auteurs }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_auteur|default:"Aucune" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Encadreurs</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_encadreurs}} </b></h3>
-                                    <p class="text-muted"><b>00%</b> {{ time_since_last_encadreur|default:"Aucune" }}</p>
-                                </div>
+                            <div class="stat-card" style="--c:#f6a821;">
+                                <div class="stat-icon"><i class="mdi mdi-school"></i></div>
+                                <p class="stat-label">Encadreurs</p>
+                                <h2 class="stat-value">{{ nb_encadreurs }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_encadreur|default:"Aucune" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Institutions</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_institutions}} </b></h3>
-                                    <p class="text-muted"><b>00%</b> {{ time_since_last_institution|default:"Aucune" }}</p>
-                                </div>
+                            <div class="stat-card" style="--c:#36b9cc;">
+                                <div class="stat-icon"><i class="mdi mdi-domain"></i></div>
+                                <p class="stat-label">Institutions</p>
+                                <h2 class="stat-value">{{ nb_institutions }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_institution|default:"Aucune" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-3">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Documents</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b>{{nb_publications}}</b></h3>
-                                    <p class="text-muted"><b>00%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
-                                </div>
+                            <div class="stat-card" style="--c:#6f42c1;">
+                                <div class="stat-icon"><i class="mdi mdi-folder-multiple"></i></div>
+                                <p class="stat-label">Documents</p>
+                                <h2 class="stat-value">{{ nb_publications }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
                             </div>
                         </div>
 
@@ -252,8 +335,8 @@
                                                     {% endfor %}
                                                 </td>
                                                 <td>
-                                                    {% if pub.statut_indexation == 'Indexée' %}
-                                                    <span style="color:green;">✔ Indexée</span>
+                                                    {% if pub.statut_indexation == 'Acceptée' %}
+                                                    <span style="color:green;">✔ Acceptée</span>
                                                     {% elif pub.statut_indexation == 'Rejetée' %}
                                                     <span style="color:red;">✘ Rejetée</span>
                                                     {% else %}
@@ -267,7 +350,7 @@
                                                         <input type="text" name="statut_publication"
                                                             value="{{pub.statut_publication}}" hidden>
                                                         <input type="text" name="idpublier" value="{{pub.id}}" hidden>
-                                                        {% if pub.statut_publication and pub.statut_indexation == 'Indexée' %}
+                                                        {% if pub.statut_publication and pub.statut_indexation == 'Acceptée' %}
                                                         <button type="submit"
                                                             class="btn btn-primary btn-sm">OUI</button>
                                                         {% else %}
@@ -323,65 +406,47 @@
                     <div class="row">
 
                         <div class="col-sm-6 col-lg-3">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Publications</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_publications}} </b></h3>
-                                    <p class="text-muted"><b>00%</b> {{time_since_last_publication|default:"Aucune"}}
-                                    </p>
-                                </div>
+                            <div class="stat-card" style="--c:#3c72fc;">
+                                <div class="stat-icon"><i class="mdi mdi-file-document"></i></div>
+                                <p class="stat-label">Publications</p>
+                                <h2 class="stat-value">{{ nb_publications }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Likes</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_likes}} </b></h3>
-                                    <p class="text-muted"><b>00%</b> {{ time_since_last_like|default:"Aucun" }}</p>
-                                </div>
+                            <div class="stat-card" style="--c:#e74a3b;">
+                                <div class="stat-icon"><i class="mdi mdi-thumb-up"></i></div>
+                                <p class="stat-label">Likes</p>
+                                <h2 class="stat-value">{{ nb_likes }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_like|default:"Aucun" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Commentaires</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_commentaires}} </b></h3>
-                                    <p class="text-muted"><b>00%</b> {{time_since_last_commentaire|default:"Aucun"}}
-                                    </p>
-                                </div>
+                            <div class="stat-card" style="--c:#36b9cc;">
+                                <div class="stat-icon"><i class="mdi mdi-comment-multiple"></i></div>
+                                <p class="stat-label">Commentaires</p>
+                                <h2 class="stat-value">{{ nb_commentaires }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_commentaire|default:"Aucun" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Téléchargements</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b> {{nb_telechargements}} </b></h3>
-                                    <p class="text-muted"><b>00%</b> {{time_since_last_telechargement|default:"Aucun"}}
-                                    </p>
-                                </div>
+                            <div class="stat-card" style="--c:#1cc88a;">
+                                <div class="stat-icon"><i class="mdi mdi-download"></i></div>
+                                <p class="stat-label">Téléchargements</p>
+                                <h2 class="stat-value">{{ nb_telechargements }}</h2>
+                                <p class="stat-trend"><b>00%</b> {{ time_since_last_telechargement|default:"Aucun" }}</p>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-3">
-                            <div class="panel panel-primary text-center">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Partages</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <h3 class=""><b>00</b></h3>
-                                    <p class="text-muted"><b>00%</b> 00:00:00</p>
-                                </div>
+                            <div class="stat-card" style="--c:#6f42c1;">
+                                <div class="stat-icon"><i class="mdi mdi-share-variant"></i></div>
+                                <p class="stat-label">Partages</p>
+                                <h2 class="stat-value">00</h2>
+                                <p class="stat-trend"><b>00%</b> 00:00:00</p>
                             </div>
                         </div>
 
@@ -442,8 +507,8 @@
                                                     {% endfor %}
                                                 </td>
                                                 <td>
-                                                    {% if pub.statut_indexation == 'Indexée' %}
-                                                    <span style="color:green;">✔ Indexée</span>
+                                                    {% if pub.statut_indexation == 'Acceptée' %}
+                                                    <span style="color:green;">✔ Acceptée</span>
                                                     {% elif pub.statut_indexation == 'Rejetée' %}
                                                     <span style="color:red;">✘ Rejetée</span>
                                                     {% else %}
@@ -457,7 +522,7 @@
                                                         <input type="text" name="statut_publication"
                                                             value="{{pub.statut_publication}}" hidden>
                                                         <input type="text" name="idpublier" value="{{pub.id}}" hidden>
-                                                        {% if pub.statut_publication and pub.statut_indexation == 'Indexée' %}
+                                                        {% if pub.statut_publication and pub.statut_indexation == 'Acceptée' %}
                                                         <button type="submit"
                                                             class="btn btn-primary btn-sm">OUI</button>
                                                         {% else %}

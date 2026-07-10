@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy
 from accounts.models import CustumerUser
-from accounts.forms import CustumerUserForm
+from accounts.forms import CustumerUserForm, CustumerUserChangeForm
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView, DetailView
 
@@ -57,7 +57,7 @@ def Update_state(request):
 
 class CustumUserUpdateView(UpdateView):
     model          = CustumerUser
-    form_class     = CustumerUserForm
+    form_class     = CustumerUserChangeForm
     template_name = "back/accounts/update.html"
     success_url = reverse_lazy("accounts:index")
     context_object_name = "custumer"

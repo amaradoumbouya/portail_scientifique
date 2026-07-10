@@ -1,71 +1,412 @@
 {% extends "back/dashboard.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load humanize_time %}
+
+{% block style %}
+<style>
+    .pub-detail .panel {
+        border-radius: 14px;
+        border: 1px solid #e9edf5;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        overflow: hidden;
+    }
+
+    /* ===== Carte hero ===== */
+    .pub-hero {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        padding: 26px;
+    }
+
+    .pub-hero .pub-cover {
+        flex: 0 0 220px;
+        max-width: 220px;
+    }
+
+    .pub-hero .pub-cover img {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #e9edf5;
+    }
+
+    .pub-hero .pub-cover .no-cover {
+        width: 100%;
+        height: 260px;
+        border-radius: 12px;
+        background: #f4f6fb;
+        border: 1px dashed #cfd8ea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #b3bed4;
+        font-size: 64px;
+    }
+
+    .pub-hero .pub-main {
+        flex: 1 1 320px;
+        min-width: 280px;
+    }
+
+    .pub-hero .pub-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2b3648;
+        margin: 0 0 12px;
+        line-height: 1.25;
+    }
+
+    .pub-badges {
+        margin-bottom: 18px;
+    }
+
+    .pub-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 0 6px 6px 0;
+        letter-spacing: .3px;
+    }
+
+    .pub-badge i {
+        margin-right: 4px;
+    }
+
+    .badge-type {
+        background: #e8effe;
+        color: #3c72fc;
+    }
+
+    .badge-domaine {
+        background: #eafaf3;
+        color: #1cc88a;
+    }
+
+    .badge-status-ok {
+        background: #eafaf3;
+        color: #159a6c;
+    }
+
+    .badge-status-ko {
+        background: #fdecea;
+        color: #d0442f;
+    }
+
+    .badge-status-wait {
+        background: #fff5e6;
+        color: #d98a13;
+    }
+
+    /* ===== Meta ===== */
+    .pub-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px 24px;
+        margin-top: 6px;
+    }
+
+    .pub-meta .meta-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .pub-meta .meta-item .meta-ic {
+        width: 38px;
+        height: 38px;
+        line-height: 38px;
+        text-align: center;
+        border-radius: 10px;
+        background: #f4f6fb;
+        color: #3c72fc;
+        font-size: 18px;
+        flex: 0 0 38px;
+    }
+
+    .pub-meta .meta-item .meta-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #8a95a8;
+        margin: 0;
+    }
+
+    .pub-meta .meta-item .meta-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2b3648;
+        margin: 2px 0 0;
+        word-break: break-word;
+    }
+
+    .pub-actions {
+        margin-top: 22px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* ===== Sections ===== */
+    .section-title {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #6b7a99;
+        margin: 0 0 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eef1f7;
+    }
+
+    .pub-resume {
+        color: #4b5568;
+        line-height: 1.7;
+        font-size: 14px;
+        text-align: justify;
+    }
+
+    .keyword-chip {
+        display: inline-block;
+        background: #f4f6fb;
+        color: #45506a;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin: 0 6px 8px 0;
+    }
+
+    .person-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px dashed #eef1f7;
+    }
+
+    .person-item:last-child {
+        border-bottom: none;
+    }
+
+    .person-item .person-avatar {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border-radius: 50%;
+        background: #e8effe;
+        color: #3c72fc;
+        font-weight: 700;
+    }
+
+    .person-item .person-name {
+        font-weight: 600;
+        color: #2b3648;
+    }
+
+    .reject-box {
+        background: #fdecea;
+        border: 1px solid #f6c9c1;
+        border-radius: 10px;
+        padding: 14px 16px;
+        color: #b3341f;
+        margin-top: 8px;
+    }
+</style>
+{% endblock style %}
 
 {% block content %}
-<!-- Page-Title -->
-<div class="row">
-    <div class="col-sm-12">
-        <div class="page-header-title">
-            <h4 class="pull-left page-title">Publications</h4>
-            <ol class="breadcrumb pull-right">
-                {% if user.is_authenticated and user.role == 'admin' %}
-                <a href="{% url 'publications:index' %}" class="btn btn-info ">Retour à la liste</a>
-                {% else %}
-                <a href="{% url 'portail_site:dashboard' %}" class="btn btn-info ">Retour à la liste</a>
-                
-                {% endif %}
-            </ol>
-            <div class="clearfix"></div>
+<div class="pub-detail">
+
+    <!-- Page-Title -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-header-title">
+                <h4 class="pull-left page-title">Détail de la publication</h4>
+                <ol class="breadcrumb pull-right">
+                    {% if user.is_authenticated and user.role == 'admin' %}
+                    <a href="{% url 'publications:index' %}" class="btn btn-default">
+                        <i class="ti-arrow-left"></i> Retour à la liste
+                    </a>
+                    {% else %}
+                    <a href="{% url 'portail_site:dashboard' %}" class="btn btn-default">
+                        <i class="ti-arrow-left"></i> Retour à la liste
+                    </a>
+                    {% endif %}
+                </ol>
+                <div class="clearfix"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Liste Start -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Detail de la publication</h3>
+    <!-- Hero -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="pub-hero">
+
+                    <!-- Couverture -->
+                    <div class="pub-cover">
+                        {% if publication.photo %}
+                        <img src="{{ publication.photo.url }}" alt="{{ publication.titre }}">
+                        {% else %}
+                        <div class="no-cover"><i class="mdi mdi-file-document"></i></div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Infos principales -->
+                    <div class="pub-main">
+                        <h1 class="pub-title">{{ publication.titre|default:"Sans titre" }}</h1>
+
+                        <div class="pub-badges">
+                            {% if publication.type_publication %}
+                            <span class="pub-badge badge-type">
+                                <i class="mdi mdi-tag"></i>{{ publication.get_type_publication_display }}
+                            </span>
+                            {% endif %}
+                            {% if publication.domaine %}
+                            <span class="pub-badge badge-domaine">
+                                <i class="mdi mdi-shape"></i>{{ publication.domaine }}
+                            </span>
+                            {% endif %}
+                            {% if publication.statut_indexation == 'Acceptée' %}
+                            <span class="pub-badge badge-status-ok"><i class="mdi mdi-check-circle"></i>Acceptée</span>
+                            {% elif publication.statut_indexation == 'Rejetée' %}
+                            <span class="pub-badge badge-status-ko"><i class="mdi mdi-close-circle"></i>Rejetée</span>
+                            {% else %}
+                            <span class="pub-badge badge-status-wait"><i class="mdi mdi-clock-outline"></i>En attente</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="pub-meta">
+                            <div class="meta-item">
+                                <div class="meta-ic"><i class="mdi mdi-calendar"></i></div>
+                                <div>
+                                    <p class="meta-label">Date de publication</p>
+                                    <p class="meta-value">{{ publication.date_ajout_systeme|date:"d/m/Y"|default:"—" }}</p>
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-ic"><i class="mdi mdi-translate"></i></div>
+                                <div>
+                                    <p class="meta-label">Langue</p>
+                                    <p class="meta-value">{{ publication.langue|default:"—" }}</p>
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-ic"><i class="mdi mdi-barcode"></i></div>
+                                <div>
+                                    <p class="meta-label">DOI</p>
+                                    <p class="meta-value">{{ publication.doi|default:"—" }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pub-actions">
+                            {% if publication.fichier_pdf %}
+                            <a href="{{ publication.fichier_pdf.url }}" target="_blank" class="btn btn-primary">
+                                <i class="mdi mdi-file-pdf"></i> Consulter le PDF
+                            </a>
+                            <a href="{{ publication.fichier_pdf.url }}" download class="btn btn-success">
+                                <i class="mdi mdi-download"></i> Télécharger
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'publications:update' publication.slug %}" class="btn btn-default">
+                                <i class="ti-pencil-alt"></i> Modifier
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="panel-body">
-                <h2>{{ publication.titre }}</h2>
-                <p><strong>Auteur(s) :</strong><br>
+        </div>
+    </div>
+
+    <!-- Motif de rejet / en attente -->
+    {% if publication.statut_indexation != 'Acceptée' and publication.motif_rejet %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <p class="section-title">Motif</p>
+                    <div class="reject-box">
+                        <i class="mdi mdi-alert-circle"></i> {{ publication.motif_rejet }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+
+        <!-- Résumé + mots-clés -->
+        <div class="col-md-8">
+            <div class="panel">
+                <div class="panel-body">
+                    <p class="section-title">Résumé</p>
+                    {% if publication.resume %}
+                    <div class="pub-resume">{{ publication.resume|linebreaksbr }}</div>
+                    {% else %}
+                    <p class="text-muted">Aucun résumé disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
+                    <p class="section-title">Mots-clés</p>
+                    {% with mots=publication.mots_cles|split_keywords %}
+                    {% if mots %}
+                    {% for mot in mots %}
+                    <span class="keyword-chip">{{ mot }}</span>
+                    {% endfor %}
+                    {% else %}
+                    <p class="text-muted">Aucun mot-clé.</p>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Auteurs / Encadreurs -->
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-body">
+                    <p class="section-title">Auteur(s)</p>
                     {% for auteur in publication.auteurs.all %}
-                    {{ auteur.prenoms }} {{ auteur.nom }}<br>
+                    <div class="person-item">
+                        <div class="person-avatar">{{ auteur.prenoms|first }}{{ auteur.nom|first }}</div>
+                        <div class="person-name">{{ auteur.prenoms }} {{ auteur.nom }}</div>
+                    </div>
                     {% empty %}
-                    Aucun auteur
+                    <p class="text-muted">Aucun auteur</p>
                     {% endfor %}
-                </p>
-                <p><strong>Encadreur(s) :</strong><br>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body">
+                    <p class="section-title">Encadreur(s)</p>
                     {% for encadreur in publication.encadreurs.all %}
-                    {{ encadreur.prenoms }} {{ encadreur.nom }}<br>
+                    <div class="person-item">
+                        <div class="person-avatar">{{ encadreur.prenoms|first }}{{ encadreur.nom|first }}</div>
+                        <div class="person-name">{{ encadreur.prenoms }} {{ encadreur.nom }}</div>
+                    </div>
                     {% empty %}
-                    Aucun encadreur
+                    <p class="text-muted">Aucun encadreur</p>
                     {% endfor %}
-                </p>
-                <p><strong>Domaine :</strong> {{ publication.domaine }}</p>
-                <p><strong>Résumé :</strong> {{ publication.resume|linebreaksbr }}</p>
-                <p><strong>Mots-clés :</strong> {{ publication.mots_cles }}</p>
-                <p><strong>Date :</strong> {{ publication.date_publication }}</p>
-                <p><strong>Langue :</strong> {{ publication.langue }}</p>
-                <p><strong>Statut :</strong>
-                    {% if publication.statut_indexation == 'Indexée' %}
-                    <span style="color:green;">✔ Indexée</span>
-                    {% elif publication.statut_indexation == 'Rejetée' %}
-                    <span style="color:red;">✘ Rejetée</span>
-                <p><strong>Motif du rejet :</strong>{{ publication.motif_rejet }}</p>
-                {% else %}
-                <span style="color:orange;">⏳ En attente</span>
-                <p><strong>Motif du rejet :</strong>{{ publication.motif_rejet }}</p>
-                {% endif %}
-                </p>
+                </div>
             </div>
         </div>
+
     </div>
 
-</div> <!-- End Row -->
-
+</div>
 {% endblock content %}
 
 {% block scripts %}
@@ -76,5 +417,4 @@
         $('form').parsley();
     });
 </script>
-
 {% endblock scripts %}

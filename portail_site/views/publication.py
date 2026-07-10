@@ -30,8 +30,6 @@ def publication_par_type_template_view(request):
     return render(request, "pages/publication_par_type.html")
 
 
-
-
 # Detail_d'une_publication
 # def detail_publication_template(request, slug):
 #     publication = get_object_or_404(Publication, slug=slug)
@@ -45,22 +43,17 @@ def detail_publication_template(request):
 
     return render(request, 'pages/detail_publication.html')
 
-
 # Informations sur l'auteur
 def detail_auteur_template_view(request, slug):
     auteur = get_object_or_404(Auteur, slug=slug)
     publications = Publication.objects.filter(auteurs__in=[auteur]).order_by('-id')[:10]
     return render(request, 'pages/detail_auteur.html', {'auteur': auteur, 'publications': publications,})
 
-
-
 # Informations sur l'encadreur
 def detail_encadreur_template_view(request, slug):
     encadreur = get_object_or_404(Encadreur, slug=slug)
     publications = Publication.objects.filter(encadreurs__in=[encadreur]).order_by('-id')[:10]
     return render(request, 'pages/detail_encadreur.html', {'encadreur': encadreur, 'publications': publications,})
-
-
 
 # La vue de publication_user
 @login_required

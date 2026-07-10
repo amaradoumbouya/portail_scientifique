@@ -4,7 +4,7 @@ from institutions.forms import InstitutionForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.db.models import Count, Q
 from publications.models.publication import (
     Publication,
@@ -50,81 +50,108 @@ class InstitutionDeleteView(DeleteView):
     template_name = "back/institutions/index.html"
     success_url   = reverse_lazy("institutions:index")
 
+class ChercheurDeleteView(DeleteView):
+    model         = UserProfile
+    template_name = "back/institutions/institut_dashboard.html"
+    success_url   = reverse_lazy("institutions:institution_dashboard")
 
 
+class ChercheurDetailView(DetailView):
+    model               = UserProfile
+    template_name       = "back/institutions/detail_chercheur.html"
+    context_object_name = "chercheur"
+    slug_field          = "slug"
+    slug_url_kwarg      = "slug"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        chercheur = self.object
 
+        publications = (
+            Publication.objects
+            .filter(user=chercheur.user)
+            .order_by("-date_ajout_systeme")
+        )
 
+        context["publications"] = publications
+        context["nbre_publications"] = publications.count()
+        context["nbre_articles"] = publications.filter(type_publication="article").count()
+        context["nbre_colloques"] = publications.filter(type_publication="colloque").count()
+        return context
 
 def institut_dashboard(request):
 
     # =====================================================
-    # Recuperer l'institution du responsable d'institution
+    # Determiner le perimetre d'affichage selon le role
+    #   - superuser            -> toute la plateforme
+    #   - responsable institution -> uniquement son institution
     # =====================================================
 
-    user_institution = request.user.profile.institution
+    is_superuser = request.user.is_superuser
 
+    user_as_enseignants = (
+        UserProfile.objects
+        .select_related("user", "institution")
+        .annotate(
 
-    # Recuperer tous les utilisateurs inscrits au compte de cette institutions
+            # ============================================
+            # Nombre total publications
+            # ============================================
 
-    # user_as_enseignants = UserProfile.objects.filter(institution=user_institution).select_related("user").annotate(nbre_publications=Count('user__publications',distinct=True))
+            nbre_publications=Count('user__publications', distinct=True),
 
-    user_as_enseignants = UserProfile.objects.filter(institution=user_institution).select_related("user").annotate(
+            # ============================================
+            # Nombre articles scientifiques
+            # ============================================
 
-        # ============================================
-        # Nombre total publications
-        # ============================================
+            nbre_articles=Count('user__publications', filter=Q(user__publications__type_publication='article'), distinct=True),
 
-        nbre_publications=Count('user__publications', distinct=True),
+            # ============================================
+            # Nombre communications colloque
+            # ============================================
 
-        # ============================================
-        # Nombre articles scientifiques
-        # ============================================
-
-        nbre_articles=Count('user__publications', filter=Q(user__publications__type_publication='article'), distinct=True),
-
-        # ============================================
-        # Nombre communications colloque
-        # ============================================
-
-        nbre_colloques=Count('user__publications', filter=Q(user__publications__type_publication='colloque'),distinct=True)
+            nbre_colloques=Count('user__publications', filter=Q(user__publications__type_publication='colloque'), distinct=True),
+        )
     )
+
+    if not is_superuser:
+        # Le responsable d'institution ne voit que son institution
+        user_institution = request.user.profile.institution
+        user_as_enseignants = user_as_enseignants.filter(institution=user_institution)
 
     # =====================================================
     # STATISTIQUES GENERALES
     # =====================================================
 
-    total_enseignants = user_as_enseignants.count()
+    total_enseignants = user_as_enseignants.filter(role='enseignant').count()
 
-    total_chercheurs = user_as_enseignants.filter().count()
-
-    # Total de publication reconnu à l'internations par celle publiée sur cette plateforme
-    total_publications = Publication.objects.count()
+    total_chercheurs = user_as_enseignants.filter(role='enseignant chercheur').count()
 
     enseignants_actifs = user_as_enseignants.filter(nbre_publications__gt=0).count()
 
-    enseignants_inactifs = ((user_as_enseignants.count())- enseignants_actifs)
+    enseignants_inactifs = (user_as_enseignants.count() - enseignants_actifs)
 
     # =====================================================
-    # ARTICLES SCIENTIFIQUES
+    # ARTICLES / COLLOQUES / PUBLICATIONS
+    #   Ces totaux suivent aussi le perimetre du role
     # =====================================================
 
-    total_articles = ArticleScientifique.objects.count()
+    if is_superuser:
+        publications_qs = Publication.objects.all()
+    else:
+        publications_qs = Publication.objects.filter(user__profile__institution=user_institution)
 
-    # =====================================================
-    # COMMUNICATIONS COLLOQUE
-    # =====================================================
+    total_articles = publications_qs.filter(type_publication='article').count()
 
-    total_communications = Colloque.objects.count()
+    total_communications = publications_qs.filter(type_publication='colloque').count()
+
+    # Total des publications (perimetre du role)
+    total_publications = publications_qs.count()
 
     # =====================================================
     # PRODUCTION SCIENTIFIQUE
     # =====================================================
     total_production_scientifique = (total_articles + total_communications)
-
-    # publications_validees = Publication.objects.filter(statut_indexation="Acceptée").count()
-
-    # publications_attente = Publication.objects.filter(statut_indexation="En attente").count()
 
     # =====================================================
     # TOP CHERCHEURS
@@ -138,13 +165,16 @@ def institut_dashboard(request):
 
     context = {
 
+        # Contrôle d'affichage selon le rôle
+        "is_superuser": is_superuser,
+
         # Table enseignants
         "enseignants": user_as_enseignants,
 
         # Stats
         "total_enseignants": total_enseignants,
         "total_chercheurs": total_chercheurs,
-        "total_publications": 3,
+        "total_publications": total_publications,
         "enseignants_actifs": enseignants_actifs,
         "enseignants_inactifs": enseignants_inactifs,
 
@@ -154,9 +184,6 @@ def institut_dashboard(request):
 
         # Production scientifique
         "total_production_scientifique": total_production_scientifique,
-
-        # "publications_validees": publications_validees,
-        # "publications_attente": publications_attente,
 
         # Top chercheurs
         "top_chercheurs": top_chercheurs,

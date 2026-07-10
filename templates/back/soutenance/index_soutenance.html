@@ -8,6 +8,87 @@
 
 {% block style %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    /* Palette : bleu #3c72fc + blanc */
+    .stat-card {
+        position: relative;
+        border: 1px solid #e6ecf7;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #ffffff;
+        color: #3c72fc;
+        padding: 22px 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(60, 114, 252, .08);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 22px rgba(60, 114, 252, .20);
+    }
+    .stat-card .stat-icon {
+        position: absolute;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        width: 58px;
+        height: 58px;
+        line-height: 58px;
+        text-align: center;
+        border-radius: 50%;
+        background: rgba(60, 114, 252, .12);
+        color: #3c72fc;
+        font-size: 26px;
+    }
+    .stat-card .stat-bg-icon {
+        position: absolute;
+        right: -12px;
+        bottom: -18px;
+        font-size: 88px;
+        opacity: .06;
+        color: #3c72fc;
+    }
+    .stat-card .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.1;
+        color: #3c72fc;
+    }
+    .stat-card .stat-label {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #6b7a99;
+        margin-top: 6px;
+    }
+
+    /* ===== Polish général des panels & tableaux (comme dashboard) ===== */
+    .content .panel {
+        border-radius: 14px;
+        border: 1px solid #e9edf5;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        overflow: hidden;
+    }
+
+    .content .panel .panel-heading {
+        border-radius: 0;
+        padding: 14px 18px;
+        font-weight: 600;
+    }
+
+    .content .table thead th {
+        border-top: none;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: #6b7a99;
+    }
+
+    .content .table td {
+        vertical-align: middle;
+    }
+</style>
 {% endblock style %}
 
 {% block content %}
@@ -79,54 +160,33 @@
 
     <div class="col-md-4">
 
-        <div class="panel text-center">
-
-            <div class="panel-body" style="background:#4e73df;color:white;border-radius:10px;">
-
-                <i class="fa fa-calendar fa-3x"></i>
-
-                <h3 style="color: white;">{{ total_soutenances }}</h3>
-
-                <h5 style="color: white;">Total soutenances</h5>
-
-            </div>
-
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-calendar"></i></div>
+            <i class="fa fa-calendar stat-bg-icon"></i>
+            <h2 class="stat-value">{{ total_soutenances }}</h2>
+            <div class="stat-label">Total soutenances</div>
         </div>
 
     </div>
 
     <div class="col-md-4">
 
-        <div class="panel text-center">
-
-            <div class="panel-body" style="background:#1cc88a;color:white;border-radius:10px;">
-
-                <i class="fa fa-clock-o fa-3x"></i>
-
-                <h3 style="color: white;">{{ soutenances_planifiees }}</h3>
-
-                <h5 style="color: white;">Planifiées</h5>
-
-            </div>
-
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-clock-o"></i></div>
+            <i class="fa fa-clock-o stat-bg-icon"></i>
+            <h2 class="stat-value">{{ soutenances_planifiees }}</h2>
+            <div class="stat-label">Planifiées</div>
         </div>
 
     </div>
 
     <div class="col-md-4">
 
-        <div class="panel text-center">
-
-            <div class="panel-body" style="background:#36b9cc;color:white;border-radius:10px;">
-
-                <i class="fa fa-check-circle fa-3x"></i>
-
-                <h3 style="color: white;">{{ soutenances_realisees }}</h3>
-
-                <h5 style="color: white;">Terminées</h5>
-
-            </div>
-
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
+            <i class="fa fa-check-circle stat-bg-icon"></i>
+            <h2 class="stat-value">{{ soutenances_realisees }}</h2>
+            <div class="stat-label">Terminées</div>
         </div>
 
     </div>
@@ -142,7 +202,7 @@
 
     <div class="col-md-12">
 
-        <div class="panel panel-purple">
+        <div class="panel panel-primary">
 
             <div class="panel-heading">
 

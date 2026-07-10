@@ -2,6 +2,120 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block style %}
+<style>
+    /* Palette : bleu #3c72fc + blanc */
+    .stat-card {
+        position: relative;
+        border: 1px solid #e6ecf7;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #ffffff;
+        color: #3c72fc;
+        padding: 22px 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(60, 114, 252, .08);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 22px rgba(60, 114, 252, .20);
+    }
+
+    .stat-card .stat-icon {
+        position: absolute;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        width: 58px;
+        height: 58px;
+        line-height: 58px;
+        text-align: center;
+        border-radius: 50%;
+        background: rgba(60, 114, 252, .12);
+        color: #3c72fc;
+        font-size: 26px;
+    }
+
+    .stat-card .stat-bg-icon {
+        position: absolute;
+        right: -12px;
+        bottom: -18px;
+        font-size: 88px;
+        opacity: .06;
+        color: #3c72fc;
+    }
+
+    .stat-card .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.1;
+        color: #3c72fc;
+    }
+
+    .stat-card .stat-label {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: #6b7a99;
+        margin-top: 6px;
+    }
+
+    /* Variante pleine : fond bleu, texte blanc */
+    .stat-card.filled {
+        background: #3c72fc;
+        border-color: #3c72fc;
+        color: #ffffff;
+    }
+
+    .stat-card.filled .stat-icon {
+        background: rgba(255, 255, 255, .20);
+        color: #ffffff;
+    }
+
+    .stat-card.filled .stat-bg-icon {
+        color: #ffffff;
+        opacity: .14;
+    }
+
+    .stat-card.filled .stat-value {
+        color: #ffffff;
+    }
+
+    .stat-card.filled .stat-label {
+        color: rgba(255, 255, 255, .85);
+    }
+
+    /* ===== Polish général des panels & tableaux (comme dashboard) ===== */
+    .content .panel {
+        border-radius: 14px;
+        border: 1px solid #e9edf5;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        overflow: hidden;
+    }
+
+    .content .panel .panel-heading {
+        border-radius: 0;
+        padding: 14px 18px;
+        font-weight: 600;
+    }
+
+    .content .table thead th {
+        border-top: none;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: #6b7a99;
+    }
+
+    .content .table td {
+        vertical-align: middle;
+    }
+</style>
+{% endblock style %}
+
 {% block content %}
 
 <!-- ========================================= -->
@@ -12,75 +126,41 @@
 
     <!-- Total enseignants(Enseignants qui n'ont pas le chercheur mais qui sont dans l'institution) -->
     <div class="col-md-3">
-        <div class="panel panel-primary">
-            <div class="panel-body text-center">
-
-                <i class="fa fa-users fa-3x"></i>
-
-                <h2 style="margin-top:15px;">
-                    {{ total_enseignants }}
-                </h2>
-
-                <h4>
-                    Enseignants
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-users"></i></div>
+            <i class="fa fa-users stat-bg-icon"></i>
+            <h2 class="stat-value">{{ total_enseignants }}</h2>
+            <div class="stat-label">Enseignants</div>
         </div>
     </div>
 
     <!-- Enseignants chercheurs -->
     <div class="col-md-3">
-        <div class="panel panel-success">
-            <div class="panel-body text-center">
-
-                <i class="fa fa-graduation-cap fa-3x"></i>
-
-                <h2 style="margin-top:15px;">
-                    {{ total_chercheurs }}
-                </h2>
-
-                <h4>
-                    Enseignants chercheurs
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-graduation-cap"></i></div>
+            <i class="fa fa-graduation-cap stat-bg-icon"></i>
+            <h2 class="stat-value">{{ total_chercheurs }}</h2>
+            <div class="stat-label">Enseignants chercheurs</div>
         </div>
     </div>
 
     <!-- Chercheur actifs dans la production scientifique(la publication d'articles scientifiques ou colloque) -->
     <div class="col-md-3">
-        <div class="panel panel-danger">
-            <div class="panel-body text-center">
-
-                <i class="fa fa-check-circle fa-3x"></i>
-
-                <h2 style="margin-top:15px;">
-                    {{ enseignants_actifs }}
-                </h2>
-
-                <h4>
-                    Chercheurs actifs
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
+            <i class="fa fa-check-circle stat-bg-icon"></i>
+            <h2 class="stat-value">{{ enseignants_actifs }}</h2>
+            <div class="stat-label">Chercheurs actifs</div>
         </div>
     </div>
 
     <!-- Chercheurs inactifs dans la production scientifique(chercheurs qui ne font pas de publication d'articles scientifiques ou colloque) -->
     <div class="col-md-3">
-        <div class="panel panel-danger">
-            <div class="panel-body text-center">
-                <i class="fa fa-times-circle fa-3x"></i>
-                <h2 style="margin-top:15px;">
-                    {{ enseignants_inactifs }}
-                </h2>
-
-                <h4>
-                    Chercheurs inactifs
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-times-circle"></i></div>
+            <i class="fa fa-times-circle stat-bg-icon"></i>
+            <h2 class="stat-value">{{ enseignants_inactifs }}</h2>
+            <div class="stat-label">Chercheurs inactifs</div>
         </div>
     </div>
 
@@ -94,69 +174,41 @@
 
     <!-- Articles scientifiques -->
     <div class="col-md-3">
-        <div class="panel panel-purple">
-            <div class="panel-body text-center">
-
-                <h2>
-                    {{ total_articles }}
-                </h2>
-
-                <h4>
-                    Articles scientifiques
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-file-text"></i></div>
+            <i class="fa fa-file-text stat-bg-icon"></i>
+            <h2 class="stat-value">{{ total_articles }}</h2>
+            <div class="stat-label">Articles scientifiques</div>
         </div>
     </div>
 
     <!-- Communications colloques -->
     <div class="col-md-3">
-        <div class="panel panel-warning">
-            <div class="panel-body text-center">
-
-                <h2>
-                    {{ total_communications }}
-                </h2>
-
-                <h4>
-                    Communications colloques
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-comments"></i></div>
+            <i class="fa fa-comments stat-bg-icon"></i>
+            <h2 class="stat-value">{{ total_communications }}</h2>
+            <div class="stat-label">Communications colloques</div>
         </div>
     </div>
 
     <!-- Production scientifique est l'ensemble des articles scientifiques et communications colloque donc la somme des deux -->
     <div class="col-md-3">
-        <div class="panel panel-success">
-            <div class="panel-body text-center">
-
-                <h2>
-                    {{ total_production_scientifique }}
-                </h2>
-
-                <h4>
-                    Production scientifique
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-flask"></i></div>
+            <i class="fa fa-flask stat-bg-icon"></i>
+            <h2 class="stat-value">{{ total_production_scientifique }}</h2>
+            <div class="stat-label">Production scientifique</div>
         </div>
     </div>
 
     <!-- Publications scientifiques reconnues à l'internations au compte de l'institution -->
     <div class="col-md-3">
-        <div class="panel panel-info">
-            <div class="panel-body text-center">
-
-                <h2 style="margin-top:15px;">
-                    {{ total_publications }}
-                </h2>
-
-                <h4>
-                    Publications scientifiques
-                </h4>
-
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa fa-book"></i></div>
+            <i class="fa fa-book stat-bg-icon"></i>
+            <h2 class="stat-value">{{ total_publications }}</h2>
+            <div class="stat-label">Publications scientifiques</div>
         </div>
     </div>
 
@@ -187,6 +239,9 @@
                         <tr>
                             <th style="width:5%">N°</th>
                             <th>Nom complet</th>
+                            {% if is_superuser %}
+                            <th>Institution</th>
+                            {% endif %}
                             <th>Grade</th>
                             <th>Spécialité</th>
                             <th>Articles</th>
@@ -209,6 +264,14 @@
                             <td>
                                 {{ chercheur.user.full_name }}
                             </td>
+
+                            {% if is_superuser %}
+                            <td>
+                                <span class="badge badge-primary">
+                                    {{ chercheur.institution.sigle_institution|default:"—" }}
+                                </span>
+                            </td>
+                            {% endif %}
 
                             <td>
                                 {{ chercheur.grade }}
@@ -247,12 +310,20 @@
                             <!-- Actions -->
                             <td>
 
-                                <!-- Voir -->
-                                <a href="" class="btn btn-success btn-sm">
-
+                                <!-- Détail -->
+                                <a href="{% url 'institutions:detail_chercheur' chercheur.user.profile.slug %}" class="btn btn-success btn-sm" title="Détail">
                                     <i class="ti-eye"></i>
-
                                 </a>
+
+                                <!-- Supprimer -->
+                                <!-- <form action="" method="post"
+                                    style="display:inline" data-bs-placement="top" data-bs-toggle="tooltip"
+                                    title="Supprimer">
+                                    <button class="btn btn-sm btn-danger delete-confirm" type="submit"
+                                        title="Supprimer">
+                                        <i class="ti-trash"></i>
+                                    </button>
+                                </form> -->
 
                             </td>
 
@@ -301,6 +372,10 @@
                             <th>Photo</th>
 
                             <th>Nom complet</th>
+
+                            {% if is_superuser %}
+                            <th>Institution</th>
+                            {% endif %}
 
                             <th>Grade</th>
 
@@ -354,6 +429,15 @@
                                 {{ ens.user.full_name }}
                             </td>
 
+                            <!-- Institution (superuser uniquement) -->
+                            {% if is_superuser %}
+                            <td>
+                                <span class="badge badge-primary">
+                                    {{ ens.institution.sigle_institution|default:"—" }}
+                                </span>
+                            </td>
+                            {% endif %}
+
                             <!-- Grade -->
                             <td>
                                 {{ ens.grade }}
@@ -364,7 +448,7 @@
                                 {{ ens.specialite }}
                             </td>
 
-                               <td>
+                            <td>
                                 <span class="badge badge-success">
 
                                     {{ ens.nbre_articles }}
@@ -394,7 +478,7 @@
                             <!-- Statut -->
                             <td>
 
-                                {% if ens.nb_publications > 0 %}
+                                {% if ens.nbre_publications > 0 %}
 
                                 <span class="badge badge-success">
                                     Actif
@@ -414,34 +498,11 @@
                             <td>
 
                                 <!-- Voir -->
-                                <a href="" class="btn btn-success btn-sm">
+                                <a href="{% url 'institutions:detail_chercheur' ens.user.profile.slug %}" class="btn btn-success btn-sm">
 
                                     <i class="ti-eye"></i>
 
                                 </a>
-
-                                <!-- Modifier -->
-                                <!-- <a href=""
-                                   class="btn btn-primary btn-sm">
-
-                                    <i class="ti-pencil-alt"></i>
-
-                                </a> -->
-
-                                <!-- Supprimer -->
-                                <!-- <form action=""
-                                      method="post"
-                                      style="display:inline;">
-
-
-                                    <button class="btn btn-danger btn-sm delete-confirm"
-                                            type="submit">
-
-                                        <i class="ti-trash"></i>
-
-                                    </button>
-
-                                </form> -->
 
                             </td>
 

@@ -56,7 +56,6 @@ def user_publications(request):
         }
     )
 
-
 # Statut publication, pour savoir si la publication est faite oui ou non
 def statut_publication(request): 
     if request.method == 'POST':
@@ -107,7 +106,6 @@ class PublicationDeleteView(LoginRequiredMixin, DeleteView):
             return reverse_lazy("publications:index")
         return reverse("portail_site:dashboard")
 
-
 # Vue pour le modal article scientifique
 def modal_article_scientifique(request):
 
@@ -140,7 +138,7 @@ def modal_article_scientifique(request):
 
         messages.warning(request, "Veuillez compléter votre profil.")
 
-        return render(request, 'back/auteurs/profil_auteur.html')
+        return redirect('accounts:profil_user')
 
     # ==========================================
     # TRAITEMENT POST
@@ -460,7 +458,6 @@ def modal_article_scientifique(request):
             "form_article": form_article
         }
     )
-
 
 # Vue pour le modal communication de colloque
 def modal_communication_colloque(request):
@@ -864,8 +861,6 @@ def modal_communication_colloque(request):
             "form_colloque": form_colloque
         }
     )
-
-
 
 def rechercher_publications(request):
 

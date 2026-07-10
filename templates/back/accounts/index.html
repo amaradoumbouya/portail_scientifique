@@ -47,10 +47,6 @@
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    {{form.adresse|as_crispy_field}}
-                                </div>
-
-                                <div class="form-group col-md-6">
                                     {{form.email|as_crispy_field}}
                                 </div>
 
@@ -60,14 +56,6 @@
 
                                 <div class="form-group col-md-6">
                                     {{form.sexe|as_crispy_field}}
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    {{form.role|as_crispy_field}}
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    {{form.photo|as_crispy_field}}
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -170,7 +158,7 @@
                                             </li>
                                             <li>
                                                 <form action="{% url 'accounts:delete' cust.slug %}" method="post"
-                                                    style="display:inline">
+                                                    style="display:inline" data-bs-placement="top" data-bs-toggle="tooltip" title="Supprimer">
                                                     {% csrf_token %}
                                                     <button class="btn btn-sm btn-danger delete-confirm" type="submit"
                                                         title="Supprimer">

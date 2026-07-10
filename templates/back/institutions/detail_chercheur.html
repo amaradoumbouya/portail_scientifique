@@ -1,0 +1,115 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Page-Title -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Détail du chercheur</h4>
+            <ol class="breadcrumb pull-right">
+                <a href="{% url 'institutions:institution_dashboard' %}" class="btn btn-default btn-sm">
+                    <i class="ti-arrow-left"></i> Retour
+                </a>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Carte profil -->
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-body text-center">
+                <img class="thumb-lg img-circle" src="{{ chercheur.ImageUrl }}" alt="{{ chercheur.user.full_name }}"
+                    onerror="this.src='{% static 'back/assets/images/users/avatar-1.jpg' %}'">
+                <h4 class="m-t-10">{{ chercheur.user.full_name }}</h4>
+                <p class="text-muted">{{ chercheur.role|default:"—" }}</p>
+                <hr>
+                <p class="text-left"><b>Grade :</b> {{ chercheur.grade|default:"—" }}</p>
+                <p class="text-left"><b>Spécialité :</b> {{ chercheur.specialite|default:"—" }}</p>
+                <p class="text-left"><b>Fonction :</b> {{ chercheur.fonction_poste|default:"—" }}</p>
+                <p class="text-left"><b>Institution :</b> {{ chercheur.institution|default:"—" }}</p>
+                <p class="text-left"><b>Email :</b> {{ chercheur.user.email }}</p>
+                <p class="text-left"><b>Téléphone :</b> {{ chercheur.user.tel|default:"—" }}</p>
+                <p class="text-left"><b>Adresse :</b> {{ chercheur.adresse|default:"—" }}</p>
+                <p class="text-left"><b>ORCID :</b> {{ chercheur.orcid|default:"—" }}</p>
+                {% if chercheur.site_web %}
+                <p class="text-left"><b>Site web :</b> <a href="{{ chercheur.site_web }}" target="_blank">{{ chercheur.site_web }}</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats + publications -->
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default text-center">
+                    <div class="panel-body">
+                        <h2 class="text-primary">{{ nbre_publications }}</h2>
+                        <p class="text-muted">Publications</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default text-center">
+                    <div class="panel-body">
+                        <h2 class="text-success">{{ nbre_articles }}</h2>
+                        <p class="text-muted">Articles</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default text-center">
+                    <div class="panel-body">
+                        <h2 class="text-info">{{ nbre_colloques }}</h2>
+                        <p class="text-muted">Colloques</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Publications</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Titre</th>
+                                <th>Type</th>
+                                <th>Domaine</th>
+                                <th>Statut</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pub in publications %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ pub.titre|default:"—" }}</td>
+                                <td>{{ pub.get_type_publication_display }}</td>
+                                <td>{{ pub.domaine|default:"—" }}</td>
+                                <td>
+                                    <span class="badge badge-info">{{ pub.statut_indexation }}</span>
+                                </td>
+                                <td>{{ pub.date_ajout_systeme|date:"d/m/Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Aucune publication.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

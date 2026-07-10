@@ -31,7 +31,7 @@ class AuteurCreateView(CreateView):
             else:
                 pass
                 # context["auteurs"] = Auteur.objects.filter(user=user).order_by('-id')
-
+ 
         return context
     
 

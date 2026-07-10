@@ -52,6 +52,17 @@
                 </li>
 
                 <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-agenda"></i> <span>
+                            Institution
+                        </span> <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'institutions:institution_dashboard' %}">Infos institution</a></li>
+                        <li><a href="{% url 'soutenance:modal_soutenance' %}"> Demandes Soutenance</a></li>
+                        <li><a href="{% url 'soutenance:index_soutenance' %}"> Liste Soutenances</a></li>
+                    </ul>
+                </li>
+
+                <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ion-person"></i> <span> Auteurs
                         </span>
                         <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
@@ -92,7 +103,7 @@
                             Encadrements
                         </span> <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'publications:index' %}">Mes encadrements</a></li>
+                        <li><a href="{% url 'projets_detudes:etudiants_a_encadrer' %}">Mes encadrements</a></li>
                     </ul>
                 </li>
 

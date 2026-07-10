@@ -1,6 +1,40 @@
+import ast
+
 from django import template
 
 register = template.Library()
+
+
+@register.filter
+def split_keywords(value):
+    """Transforme les mots-clés (liste Python stockée en texte ou chaîne
+    séparée par des virgules/points-virgules) en une liste propre."""
+    if not value:
+        return []
+
+    if isinstance(value, (list, tuple)):
+        items = value
+    else:
+        text = str(value).strip()
+        items = None
+        if text.startswith("[") and text.endswith("]"):
+            try:
+                parsed = ast.literal_eval(text)
+                if isinstance(parsed, (list, tuple)):
+                    items = list(parsed)
+            except (ValueError, SyntaxError):
+                items = None
+        if items is None:
+            text = text.strip("[]")
+            separator = ";" if ";" in text else ","
+            items = text.split(separator)
+
+    cleaned = []
+    for item in items:
+        mot = str(item).strip().strip("'\"").strip()
+        if mot:
+            cleaned.append(mot)
+    return cleaned
 
 @register.filter
 def humanize_seconds(value):
