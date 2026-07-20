@@ -28,7 +28,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="publicationsDropdown">
               {% for type_doc in request.type_document %}
-              <a class="dropdown-item" href="{% url 'portail_site:publication_par_type' type_doc.slug %}"> {{type_doc.libelle}} </a>
+              <a class="dropdown-item" href="{% url 'portail_site:publication_par_type_detail' type_doc.slug %}"> {{type_doc.libelle}} </a>
               <div class="dropdown-divider"></div>
               {% endfor %}
             </div>
@@ -89,7 +89,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="publicationsDropdown">
               {% for type_doc in request.type_document %}
-              <a class="dropdown-item" href="{% url 'portail_site:publication_par_type' type_doc.slug %}"> {{type_doc.libelle}} </a>
+              <a class="dropdown-item" href="{% url 'portail_site:publication_par_type_detail' type_doc.slug %}"> {{type_doc.libelle}} </a>
               <div class="dropdown-divider"></div>
               {% endfor %}
             </div>

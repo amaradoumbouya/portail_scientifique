@@ -18,8 +18,9 @@
                                             Chercheurs, enseignants et étudiants peuvent collaborer, partager leurs
                                             travaux et accéder à des ressources académiques de qualité. </p>
                                     </div>
+
                                     <div class="slider-btn bnt1 text-center">
-                                        <form class="search-bar-container" action="/rechercher" method="GET">
+                                        <form class="search-bar-container" action="{% url 'portail_site:recherche' %}" method="GET">
                                             <div class="search-input-wrapper">
                                                 <input type="text" name="q" class="search-input"
                                                     placeholder="Rechercher une publication, un auteur, un sujet..."
@@ -53,6 +54,7 @@
                                             </div>
                                         </form>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -77,7 +79,7 @@
                                         </p>
                                     </div>
                                     <div class="slider-btn bnt1 text-center">
-                                        <form class="search-bar-container" action="/rechercher" method="GET">
+                                        <form class="search-bar-container" action="{% url 'portail_site:recherche' %}" method="GET">
                                             <div class="search-input-wrapper">
                                                 <input type="text" name="q" class="search-input"
                                                     placeholder="Rechercher une publication, un auteur, un sujet..."
@@ -91,6 +93,7 @@
                                                     </svg>
                                                 </button>
                                             </div>
+
                                             <div class="search-filters">
                                                 <label class="filter-tag">
                                                     <input type="radio" name="type" value="tout" checked>
@@ -109,6 +112,7 @@
                                                     <span>Thèses</span>
                                                 </label>
                                             </div>
+                                            
                                         </form>
                                     </div>
                                 </div>

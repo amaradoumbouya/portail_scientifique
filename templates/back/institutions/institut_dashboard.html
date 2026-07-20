@@ -113,19 +113,50 @@
     .content .table td {
         vertical-align: middle;
     }
+
+    .stat-row-compact .stat-card {
+        padding: 18px 14px;
+    }
+
+    .stat-row-compact .stat-value {
+        font-size: 26px;
+    }
+
+    .stat-row-compact .stat-label {
+        font-size: 11px;
+    }
+
+    .stat-row-compact .stat-icon {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+        font-size: 22px;
+        right: 12px;
+    }
+
+    a.stat-card-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    a.stat-card-link:hover,
+    a.stat-card-link:focus {
+        text-decoration: none;
+        color: inherit;
+    }
 </style>
 {% endblock style %}
 
 {% block content %}
 
 <!-- ========================================= -->
-<!-- DASHBOARD STATISTIQUES -->
+<!-- DASHBOARD STATISTIQUES — Personnel & étudiants -->
 <!-- ========================================= -->
 
-<div class="row">
+<div class="row stat-row-compact">
 
-    <!-- Total enseignants(Enseignants qui n'ont pas le chercheur mais qui sont dans l'institution) -->
-    <div class="col-md-3">
+    <div class="col-lg-2 col-md-4 col-sm-6">
         <div class="stat-card">
             <div class="stat-icon"><i class="fa fa-users"></i></div>
             <i class="fa fa-users stat-bg-icon"></i>
@@ -134,8 +165,7 @@
         </div>
     </div>
 
-    <!-- Enseignants chercheurs -->
-    <div class="col-md-3">
+    <div class="col-lg-2 col-md-4 col-sm-6">
         <div class="stat-card">
             <div class="stat-icon"><i class="fa fa-graduation-cap"></i></div>
             <i class="fa fa-graduation-cap stat-bg-icon"></i>
@@ -144,8 +174,7 @@
         </div>
     </div>
 
-    <!-- Chercheur actifs dans la production scientifique(la publication d'articles scientifiques ou colloque) -->
-    <div class="col-md-3">
+    <div class="col-lg-2 col-md-4 col-sm-6">
         <div class="stat-card">
             <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
             <i class="fa fa-check-circle stat-bg-icon"></i>
@@ -154,8 +183,7 @@
         </div>
     </div>
 
-    <!-- Chercheurs inactifs dans la production scientifique(chercheurs qui ne font pas de publication d'articles scientifiques ou colloque) -->
-    <div class="col-md-3">
+    <div class="col-lg-2 col-md-4 col-sm-6">
         <div class="stat-card">
             <div class="stat-icon"><i class="fa fa-times-circle"></i></div>
             <i class="fa fa-times-circle stat-bg-icon"></i>
@@ -164,10 +192,32 @@
         </div>
     </div>
 
+    <div class="col-lg-2 col-md-4 col-sm-6">
+        <a href="{% url 'institutions:liste_etudiants_niveau' 'master' %}" class="stat-card-link" title="Voir la liste des étudiants Master">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-user"></i></div>
+                <i class="fa fa-user stat-bg-icon"></i>
+                <h2 class="stat-value">{{ total_master }}</h2>
+                <div class="stat-label">Étudiants Master</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-sm-6">
+        <a href="{% url 'institutions:liste_etudiants_niveau' 'doctorat' %}" class="stat-card-link" title="Voir la liste des étudiants Doctorat">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-book"></i></div>
+                <i class="fa fa-book stat-bg-icon"></i>
+                <h2 class="stat-value">{{ total_doctorat }}</h2>
+                <div class="stat-label">Étudiants Doctorat</div>
+            </div>
+        </a>
+    </div>
+
 </div>
 
 <!-- ========================================= -->
-<!-- AUTRES STATISTIQUES -->
+<!-- Production scientifique -->
 <!-- ========================================= -->
 
 <div class="row">

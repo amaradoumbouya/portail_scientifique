@@ -1,0 +1,35 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% if actualite %}{% url 'actualites:modal_actualite_edit' actualite.slug %}{% else %}{% url 'actualites:modal_actualite' %}{% endif %}"
+      method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="form-group col-md-6">
+                {{ form.image|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form.date_publication|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-12">
+                {{ form.titre|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-12">
+                {{ form.resume|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-12">
+                {{ form.contenu|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form.is_actif|as_crispy_field }}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+    </div>
+</form>

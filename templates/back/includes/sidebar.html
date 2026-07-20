@@ -30,7 +30,7 @@
             </div>
         </div>
         <!--- Divider -->
-        {% if user.is_authenticated and user.is_superuser %}
+        {% if user.is_authenticated and user.is_superuser or user.is_authenticated and user.role == 'admin' %}
 
         <div id="sidebar-menu">
             <ul>
@@ -145,6 +145,25 @@
                         </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
                     <ul class="list-unstyled">
                         <li><a href=" {% url 'partenaires:index' %} ">Les partenaires</a></li>
+                    </ul>
+                </li>
+
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar"></i><span>
+                            Événements
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'evenements:index' %}">Conférences & ateliers</a></li>
+                        <li><a href="{% url 'evenements:inscriptions' %}">Personnes inscrites</a></li>
+                    </ul>
+                </li>
+
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-announcement"></i><span>
+                            Actualités
+                        </span><span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'actualites:index' %}">Les actualités</a></li>
                     </ul>
                 </li>
 

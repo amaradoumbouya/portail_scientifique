@@ -373,32 +373,18 @@
             </div>
         </div>
 
-        <!-- Auteurs / Encadreurs -->
+        <!-- Auteurs -->
         <div class="col-md-4">
             <div class="panel">
                 <div class="panel-body">
                     <p class="section-title">Auteur(s)</p>
-                    {% for auteur in publication.auteurs.all %}
+                    {% for aut in publication.publicationauteur_set.all %}
                     <div class="person-item">
-                        <div class="person-avatar">{{ auteur.prenoms|first }}{{ auteur.nom|first }}</div>
-                        <div class="person-name">{{ auteur.prenoms }} {{ auteur.nom }}</div>
+                        <div class="person-avatar">{{ aut.auteur.prenoms|first }}{{ aut.auteur.nom|first }}</div>
+                        <div class="person-name">{{ aut.auteur.prenoms }} {{ aut.auteur.nom }}{% if aut.role %} <small class="text-muted">({{ aut.role }})</small>{% endif %}</div>
                     </div>
                     {% empty %}
                     <p class="text-muted">Aucun auteur</p>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-body">
-                    <p class="section-title">Encadreur(s)</p>
-                    {% for encadreur in publication.encadreurs.all %}
-                    <div class="person-item">
-                        <div class="person-avatar">{{ encadreur.prenoms|first }}{{ encadreur.nom|first }}</div>
-                        <div class="person-name">{{ encadreur.prenoms }} {{ encadreur.nom }}</div>
-                    </div>
-                    {% empty %}
-                    <p class="text-muted">Aucun encadreur</p>
                     {% endfor %}
                 </div>
             </div>

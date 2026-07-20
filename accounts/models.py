@@ -80,6 +80,7 @@ class UserProfile(models.Model):
         # ('admin', 'Administrateur'),
     )
     GRADE = (
+        ('Docteur', 'Docteur'),
         ('Assistant', 'Assistant'),
         ('Maître assistant', 'Maître assistant'),
         ('Maître de conférences', 'Maître de conférences'),
@@ -93,6 +94,24 @@ class UserProfile(models.Model):
         ('Physique', 'Physique'),
         ('Mathématiques', 'Mathématiques'),
         ('Médecine', 'Médecine'),
+        ('Agronomie', 'Agronomie'),
+        ('Génie Civil', 'Génie Civil'),
+        ('Génie Industriel', 'Génie Industriel'),
+        ('Génie Logiciel', 'Génie Logiciel'),
+        ('Génie Mathématique', 'Génie Mathématique'),
+        ('Génie Physique', 'Génie Physique'),
+        ('Génie Chimie', 'Génie Chimie'),
+        ('Génie Biologique', 'Génie Biologique'),
+        ('Génie Agronomique', 'Génie Agronomique'),
+        ('Sciences Sociales', 'Sciences Sociales'),
+        ('Sciences de la Vie', 'Sciences de la Vie'),
+        ('Sciences de la Terre', 'Sciences de la Terre'),
+        ('Sciences de l\'Education', 'Sciences de l\'Education'),
+        ('Sciences de la Santé', 'Sciences de la Santé'),
+        ('Sciences de la Culture', 'Sciences de la Culture'),
+        ('Sciences de la Communication', 'Sciences de la Communication'),
+        ('Sciences de la Politique', 'Sciences de la Politique'),
+        ('Sciences de la Religion', 'Sciences de la Religion'),
         ('Autre', 'Autre'),
     )
     user                   = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')

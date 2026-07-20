@@ -552,6 +552,10 @@
                                     <a href="{{ user.profile.institution.reseau_social_linkedin_inst }}" target="_blank"
                                         class="info-link">LinkedIn</a><br>
                                     {% endif %}
+                                    {% if user.profile.institution.reseau_social_twitter_inst %}
+                                    <a href="{{ user.profile.institution.reseau_social_twitter_inst }}" target="_blank"
+                                        class="info-link">Twitter</a><br>
+                                    {% endif %}
                                     {% if user.profile.institution.reseau_social_youtube_inst %}
                                     <a href="{{ user.profile.institution.reseau_social_youtube_inst }}" target="_blank"
                                         class="info-link">YouTube</a><br>

@@ -12,6 +12,38 @@ from publications.models.publication import (
     Colloque
 )
 from accounts.models import CustumerUser, UserProfile
+from projets_detudes.models.candidate import Candidate
+
+
+def _etudiants_queryset(is_superuser, user_institution=None):
+    qs = Candidate.objects.select_related("user", "institution")
+
+    if not is_superuser and user_institution:
+        institution_user_ids = UserProfile.objects.filter(
+            institution=user_institution
+        ).values_list("user_id", flat=True)
+
+        qs = qs.filter(
+            Q(institution=user_institution) |
+            Q(etudiant__projet__user_id__in=institution_user_ids)
+        ).distinct()
+
+    return qs
+
+
+def _filter_etudiants_par_niveau(qs, niveau):
+    if niveau == "master":
+        return qs.filter(
+            Q(niveau__iexact="master") | Q(etudiant__type_projet="memoire")
+        ).distinct()
+    if niveau == "doctorat":
+        return qs.filter(
+            Q(niveau__iexact="doctorat") | Q(etudiant__type_projet="these")
+        ).distinct()
+    return qs.filter(
+        Q(niveau__iexact="master") | Q(niveau__iexact="doctorat") |
+        Q(etudiant__type_projet__in=["memoire", "these"])
+    ).distinct()
 
 
 class InstitutionCreateView(CreateView):
@@ -88,6 +120,7 @@ def institut_dashboard(request):
     # =====================================================
 
     is_superuser = request.user.is_superuser
+    user_institution = None
 
     user_as_enseignants = (
         UserProfile.objects
@@ -132,6 +165,15 @@ def institut_dashboard(request):
     enseignants_inactifs = (user_as_enseignants.count() - enseignants_actifs)
 
     # =====================================================
+    # ETUDIANTS (MASTER / DOCTORAT)
+    # =====================================================
+
+    etudiants_qs = _etudiants_queryset(is_superuser, user_institution)
+
+    total_master = _filter_etudiants_par_niveau(etudiants_qs, "master").count()
+    total_doctorat = _filter_etudiants_par_niveau(etudiants_qs, "doctorat").count()
+
+    # =====================================================
     # ARTICLES / COLLOQUES / PUBLICATIONS
     #   Ces totaux suivent aussi le perimetre du role
     # =====================================================
@@ -155,9 +197,18 @@ def institut_dashboard(request):
 
     # =====================================================
     # TOP CHERCHEURS
+    #   Enseignants chercheurs et responsables d'institution
+    #   actifs (nbre_publications > 0).
     # =====================================================
 
-    top_chercheurs = user_as_enseignants.order_by("-nbre_publications")[:10]
+    top_chercheurs = (
+        user_as_enseignants
+        .filter(
+            role__in=['enseignant', 'enseignant chercheur', 'responsable institution'],
+            nbre_publications__gt=0,
+        )
+        .order_by("-nbre_publications")[:10]
+    )
 
     # =====================================================
     # CONTEXT
@@ -177,6 +228,8 @@ def institut_dashboard(request):
         "total_publications": total_publications,
         "enseignants_actifs": enseignants_actifs,
         "enseignants_inactifs": enseignants_inactifs,
+        "total_master": total_master,
+        "total_doctorat": total_doctorat,
 
         # Publications
         "total_articles": total_articles,
@@ -190,3 +243,34 @@ def institut_dashboard(request):
     }
 
     return render(request,"back/institutions/institut_dashboard.html",context)
+
+
+def liste_etudiants(request, niveau=None):
+
+    is_superuser = request.user.is_superuser
+    user_institution = None
+
+    if not is_superuser:
+        user_institution = request.user.profile.institution
+
+    etudiants_qs = _etudiants_queryset(is_superuser, user_institution)
+
+    if niveau in ("master", "doctorat"):
+        etudiants = _filter_etudiants_par_niveau(etudiants_qs, niveau).order_by("user__nom", "user__prenoms")
+        titres = {
+            "master": "Liste des étudiants Master",
+            "doctorat": "Liste des étudiants Doctorat",
+        }
+        page_title = titres[niveau]
+    else:
+        etudiants = _filter_etudiants_par_niveau(etudiants_qs, None).order_by("user__nom", "user__prenoms")
+        page_title = "Liste des étudiants (Master / Doctorat)"
+
+    context = {
+        "is_superuser": is_superuser,
+        "etudiants": etudiants,
+        "page_title": page_title,
+        "niveau_actif": niveau,
+    }
+
+    return render(request, "back/institutions/liste_etudiants.html", context)

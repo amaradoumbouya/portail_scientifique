@@ -200,24 +200,25 @@
                     </div>
 
                     <div class="row">
+
                         <div class="col-sm-4">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <h4 class="m-t-0">Documents</h4>
+                                    <h4 class="m-t-0">Nouvelles publications</h4>
                                     <ul class="list-inline m-t-30 widget-chart text-center">
                                         <li>
                                             <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>5248</b></h4>
-                                            <h5 class="text-muted m-b-0">jour</h5>
+                                            <h4 class=""><b>{{ stat_publications.jour|default:0 }}</b></h4>
+                                            <h5 class="text-muted m-b-0">Jour</h5>
                                         </li>
                                         <li>
-                                            <i class="mdi mdi-arrow-down-bold-circle text-danger"></i>
-                                            <h4 class=""><b>321</b></h4>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>{{ stat_publications.semaine|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Semaine</h5>
                                         </li>
                                         <li>
                                             <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>964</b></h4>
+                                            <h4 class=""><b>{{ stat_publications.mois|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Mois</h5>
                                         </li>
                                     </ul>
@@ -229,21 +230,21 @@
                         <div class="col-sm-4">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <h4 class="m-t-0">Email Envoyé</h4>
+                                    <h4 class="m-t-0">Téléchargements</h4>
                                     <ul class="list-inline m-t-30 widget-chart text-center">
                                         <li>
                                             <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>3654</b></h4>
+                                            <h4 class=""><b>{{ stat_telechargements.jour|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Jour</h5>
                                         </li>
                                         <li>
-                                            <i class="mdi mdi-arrow-down-bold-circle text-danger"></i>
-                                            <h4 class=""><b>954</b></h4>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>{{ stat_telechargements.semaine|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Semaine</h5>
                                         </li>
                                         <li>
                                             <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>8462</b></h4>
+                                            <h4 class=""><b>{{ stat_telechargements.mois|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Mois</h5>
                                         </li>
                                     </ul>
@@ -255,21 +256,21 @@
                         <div class="col-sm-4">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <h4 class="m-t-0">Souscription mensuel</h4>
+                                    <h4 class="m-t-0">Likes</h4>
                                     <ul class="list-inline m-t-30 widget-chart text-center">
                                         <li>
                                             <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>3256</b></h4>
+                                            <h4 class=""><b>{{ stat_likes.jour|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Jour</h5>
                                         </li>
                                         <li>
-                                            <i class="mdi mdi-arrow-down-bold-circle text-danger"></i>
-                                            <h4 class=""><b>785</b></h4>
+                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
+                                            <h4 class=""><b>{{ stat_likes.semaine|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Semaine</h5>
                                         </li>
                                         <li>
                                             <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>1546</b></h4>
+                                            <h4 class=""><b>{{ stat_likes.mois|default:0 }}</b></h4>
                                             <h5 class="text-muted m-b-0">Mois</h5>
                                         </li>
                                     </ul>
@@ -277,7 +278,12 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
+                    {{ stat_publications.serie|json_script:"serie-publications" }}
+                    {{ stat_telechargements.serie|json_script:"serie-telechargements" }}
+                    {{ stat_likes.serie|json_script:"serie-likes" }}
 
 
                     <!-- Liste des publications -->
@@ -296,8 +302,7 @@
                                                 <th>Photo</th>
                                                 <th>Titre</th>
                                                 <th>Auteur</th>
-                                                <th>Encadreur</th>
-                                                <th>Inst Contributrice</th>
+                                                <th>Institutions</th>
                                                 <th>Statut indexation</th>
                                                 <th>Publié</th>
                                                 <th style='width:11%'>Action</th>
@@ -314,22 +319,16 @@
                                                 </td>
                                                 <td>{{pub.titre}}</td>
                                                 <td>
-                                                    {% for auteur in pub.auteurs.all %}
-                                                    {{ auteur.prenoms }} {{ auteur.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% for aut in pub.publicationauteur_set.all %}
+                                                    {{ aut.auteur.prenoms }} {{ aut.auteur.nom }}{% if aut.role %} ({{ aut.role }}){% endif %}{% if not forloop.last %}, {% endif %}
                                                     {% empty %}
                                                     Aucun auteur
                                                     {% endfor %}
                                                 </td>
+
                                                 <td>
-                                                    {% for encadreur in pub.encadreurs.all %}
-                                                    {{ encadreur.prenoms }} {{ encadreur.nom }}{% if not forloop.last %}, {% endif %}
-                                                    {% empty %}
-                                                    Aucun encadreur
-                                                    {% endfor %}
-                                                </td>
-                                                <td>
-                                                    {% for institution in pub.institutions_contributrices.all %}
-                                                    {{ institution.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% for aut in pub.publicationauteur_set.all %}
+                                                    {% if aut.auteur.profile.institution %}{{ aut.auteur.profile.institution.nom_institution }}{% if not forloop.last %}, {% endif %}{% endif %}
                                                     {% empty %}
                                                     Aucune institution
                                                     {% endfor %}
@@ -408,9 +407,18 @@
                         <div class="col-sm-6 col-lg-3">
                             <div class="stat-card" style="--c:#3c72fc;">
                                 <div class="stat-icon"><i class="mdi mdi-file-document"></i></div>
-                                <p class="stat-label">Publications</p>
-                                <h2 class="stat-value">{{ nb_publications }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
+                                <p class="stat-label">Auteur principal</p>
+                                <h2 class="stat-value">{{ nb_publications_auteur_principal }}</h2>
+                                <p class="stat-trend">{{ time_since_last_publication_auteur|default:"Aucune" }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="stat-card" style="--c:#5a67d8;">
+                                <div class="stat-icon"><i class="mdi mdi-account-multiple"></i></div>
+                                <p class="stat-label">Co-auteur</p>
+                                <h2 class="stat-value">{{ nb_publications_coauteur }}</h2>
+                                <p class="stat-trend">{{ time_since_last_publication_coauteur|default:"Aucune" }}</p>
                             </div>
                         </div>
 
@@ -419,7 +427,7 @@
                                 <div class="stat-icon"><i class="mdi mdi-thumb-up"></i></div>
                                 <p class="stat-label">Likes</p>
                                 <h2 class="stat-value">{{ nb_likes }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_like|default:"Aucun" }}</p>
+                                <p class="stat-trend">{{ time_since_last_like|default:"Aucun" }}</p>
                             </div>
                         </div>
 
@@ -428,7 +436,7 @@
                                 <div class="stat-icon"><i class="mdi mdi-comment-multiple"></i></div>
                                 <p class="stat-label">Commentaires</p>
                                 <h2 class="stat-value">{{ nb_commentaires }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_commentaire|default:"Aucun" }}</p>
+                                <p class="stat-trend">{{ time_since_last_commentaire|default:"Aucun" }}</p>
                             </div>
                         </div>
 
@@ -437,16 +445,7 @@
                                 <div class="stat-icon"><i class="mdi mdi-download"></i></div>
                                 <p class="stat-label">Téléchargements</p>
                                 <h2 class="stat-value">{{ nb_telechargements }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_telechargement|default:"Aucun" }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="stat-card" style="--c:#6f42c1;">
-                                <div class="stat-icon"><i class="mdi mdi-share-variant"></i></div>
-                                <p class="stat-label">Partages</p>
-                                <h2 class="stat-value">00</h2>
-                                <p class="stat-trend"><b>00%</b> 00:00:00</p>
+                                <p class="stat-trend">{{ time_since_last_telechargement|default:"Aucun" }}</p>
                             </div>
                         </div>
 
@@ -468,8 +467,7 @@
                                                 <th>Photo</th>
                                                 <th>Titre</th>
                                                 <th>Auteur</th>
-                                                <th>Encadreur</th>
-                                                <th>Inst Contributrice</th>
+                                                <th>Institutions</th>
                                                 <th>Statut indexation</th>
                                                 <th>Publié</th>
                                                 <th style='width:11%'>Action</th>
@@ -486,22 +484,15 @@
                                                 </td>
                                                 <td>{{pub.titre}}</td>
                                                 <td>
-                                                    {% for auteur in pub.auteurs.all %}
-                                                    {{ auteur.prenoms }} {{ auteur.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% for aut in pub.publicationauteur_set.all %}
+                                                    {{ aut.auteur.prenoms }} {{ aut.auteur.nom }}{% if aut.role %} ({{ aut.role }}){% endif %}{% if not forloop.last %}, {% endif %}
                                                     {% empty %}
                                                     Aucun auteur
                                                     {% endfor %}
                                                 </td>
                                                 <td>
-                                                    {% for encadreur in pub.encadreurs.all %}
-                                                    {{ encadreur.prenoms }} {{ encadreur.nom }}{% if not forloop.last %}, {% endif %}
-                                                    {% empty %}
-                                                    Aucun encadreur
-                                                    {% endfor %}
-                                                </td>
-                                                <td>
-                                                    {% for institution in pub.institutions_contributrices.all %}
-                                                    {{ institution.nom }}{% if not forloop.last %}, {% endif %}
+                                                    {% for aut in pub.publicationauteur_set.all %}
+                                                    {% if aut.auteur.profile.institution %}{{ aut.auteur.profile.institution.nom_institution }}{% if not forloop.last %}, {% endif %}{% endif %}
                                                     {% empty %}
                                                     Aucune institution
                                                     {% endfor %}
@@ -579,8 +570,48 @@
     <!-- Foot Start -->
     {% include "back/includes/foot.html" %}
     {% block scripts %}
+    {% if user.is_authenticated and user.role == 'admin' %}
+    <script>
+        $(function () {
+            function lireSerie(id) {
+                var el = document.getElementById(id);
+                return el ? JSON.parse(el.textContent) : [];
+            }
 
+            var series = {
+                sparkline1: { data: lireSerie("serie-publications"), line: "#3c72fc", fill: "rgba(60,114,252,.15)" },
+                sparkline2: { data: lireSerie("serie-telechargements"), line: "#1cc88a", fill: "rgba(28,200,138,.15)" },
+                sparkline3: { data: lireSerie("serie-likes"), line: "#e74a3b", fill: "rgba(231,74,59,.15)" }
+            };
 
+            function dessinerSparklines() {
+                $.each(series, function (id, cfg) {
+                    var $el = $("#" + id);
+                    if ($el.length) {
+                        $el.sparkline(cfg.data, {
+                            type: "line",
+                            width: $el.width(),
+                            height: 60,
+                            lineColor: cfg.line,
+                            fillColor: cfg.fill,
+                            spotColor: false,
+                            minSpotColor: false,
+                            maxSpotColor: false,
+                            highlightLineColor: "rgba(0,0,0,.1)",
+                            highlightSpotColor: "rgba(0,0,0,.2)"
+                        });
+                    }
+                });
+            }
+
+            dessinerSparklines();
+            // Redessine après le resize (le script de démo se déclenche aussi, on garde la main)
+            $(window).on("resize", function () {
+                setTimeout(dessinerSparklines, 350);
+            });
+        });
+    </script>
+    {% endif %}
     {% endblock scripts %}
 </body>
 

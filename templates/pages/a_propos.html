@@ -108,115 +108,59 @@
         </div>
 
         <div class="row">
-
-            <!-- Chercheur 1 -->
+            {% for chercheur in liste_chercheurs %}
             <div class="col-lg-3 col-sm-6">
                 <div class="single-home-teacher">
 
                     <div class="teacher-img">
-                        <a href="#">
-                            <img src="{% static 'front/assets/images/teachers/img5.png' %}" alt="chercheur" />
-                        </a>
+                        {% if chercheur.photo %}
+                        <img src="{{ chercheur.photo.url }}" alt="{{ chercheur.user.full_name }}" />
+                        {% else %}
+                        <img src="{% static 'front/assets/images/teachers/img5.png' %}" alt="{{ chercheur.user.full_name }}" />
+                        {% endif %}
                     </div>
 
                     <div class="teachers-content">
-                        <h2>Dr. Amara CAMARA</h2>
-                        <p>Chercheur en Intelligence Artificielle</p>
+                        <h2>
+                            {% if chercheur.grade %}{{ chercheur.grade }} {% endif %}{{ chercheur.user.full_name }}
+                        </h2>
+                        <p>
+                            {% if chercheur.specialite %}
+                            {{ chercheur.specialite }}
+                            {% else %}
+                            {{ chercheur.get_role_display }}
+                            {% endif %}
+                            <br>
+                            <small>{{ chercheur.nb_publications }} publication{{ chercheur.nb_publications|pluralize }}</small>
+                        </p>
                     </div>
 
                     <div class="teacher-social">
                         <ul>
-                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
-                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
-                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
-                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
+                            {% if chercheur.reseau_social_facebook %}
+                            <li><a href="{{ chercheur.reseau_social_facebook }}" target="_blank" rel="noopener"><i class="flaticon-facebook"></i></a></li>
+                            {% endif %}
+                            {% if chercheur.reseau_social_twitter %}
+                            <li><a href="{{ chercheur.reseau_social_twitter }}" target="_blank" rel="noopener"><i class="flaticon-twitter"></i></a></li>
+                            {% endif %}
+                            {% if chercheur.user.email %}
+                            <li><a href="mailto:{{ chercheur.user.email }}"><i class="flaticon-envelope"></i></a></li>
+                            {% endif %}
+                            {% if chercheur.orcid %}
+                            <li><a href="https://orcid.org/{{ chercheur.orcid }}" target="_blank" rel="noopener" title="ORCID"><i class="flaticon-right-arrow"></i></a></li>
+                            {% elif chercheur.site_web %}
+                            <li><a href="{{ chercheur.site_web }}" target="_blank" rel="noopener"><i class="flaticon-right-arrow"></i></a></li>
+                            {% endif %}
                         </ul>
                     </div>
 
                 </div>
             </div>
-
-            <!-- Chercheur 2 -->
-            <div class="col-lg-3 col-sm-6">
-                <div class="single-home-teacher">
-
-                    <div class="teacher-img">
-                        <a href="#">
-                            <img src="{% static 'front/assets/images/teachers/img2.png' %}" alt="chercheur" />
-                        </a>
-                    </div>
-
-                    <div class="teachers-content">
-                        <h2>Pr. Oumou Younoussa BAH</h2>
-                        <p>Spécialiste en Santé Publique</p>
-                    </div>
-
-                    <div class="teacher-social">
-                        <ul>
-                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
-                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
-                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
-                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
-                        </ul>
-                    </div>
-
-                </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>Aucun chercheur à afficher pour le moment.</p>
             </div>
-
-            <!-- Chercheur 3 -->
-            <div class="col-lg-3 col-sm-6">
-                <div class="single-home-teacher">
-
-                    <div class="teacher-img">
-                        <a href="#">
-                            <img src="{% static 'front/assets/images/teachers/img11.png' %}" alt="chercheur" />
-                        </a>
-                    </div>
-
-                    <div class="teachers-content">
-                        <h2>Dr. COSSI </h2>
-                        <p>Chercheur en Cybersécurité</p>
-                    </div>
-
-                    <div class="teacher-social">
-                        <ul>
-                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
-                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
-                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
-                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Chercheur 4 -->
-            <div class="col-lg-3 col-sm-6">
-                <div class="single-home-teacher">
-
-                    <div class="teacher-img">
-                        <a href="#">
-                            <img src="{% static 'front/assets/images/teachers/img5.png' %}" alt="chercheur" />
-                        </a>
-                    </div>
-
-                    <div class="teachers-content">
-                        <h2>Dr. Babou DIONE</h2>
-                        <p>Chercheur en télécommunications</p>
-                    </div>
-
-                    <div class="teacher-social">
-                        <ul>
-                            <li><a href="#"><i class="flaticon-facebook"></i></a></li>
-                            <li><a href="#"><i class="flaticon-twitter"></i></a></li>
-                            <li><a href="#"><i class="flaticon-envelope"></i></a></li>
-                            <li><a href="#"><i class="flaticon-right-arrow"></i></a></li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </div>
 </section>

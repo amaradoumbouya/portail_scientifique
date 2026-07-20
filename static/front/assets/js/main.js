@@ -60,70 +60,78 @@
     });
 
     // Owl Carausel 
-    $('.home-course-slider').owlCarousel({
-        loop: true,
-        margin: 20,
-        dots: false,
-        autoplay: true,
-        nav: true,
-        navText: ["<i class='flaticon-left-arrow'></i>", "<i class='flaticon-next'></i>"],
-        autoplayHoverPause: true,
-        responsive: {
-            0: {
-                items: 1,
-            },
-            576: {
-                items: 2,
-            },
-            768: {
-                items: 2,
-            },
-            1000: {
-                items: 3,
-            },
-            1300: {
-                items: 4,
+    var $homeCourseSlider = $('.home-course-slider');
+    if ($homeCourseSlider.length && $homeCourseSlider.children().length) {
+        var homeCourseCount = $homeCourseSlider.children().length;
+        $homeCourseSlider.owlCarousel({
+            loop: homeCourseCount > 4,
+            margin: 20,
+            dots: false,
+            autoplay: homeCourseCount > 1,
+            nav: homeCourseCount > 1,
+            navText: ["<i class='flaticon-left-arrow'></i>", "<i class='flaticon-next'></i>"],
+            autoplayHoverPause: true,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                576: {
+                    items: Math.min(2, homeCourseCount),
+                },
+                768: {
+                    items: Math.min(2, homeCourseCount),
+                },
+                1000: {
+                    items: Math.min(3, homeCourseCount),
+                },
+                1300: {
+                    items: Math.min(4, homeCourseCount),
+                }
             }
-        }
-    });
+        });
+    }
 
-    $('.course-slider').owlCarousel({
-        loop: true,
-        margin: 20,
-        dots: false,
-        autoplay: false,
-        nav: true,
-        navText: ["<i class='flaticon-left-arrow'></i>", "<i class='flaticon-next'></i>"],
-        autoplayHoverPause: true,
-        responsive: {
-            0: {
-                items: 1,
-            },
-            576: {
-                items: 1,
-            },
-            768: {
-                items: 1,
-            },
-            1200: {
-                items: 1,
+    var $courseSlider = $('.course-slider');
+    if ($courseSlider.length && $courseSlider.children().length) {
+        $courseSlider.owlCarousel({
+            loop: $courseSlider.children().length > 1,
+            margin: 20,
+            dots: false,
+            autoplay: false,
+            nav: $courseSlider.children().length > 1,
+            navText: ["<i class='flaticon-left-arrow'></i>", "<i class='flaticon-next'></i>"],
+            autoplayHoverPause: true,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                576: {
+                    items: 1,
+                },
+                768: {
+                    items: 1,
+                },
+                1200: {
+                    items: 1,
+                }
             }
-        }
-    });
+        });
+    }
 
     $(".home-slider").owlCarousel({
-        animateOut: 'animate__animated animate__slideOutDown',
-        animateIn: 'animate__animated animate__slideInDown',
         items: 1,
         loop: true,
-        autoplay: false,
+        autoplay: true,
+        autoplayTimeout: 6000,
+        autoplayHoverPause: true,
+        autoplaySpeed: 800,
+        smartSpeed: 800,
         dots: false,
         nav: true,
         navText: ["<i class='flaticon-left-arrow'></i>", "<i class='flaticon-next'></i>"],
-        autoHeight: true,
-        autoplaySpeed: 800,
-        mouseDrag: false,
-        autoplayHoverPause: true,
+        mouseDrag: true,
+        touchDrag: true,
+        pullDrag: true,
         responsive: {
             0: {
                 items: 1,
@@ -234,22 +242,31 @@
 
     // Count Time 
     function makeTimer() {
-        var endTime = new Date("April 30, 2025 17:00:00 PDT");
-        var endTime = (Date.parse(endTime)) / 1000;
-        var now = new Date();
-        var now = (Date.parse(now) / 1000);
-        var timeLeft = endTime - now;
+        var deadlineEl = document.querySelector('.admission-content[data-deadline]');
+        var deadlineValue = deadlineEl ? deadlineEl.getAttribute('data-deadline') : null;
+        var endTime = deadlineValue
+            ? new Date(deadlineValue)
+            : new Date(new Date().getFullYear(), 2, 30, 23, 59, 59);
+
+        // Si la date de l'année en cours est déjà passée, basculer sur l'année suivante
+        if (!deadlineValue && endTime.getTime() < Date.now()) {
+            endTime = new Date(new Date().getFullYear() + 1, 2, 30, 23, 59, 59);
+        }
+
+        var endTimeSec = Date.parse(endTime) / 1000;
+        var nowSec = Date.parse(new Date()) / 1000;
+        var timeLeft = Math.max(0, endTimeSec - nowSec);
         var days = Math.floor(timeLeft / 86400);
         var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
         var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
         var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
-        if (hours < "10") {
+        if (hours < 10) {
             hours = "0" + hours;
         }
-        if (minutes < "10") {
+        if (minutes < 10) {
             minutes = "0" + minutes;
         }
-        if (seconds < "10") {
+        if (seconds < 10) {
             seconds = "0" + seconds;
         }
         $("#days").html(days + "");

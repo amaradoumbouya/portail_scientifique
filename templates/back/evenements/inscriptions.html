@@ -1,0 +1,123 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">
+                {% if evenement %}
+                Inscrits – {{ evenement.titre }}
+                {% else %}
+                Personnes inscrites
+                {% endif %}
+            </h4>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Filtrer par événement</h3>
+            </div>
+            <div class="panel-body">
+                <form method="get" action="{% url 'evenements:inscriptions' %}" class="form-inline" id="filtre-evenement">
+                    <div class="form-group">
+                        <label for="evenement_slug" class="m-r-10">Événement</label>
+                        <select id="evenement_slug" class="form-control" style="min-width: 320px;"
+                            onchange="filtrerInscriptions(this.value)">
+                            <option value="">Tous les événements</option>
+                            {% for evt in evenements %}
+                            <option value="{{ evt.slug }}" {% if evenement and evenement.slug == evt.slug %}selected{% endif %}>
+                                {{ evt.get_type_evenement_display }} – {{ evt.titre }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% if evenement %}
+                    <a href="{% url 'evenements:inscriptions' %}" class="btn btn-default m-l-10">Réinitialiser</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Liste des personnes inscrites
+                    <span class="badge badge-info">{{ inscriptions|length }}</span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Date d'inscription</th>
+                            <th>Prénom(s)</th>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Institution</th>
+                            {% if not evenement %}
+                            <th>Événement</th>
+                            <th>Type</th>
+                            {% endif %}
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inscription in inscriptions %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ inscription.created_at|date:"d/m/Y H:i" }}</td>
+                            <td>{{ inscription.prenoms }}</td>
+                            <td>{{ inscription.nom }}</td>
+                            <td>
+                                <a href="mailto:{{ inscription.email }}">{{ inscription.email }}</a>
+                            </td>
+                            <td>{{ inscription.telephone|default:"—" }}</td>
+                            <td>{{ inscription.institution|default:"—" }}</td>
+                            {% if not evenement %}
+                            <td>
+                                <a href="{% url 'evenements:inscriptions_evenement' inscription.evenement.slug %}">
+                                    {{ inscription.evenement.titre }}
+                                </a>
+                            </td>
+                            <td>{{ inscription.evenement.get_type_evenement_display }}</td>
+                            {% endif %}
+                            <td>{{ inscription.message|default:"—"|truncatechars:80 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="{% if evenement %}8{% else %}10{% endif %}" class="text-center">
+                                Aucune personne inscrite{% if evenement %} à cet événement{% endif %}.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+    function filtrerInscriptions(slug) {
+        if (slug) {
+            window.location.href = "{% url 'evenements:inscriptions' %}" + slug + "/";
+        } else {
+            window.location.href = "{% url 'evenements:inscriptions' %}";
+        }
+    }
+</script>
+{% endblock scripts %}

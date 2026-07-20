@@ -1,0 +1,309 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block style %}
+<style>
+    .evt-detail .panel {
+        border-radius: 10px;
+        border: 1px solid #e9edf5;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+        overflow: hidden;
+    }
+
+    .evt-hero {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        padding: 10px 0;
+    }
+
+    .evt-cover {
+        flex: 0 0 260px;
+        max-width: 260px;
+    }
+
+    .evt-cover img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #e9edf5;
+    }
+
+    .evt-cover .no-cover {
+        width: 100%;
+        height: 220px;
+        border-radius: 10px;
+        background: #f4f6fb;
+        border: 1px dashed #cfd8ea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #b3bed4;
+        font-size: 48px;
+    }
+
+    .evt-main {
+        flex: 1 1 320px;
+        min-width: 280px;
+    }
+
+    .evt-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2b3648;
+        margin: 0 0 12px;
+        line-height: 1.3;
+    }
+
+    .evt-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 0 6px 8px 0;
+    }
+
+    .badge-type {
+        background: #e8effe;
+        color: #3c72fc;
+    }
+
+    .badge-ok {
+        background: #eafaf3;
+        color: #159a6c;
+    }
+
+    .badge-ko {
+        background: #fdecea;
+        color: #d0442f;
+    }
+
+    .evt-meta {
+        margin-top: 14px;
+    }
+
+    .evt-meta p {
+        margin: 0 0 8px;
+        color: #4a5568;
+    }
+
+    .evt-meta i {
+        width: 18px;
+        color: #3c72fc;
+        margin-right: 6px;
+    }
+
+    .evt-actions {
+        margin-top: 18px;
+    }
+
+    .evt-actions .btn {
+        margin: 0 6px 8px 0;
+    }
+
+    .evt-description {
+        white-space: pre-wrap;
+        color: #4a5568;
+        line-height: 1.6;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Détail de l'événement</h4>
+            <ol class="breadcrumb pull-right">
+                <a href="{% url 'evenements:index' %}" class="btn btn-info">Retour à la liste</a>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row evt-detail">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Informations générales</h3>
+            </div>
+            <div class="panel-body">
+                <div class="evt-hero">
+                    <div class="evt-cover">
+                        {% if evenement.image %}
+                        <img src="{{ evenement.image.url }}" alt="{{ evenement.titre }}">
+                        {% else %}
+                        <div class="no-cover"><i class="ti-calendar"></i></div>
+                        {% endif %}
+                    </div>
+                    <div class="evt-main">
+                        <h2 class="evt-title">{{ evenement.titre }}</h2>
+                        <div>
+                            <span class="evt-badge badge-type">{{ evenement.get_type_evenement_display }}</span>
+                            {% if evenement.is_actif %}
+                            <span class="evt-badge badge-ok">Actif</span>
+                            {% else %}
+                            <span class="evt-badge badge-ko">Inactif</span>
+                            {% endif %}
+                            <span class="evt-badge badge-type">{{ nb_inscriptions }} inscrit(s)</span>
+                        </div>
+                        <div class="evt-meta">
+                            <p><i class="fa fa-calendar"></i> {{ evenement.date_evenement|date:"d/m/Y à H:i" }}</p>
+                            <p><i class="fa fa-map-marker"></i> {{ evenement.lieu|default:"Lieu non précisé" }}</p>
+                            <p><i class="fa fa-clock-o"></i> Créé le {{ evenement.created_at|date:"d/m/Y H:i" }}</p>
+                            <p><i class="fa fa-refresh"></i> Mis à jour le {{ evenement.updated_at|date:"d/m/Y H:i" }}</p>
+                        </div>
+                        <div class="evt-actions">
+                            <button class="btn btn-primary btn-sm"
+                                data-url="{% url 'evenements:modal_evenement_edit' evenement.slug %}"
+                                data-title="Modifier l'événement"
+                                onclick="openModal(this.dataset.url, this.dataset.title)">
+                                <i class="fa fa-pencil"></i> Modifier
+                            </button>
+                            <a href="{% url 'evenements:inscriptions_evenement' evenement.slug %}" class="btn btn-success btn-sm">
+                                <i class="fa fa-users"></i> Personnes inscrites
+                            </a>
+                            <a href="{% url 'evenements:detail' evenement.slug %}" class="btn btn-info btn-sm" target="_blank">
+                                <i class="fa fa-external-link"></i> Voir sur le site
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row evt-detail">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Description</h3>
+            </div>
+            <div class="panel-body">
+                <div class="evt-description">{{ evenement.description|linebreaksbr }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Liens</h3>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <strong>Inscription :</strong><br>
+                    {% if evenement.lien_inscription %}
+                    <a href="{{ evenement.lien_inscription }}" target="_blank" rel="noopener">{{ evenement.lien_inscription }}</a>
+                    {% else %}
+                    <a href="{% url 'evenements:inscription' evenement.slug %}" target="_blank">
+                        Formulaire interne
+                    </a>
+                    {% endif %}
+                </p>
+                <p>
+                    <strong>Détails :</strong><br>
+                    {% if evenement.lien_details %}
+                    <a href="{{ evenement.lien_details }}" target="_blank" rel="noopener">{{ evenement.lien_details }}</a>
+                    {% else %}
+                    —
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row evt-detail">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Dernières inscriptions
+                    <span class="badge">{{ nb_inscriptions }}</span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Date</th>
+                            <th>Nom complet</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Institution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inscription in inscriptions|slice:":10" %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ inscription.created_at|date:"d/m/Y H:i" }}</td>
+                            <td>{{ inscription.prenoms }} {{ inscription.nom }}</td>
+                            <td><a href="mailto:{{ inscription.email }}">{{ inscription.email }}</a></td>
+                            <td>{{ inscription.telephone|default:"—" }}</td>
+                            <td>{{ inscription.institution|default:"—" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">Aucune inscription pour cet événement.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if nb_inscriptions > 10 %}
+                <a href="{% url 'evenements:inscriptions_evenement' evenement.slug %}" class="btn btn-default btn-sm">
+                    Voir toutes les inscriptions
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
+        <div id="main-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+            aria-hidden="true" style="display: none">
+            <div class="modal-dialog" style="width:55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-title">Chargement...</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <p>Chargement...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+    function openModal(url, title = "") {
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur de chargement");
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById("modal-body").innerHTML = html;
+                $('#main-modal').modal('show');
+            })
+            .catch(() => {
+                document.getElementById("modal-body").innerHTML = "<p class='text-danger'>Impossible de charger le formulaire.</p>";
+                $('#main-modal').modal('show');
+            });
+    }
+</script>
+{% endblock scripts %}

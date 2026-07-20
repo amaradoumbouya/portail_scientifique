@@ -12,7 +12,7 @@ urlpatterns = [
     path('dashboard/', login_required(DashboardTemplateView.as_view()), name='dashboard'),
     path('publication/', PublicationTemplateView.as_view(), name='publication'),
     path('publication-par-type/', views.publication_par_type_template_view, name='publication_par_type'),
-    # path('publication-par-type/<slug:slug>', views.publication_par_type_template_view, name='publication_par_type'),
+    path('publication-par-type/<slug:slug>/', views.publication_par_type_template_view, name='publication_par_type_detail'),
     
     # Les URLs pour les publicationLike, publicationComment et publicationDownload
     path('like/<int:pk>/', views.like_publication, name='like_publication'),
@@ -32,8 +32,8 @@ urlpatterns = [
     path('depot-publication/',login_required(views.depot_publication), name='depot_publication'),
     path('messages/',login_required(MessagesTemplateView.as_view()), name='messages'),
     path('notifications/',login_required(NotificationsTemplateView.as_view()), name='notifications'),
-    path('detail-publication/', views.detail_publication_template, name='detail_publication'),
-    # path('detail-publication/<slug:slug>/', views.detail_publication_template, name='detail_publication'),
+    path('detail-publication/<slug:slug>/', views.detail_publication_template, name='detail_publication'),
+    path('recherche/', views.recherche_template_view, name='recherche'),
     path('detail-auteur/<slug:slug>/', views.detail_auteur_template_view, name='detail_auteur'),
     path('detail-encadreur/<slug:slug>/', views.detail_encadreur_template_view, name='detail_encadreur'),
     path('connexion/', views.user_login_view, name='connexion'),

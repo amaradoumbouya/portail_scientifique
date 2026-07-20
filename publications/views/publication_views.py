@@ -88,7 +88,7 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
         if user.is_authenticated and user.role == "admin":
             return reverse_lazy("publications:index")
         else:
-            return reverse("portail_site:dashboard")
+            return reverse("publications:index")
 
     def form_valid(self, form):
         messages.success(self.request, f"publication {self.request.POST.get('titre')} modifié avec succès !")
@@ -104,7 +104,7 @@ class PublicationDeleteView(LoginRequiredMixin, DeleteView):
         user = self.request.user
         if hasattr(user, "role") and user.role == "admin":
             return reverse_lazy("publications:index")
-        return reverse("portail_site:dashboard")
+        return reverse("publications:index")
 
 # Vue pour le modal article scientifique
 def modal_article_scientifique(request):

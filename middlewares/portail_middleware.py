@@ -25,7 +25,7 @@ class PortailMiddleware:
         request.page_obj = page_obj
 
         # Les types de document(ça va servir à dynamiser le menu)
-        type_document = TypeDocument.objects.all()
+        type_document = TypeDocument.objects.order_by('libelle')
 
         request.type_document = type_document
 

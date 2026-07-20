@@ -52,6 +52,33 @@ class UserProfileForm(forms.ModelForm):
             "reseau_social_youtube": forms.URLInput(attrs={'class': 'form-control form-control-rounded'}),
         }
 
+class ProfilInfoForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['adresse', 'institution', 'fonction_poste', 'grade', 'specialite', 'orcid', 'photo', 'site_web']
+        widgets = {
+            "adresse": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
+            "institution": forms.Select(attrs={'class': 'form-control form-control-rounded choices__input'}),
+            "fonction_poste": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
+            "grade": forms.Select(attrs={'class': 'form-control form-control-rounded choices__input'}),
+            "specialite": forms.Select(attrs={'class': 'form-control form-control-rounded choices__input'}),
+            "orcid": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
+            "photo": forms.FileInput(attrs={'class': 'form-control form-control-rounded'}),
+            "site_web": forms.URLInput(attrs={'class': 'form-control form-control-rounded'}),
+        }
+
+class ReseauxSociauxForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['reseau_social_facebook', 'reseau_social_twitter', 'reseau_social_linkedin', 'reseau_social_youtube', 'site_web']
+        widgets = {
+            "reseau_social_facebook": forms.URLInput(attrs={'class': 'form-control form-control-rounded'}),
+            "reseau_social_twitter": forms.URLInput(attrs={'class': 'form-control form-control-rounded'}),
+            "reseau_social_linkedin": forms.URLInput(attrs={'class': 'form-control form-control-rounded'}),
+            "reseau_social_youtube": forms.URLInput(attrs={'class': 'form-control form-control-rounded'}),
+            "site_web": forms.URLInput(attrs={'class': 'form-control form-control-rounded'}),
+        }
+
 class User_biographyForm(forms.ModelForm):
     class Meta:
         model = User_biography

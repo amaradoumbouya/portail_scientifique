@@ -1,0 +1,109 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">{{ page_title }}</h4>
+            <ol class="breadcrumb pull-right">
+                <a href="{% url 'institutions:institution_dashboard' %}" class="btn btn-default btn-sm">
+                    <i class="ti-arrow-left"></i> Retour
+                </a>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row m-b-10">
+    <div class="col-md-12">
+        <div class="btn-group">
+            <a href="{% url 'institutions:liste_etudiants' %}"
+                class="btn btn-sm {% if not niveau_actif %}btn-primary{% else %}btn-default{% endif %}">
+                Tous
+            </a>
+            <a href="{% url 'institutions:liste_etudiants_niveau' 'master' %}"
+                class="btn btn-sm {% if niveau_actif == 'master' %}btn-primary{% else %}btn-default{% endif %}">
+                Master
+            </a>
+            <a href="{% url 'institutions:liste_etudiants_niveau' 'doctorat' %}"
+                class="btn btn-sm {% if niveau_actif == 'doctorat' %}btn-primary{% else %}btn-default{% endif %}">
+                Doctorat
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ page_title }}</h3>
+            </div>
+            <div class="panel-body">
+                <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">N°</th>
+                            <th>Photo</th>
+                            <th>Nom complet</th>
+                            <th>Matricule</th>
+                            {% if is_superuser %}
+                            <th>Institution</th>
+                            {% endif %}
+                            <th>Niveau</th>
+                            <th>Domaine</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for etu in etudiants %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {% if etu.photo %}
+                                <img src="{{ etu.photo.url }}" width="50" height="50"
+                                    style="border-radius:50%; object-fit:cover;" alt="">
+                                {% else %}
+                                <img src="{% static 'back/images/default.png' %}" width="50" height="50"
+                                    style="border-radius:50%; object-fit:cover;" alt="">
+                                {% endif %}
+                            </td>
+                            <td>{{ etu.user.full_name }}</td>
+                            <td>{{ etu.matricule|default:"—" }}</td>
+                            {% if is_superuser %}
+                            <td>
+                                <span class="badge badge-primary">
+                                    {{ etu.institution.sigle_institution|default:"—" }}
+                                </span>
+                            </td>
+                            {% endif %}
+                            <td>
+                                {% if etu.niveau == 'master' %}
+                                <span class="badge badge-info">Master</span>
+                                {% elif etu.niveau == 'doctorat' %}
+                                <span class="badge badge-primary">Doctorat</span>
+                                {% else %}
+                                {{ etu.get_niveau_display|default:"—" }}
+                                {% endif %}
+                            </td>
+                            <td>{{ etu.domaine|default:"—" }}</td>
+                            <td>{{ etu.user.email }}</td>
+                            <td>{{ etu.user.tel|default:"—" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="{% if is_superuser %}9{% else %}8{% endif %}" class="text-center text-muted">
+                                Aucun étudiant trouvé.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

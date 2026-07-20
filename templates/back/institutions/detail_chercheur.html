@@ -92,7 +92,11 @@
                             {% for pub in publications %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ pub.titre|default:"—" }}</td>
+                                <td>
+                                    <a href="{% url 'publications:detail' pub.slug %}">
+                                        {{ pub.titre|default:"—" }}
+                                    </a>
+                                </td>
                                 <td>{{ pub.get_type_publication_display }}</td>
                                 <td>{{ pub.domaine|default:"—" }}</td>
                                 <td>

@@ -666,7 +666,7 @@ def ajouter_deliberation(request, slug):
 
         messages.warning(request, "Une délibération existe déjà pour cette soutenance.")
 
-        return redirect("detail_deliberation", pk=soutenance.deliberation.pk)
+        return redirect("soutenance:voir_plus_deliberation", slug=soutenance.slug)
 
     if request.method == "POST":
 
@@ -686,7 +686,7 @@ def ajouter_deliberation(request, slug):
 
             messages.success(request, "La délibération a été enregistrée avec succès.")
 
-            # return redirect("detail_deliberation", slug=deliberation.slug)
+            return redirect("soutenance:voir_plus_deliberation", slug=soutenance.slug)
 
         else:
 

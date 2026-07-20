@@ -1,0 +1,159 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Événements</h4>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="row">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Ajouter un événement</h3>
+                </div>
+                <div class="panel-body">
+                    <button class="btn btn-success waves-effect waves-light"
+                        data-url="{% url 'evenements:modal_evenement' %}"
+                        data-title="Ajouter une conférence / un atelier"
+                        onclick="openModal(this.dataset.url, this.dataset.title)">
+                        <i class="mdi mdi-plus"></i> Nouvel événement
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Liste des événements</h3>
+            </div>
+            <div class="panel-body">
+                <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Image</th>
+                            <th>Titre</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Lieu</th>
+                            <th>Actif</th>
+                            <th style="width:18%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evenement in evenements %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                {% if evenement.image %}
+                                <img height="70" width="70" src="{{ evenement.image.url }}" alt="">
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+                            <td>{{ evenement.titre }}</td>
+                            <td>{{ evenement.get_type_evenement_display }}</td>
+                            <td>{{ evenement.date_evenement|date:"d/m/Y H:i" }}</td>
+                            <td>{{ evenement.lieu|default:"—" }}</td>
+                            <td>
+                                <form action="{% url 'evenements:update_state' %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="evenement_id" value="{{ evenement.id }}">
+                                    <button type="submit" class="btn btn-xs {% if evenement.is_actif %}btn-success{% else %}btn-danger{% endif %}">
+                                        {% if evenement.is_actif %}Oui{% else %}Non{% endif %}
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-sm"
+                                    data-url="{% url 'evenements:modal_evenement_edit' evenement.slug %}"
+                                    data-title="Modifier l'événement"
+                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <a href="{% url 'evenements:detail_back' evenement.slug %}" class="btn btn-info btn-sm"
+                                    title="Voir le détail">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{% url 'evenements:inscriptions_evenement' evenement.slug %}" class="btn btn-success btn-sm"
+                                    title="Personnes inscrites">
+                                    <i class="fa fa-users"></i>
+                                </a>
+                                <form action="{% url 'evenements:delete' evenement.slug %}" method="post" style="display:inline;"
+                                    onsubmit="return confirm('Supprimer cet événement ?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">Aucun événement enregistré.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main_modal Start -->
+<div class="row">
+    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
+        <div id="main-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+            aria-hidden="true" style="display: none">
+            <div class="modal-dialog" style="width:55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-title">Chargement...</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <p>Chargement...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main_modal End -->
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('form').parsley();
+    });
+
+    function openModal(url, title = "") {
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur de chargement");
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById("modal-body").innerHTML = html;
+                $('#main-modal').modal('show');
+            })
+            .catch(() => {
+                document.getElementById("modal-body").innerHTML = "<p class='text-danger'>Impossible de charger le formulaire.</p>";
+                $('#main-modal').modal('show');
+            });
+    }
+</script>
+{% endblock scripts %}

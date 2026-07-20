@@ -1,0 +1,139 @@
+{% extends "index.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>{{ evenement.bouton_inscription }} – {{ evenement.titre }} - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .inscription-evenement-area {
+        padding: 60px 0 90px;
+        background: linear-gradient(180deg, #f7f9fc 0%, #fff 45%);
+    }
+    .inscription-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(24, 39, 75, 0.08);
+        padding: 32px;
+        max-width: 720px;
+        margin: 0 auto;
+    }
+    .inscription-card h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        color: #181818;
+        margin-bottom: 8px;
+    }
+    .inscription-card .event-info {
+        color: #616161;
+        margin-bottom: 24px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #e8edf5;
+    }
+    .inscription-card .event-info strong {
+        color: #3c72fc;
+    }
+    .inscription-card .form-group {
+        margin-bottom: 16px;
+    }
+    .inscription-card label {
+        font-weight: 600;
+        color: #2b3648;
+        margin-bottom: 6px;
+        display: block;
+    }
+    .inscription-actions {
+        margin-top: 22px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="banner-area news-details">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Inscription</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <a href="{% url 'evenements:detail' evenement.slug %}"> {{ evenement.get_type_evenement_display }} </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active"> Inscription</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inscription-evenement-area">
+    <div class="container">
+        <div class="inscription-card">
+            <h2>{{ evenement.bouton_inscription }} à l’événement</h2>
+            <div class="event-info">
+                <p>
+                    <strong>{{ evenement.get_type_evenement_display }} :</strong>
+                    {{ evenement.titre }}
+                </p>
+                <p>
+                    <i class="fa fa-calendar"></i>
+                    {{ evenement.date_evenement|date:"d F Y à H:i" }}
+                    {% if evenement.lieu %}
+                    &nbsp;·&nbsp;
+                    <i class="fa fa-map-marker"></i>
+                    {{ evenement.lieu }}
+                    {% endif %}
+                </p>
+            </div>
+
+            <form method="post" action="{% url 'evenements:inscription' evenement.slug %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="{{ form.prenoms.id_for_label }}">Prénom(s)</label>
+                        {{ form.prenoms }}
+                        {{ form.prenoms.errors }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="{{ form.nom.id_for_label }}">Nom</label>
+                        {{ form.nom }}
+                        {{ form.nom.errors }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="{{ form.email.id_for_label }}">Email</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="{{ form.telephone.id_for_label }}">Téléphone</label>
+                        {{ form.telephone }}
+                        {{ form.telephone.errors }}
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="{{ form.institution.id_for_label }}">Institution</label>
+                        {{ form.institution }}
+                        {{ form.institution.errors }}
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="{{ form.message.id_for_label }}">Message</label>
+                        {{ form.message }}
+                        {{ form.message.errors }}
+                    </div>
+                </div>
+                <div class="inscription-actions">
+                    <button type="submit" class="box-btn">{{ evenement.bouton_inscription }}</button>
+                    <a href="{% url 'evenements:detail' evenement.slug %}" class="border-btn">Retour</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}

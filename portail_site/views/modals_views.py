@@ -22,7 +22,7 @@ def modal_profil(request, slug):
     user = profile.user
     if request.method == 'POST':
         form_custumer = CustumerUserChangeForm(request.POST, instance=user)
-        form_profile = UserProfileForm(request.POST, request.FILES, instance=profile)
+        form_profile = ProfilInfoForm(request.POST, request.FILES, instance=profile)
         if form_custumer.is_valid() and form_profile.is_valid():
             form_custumer.save() 
             form_profile.save()
@@ -31,7 +31,7 @@ def modal_profil(request, slug):
             return redirect('accounts:profil_user')
     else:
         form_custumer = CustumerUserChangeForm(instance=user)
-        form_profile = UserProfileForm(instance=profile)
+        form_profile = ProfilInfoForm(instance=profile)
     
     return render(request, 'back/modals/profil.html', {
         'form_custumer_user': form_custumer, 
@@ -149,15 +149,13 @@ def modal_reseaux_sociaux(request, slug):
     if error: return error
     
     if request.method == 'POST':
-        # On utilise UserProfileForm mais on ne traite que les champs réseaux sociaux si on veut être strict, 
-        # mais le plus simple est de réutiliser UserProfileForm.
-        form = UserProfileForm(request.POST, instance=profile)
+        form = ReseauxSociauxForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Réseaux sociaux mis à jour.')
             return redirect('accounts:profil_user')
     else:
-        form = UserProfileForm(instance=profile)
+        form = ReseauxSociauxForm(instance=profile)
     
     return render(request, 'back/modals/reseaux_sociaux.html', {'form': form})
 

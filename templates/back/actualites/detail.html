@@ -1,0 +1,121 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Détail de l'actualité</h4>
+            <ol class="breadcrumb pull-right">
+                <a href="{% url 'actualites:index' %}" class="btn btn-info">Retour à la liste</a>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ actualite.titre }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if actualite.image %}
+                        <img src="{{ actualite.image.url }}" alt="{{ actualite.titre }}" class="img-responsive"
+                            style="border-radius:10px;max-height:260px;object-fit:cover;width:100%;">
+                        {% else %}
+                        <div style="height:220px;background:#f4f6fb;border:1px dashed #cfd8ea;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#b3bed4;">
+                            <i class="ti-image" style="font-size:48px;"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <p>
+                            <strong>Date de publication :</strong>
+                            {{ actualite.date_publication|date:"d/m/Y" }}
+                        </p>
+                        <p>
+                            <strong>Statut :</strong>
+                            {% if actualite.is_actif %}
+                            <span class="label label-success">Actif</span>
+                            {% else %}
+                            <span class="label label-danger">Inactif</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Résumé :</strong><br>{{ actualite.resume }}</p>
+                        <div style="margin-top:15px;">
+                            <button class="btn btn-primary btn-sm"
+                                data-url="{% url 'actualites:modal_actualite_edit' actualite.slug %}"
+                                data-title="Modifier l'actualité"
+                                onclick="openModal(this.dataset.url, this.dataset.title)">
+                                <i class="fa fa-pencil"></i> Modifier
+                            </button>
+                            <a href="{% url 'actualites:detail' actualite.slug %}" class="btn btn-info btn-sm" target="_blank">
+                                <i class="fa fa-external-link"></i> Voir sur le site
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Contenu</h3>
+            </div>
+            <div class="panel-body">
+                {{ actualite.contenu|linebreaksbr }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6 col-sm-3 m-t-30 m-b-15">
+        <div id="main-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+            aria-hidden="true" style="display: none">
+            <div class="modal-dialog" style="width:55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="modal-title">Chargement...</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <p>Chargement...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+    function openModal(url, title = "") {
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur de chargement");
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById("modal-body").innerHTML = html;
+                $('#main-modal').modal('show');
+            })
+            .catch(() => {
+                document.getElementById("modal-body").innerHTML = "<p class='text-danger'>Impossible de charger le formulaire.</p>";
+                $('#main-modal').modal('show');
+            });
+    }
+</script>
+{% endblock scripts %}

@@ -687,6 +687,7 @@ a.scroll-top i {
 }
 .slider-area .owl-nav {
   display: inline-block !important;
+  z-index: 5;
 }
 .slider-area .owl-nav button.owl-next {
   width: 35px;
@@ -702,6 +703,7 @@ a.scroll-top i {
   font-weight: bold;
   transition: 0.3s;
   color: #3c72fc; /* Ancienne couleure du template: #1d42d9 */
+  z-index: 5;
 }
 .slider-area .owl-nav button.owl-next:hover {
   background: #3c72fc; /* Ancienne couleure du template: #1d42d9 */
@@ -721,6 +723,7 @@ a.scroll-top i {
   font-weight: bold;
   background: #fff;
   transition: 0.3s;
+  z-index: 5;
 }
 .slider-area .owl-nav button.owl-prev:hover {
   background: #3c72fc; /* Ancienne couleure du template: #1d42d9 */

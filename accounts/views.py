@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from accounts.models import CustumerUser
 from accounts.forms import CustumerUserForm, CustumerUserChangeForm
@@ -75,5 +76,10 @@ class CustumUserDeleteView(DeleteView):
 
 
 ########## Profil user ##########
+@login_required
 def profil_user_template_view(request):
+    if hasattr(request.user, "profile"):
+        profile = request.user.profile
+        if not profile.slug:
+            profile.save()
     return render(request, 'back/accounts/profil_user.html')

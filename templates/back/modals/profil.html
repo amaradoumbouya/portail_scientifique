@@ -34,6 +34,10 @@
             </div>
 
             <div class="form-group col-md-6">
+                {{form_user_profile.institution|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-6">
                 {{form_user_profile.fonction_poste|as_crispy_field}}
             </div>
 
@@ -54,7 +58,7 @@
                     <small class="form-text text-muted">La photo doit être au format JPG ou PNG et ne doit pas dépasser 2 Mo.</small>
             </div>
 
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
                 {{form_user_profile.site_web|as_crispy_field}}
             </div>
 

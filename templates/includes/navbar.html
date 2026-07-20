@@ -19,21 +19,21 @@
                             <li class="nav-item">
                                 <a href=" {% url 'portail_site:index' %} " class="nav-link active">Accueil</a>
                             </li>
+
                             <li class="nav-item">
-                                <a href="#" class="nav-link dropdown-toggle">Publications</a>
+                                <a href="{% url 'portail_site:publication_par_type' %}" class="nav-link dropdown-toggle">Publications</a>
                                 <ul class="dropdown-menu">
+                                    {% for type_doc in request.type_document %}
                                     <li class="nav-item">
-                                        <a href="{% url 'portail_site:publication_par_type' %}" class="nav-link">Memoires de master</a>
+                                        <a href="{% url 'portail_site:publication_par_type_detail' type_doc.slug %}" class="nav-link">
+                                            {{ type_doc.libelle }}
+                                        </a>
                                     </li>
+                                    {% empty %}
                                     <li class="nav-item">
-                                        <a href="{% url 'portail_site:publication_par_type' %}" class="nav-link">Thèses de doctorat</a>
+                                        <a href="{% url 'portail_site:publication_par_type' %}" class="nav-link">Aucun type disponible</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'portail_site:publication_par_type' %}" class="nav-link">Articles scientifiques</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'portail_site:publication_par_type' %}" class="nav-link">Communications scientifiques</a>
-                                    </li>
+                                    {% endfor %}
                                 </ul>
                             </li>
 

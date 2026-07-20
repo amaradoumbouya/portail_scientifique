@@ -38,4 +38,6 @@ urlpatterns = [
     path('projets_detudes/', include('projets_detudes.urls')),
     path('evaluation/', include('evaluation.urls')),
     path('soutenance/', include('soutenance.urls')),
+    path('evenements/', include('evenements.urls')),
+    path('actualites/', include('actualites.urls')),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

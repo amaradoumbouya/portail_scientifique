@@ -1,0 +1,107 @@
+{% extends "index.html" %}
+{% load static %}
+{% block title %}
+<title>{{ actualite.titre }} - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .actualite-detail {
+        padding: 70px 0 90px;
+    }
+    .actualite-cover {
+        width: 100%;
+        max-height: 380px;
+        overflow: hidden;
+        border-radius: 14px;
+        margin-bottom: 24px;
+        background: #f4f6fb;
+    }
+    .actualite-cover img {
+        width: 100%;
+        height: 380px;
+        object-fit: cover;
+        display: block;
+    }
+    .actualite-detail h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 32px;
+        color: #181818;
+        margin-bottom: 12px;
+    }
+    .actualite-meta {
+        color: #616161;
+        margin-bottom: 20px;
+    }
+    .actualite-resume {
+        font-size: 17px;
+        color: #444;
+        margin-bottom: 22px;
+        padding: 16px 18px;
+        background: #f7f9fc;
+        border-radius: 10px;
+        border-left: 4px solid #3c72fc;
+    }
+    .actualite-actions {
+        margin-top: 28px;
+    }
+    .actualite-actions .border-btn {
+        display: inline-block;
+        border: 1px solid #3c72fc;
+        color: #3c72fc;
+        background: transparent;
+    }
+    .actualite-actions .border-btn:hover {
+        background: #3c72fc;
+        color: #fff;
+        border-color: #3c72fc;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="banner-area news-details">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Actualité scientifique</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active"> Actualité</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="actualite-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="actualite-cover">
+                    {% if actualite.image %}
+                    <img src="{{ actualite.image.url }}" alt="{{ actualite.titre }}">
+                    {% else %}
+                    <img src="{% static 'front/assets/images/news/home_2.png' %}" alt="{{ actualite.titre }}">
+                    {% endif %}
+                </div>
+                <h1>{{ actualite.titre }}</h1>
+                <div class="actualite-meta">
+                    <span><i class="fa fa-calendar"></i> {{ actualite.date_publication|date:"d F Y" }}</span>
+                </div>
+                <div class="actualite-resume">{{ actualite.resume }}</div>
+                <div>{{ actualite.contenu|linebreaksbr }}</div>
+
+                <div class="actualite-actions">
+                    <a href="{% url 'portail_site:index' %}#actualites" class="border-btn">Retour à l’accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

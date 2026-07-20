@@ -411,6 +411,7 @@ def user_login_view(request, *args, **kwargs):
                     login(request, user)
                     
                     messages.success(request, 'Vous êtes connectés.')
+                    return redirect('accounts:profil_user')
                     
                 else:
                     messages.error(request, "Le nom d'utilisateur ou le mot de passe est incorrecte.")
@@ -420,7 +421,7 @@ def user_login_view(request, *args, **kwargs):
                 
         else:
             messages.error(request, "Le nom d'utilisateur ou le mot de passe est incorrecte.")
-            
-        return redirect('accounts:profil_user')  
-         
+
+        return redirect('portail_site:connexion')
+
     return render(request, 'registration/login.html', {})

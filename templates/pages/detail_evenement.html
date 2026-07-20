@@ -1,0 +1,104 @@
+{% extends "index.html" %}
+{% load static %}
+{% block title %}
+<title>{{ evenement.titre }} - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .evenement-detail {
+        padding: 70px 0 90px;
+    }
+    .evenement-cover {
+        width: 100%;
+        max-height: 380px;
+        overflow: hidden;
+        border-radius: 14px;
+        margin-bottom: 24px;
+        background: #f4f6fb;
+    }
+    .evenement-cover img {
+        width: 100%;
+        height: 380px;
+        object-fit: cover;
+        display: block;
+    }
+    .evenement-detail h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 32px;
+        color: #181818;
+        margin-bottom: 12px;
+    }
+    .evenement-meta {
+        color: #616161;
+        margin-bottom: 20px;
+    }
+    .evenement-meta span {
+        margin-right: 18px;
+    }
+    .evenement-actions a {
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="banner-area news-details">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Détail de l’événement</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active"> Événement</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="evenement-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="evenement-cover">
+                    {% if evenement.image %}
+                    <img src="{{ evenement.image.url }}" alt="{{ evenement.titre }}">
+                    {% else %}
+                    <img src="{% static 'front/assets/images/courses/conference_1.png' %}" alt="{{ evenement.titre }}">
+                    {% endif %}
+                </div>
+                <span class="result-badge" style="display:inline-block;padding:5px 12px;border-radius:20px;background:rgba(60,114,252,.08);color:#3c72fc;font-size:12px;font-weight:600;">
+                    {{ evenement.get_type_evenement_display }}
+                </span>
+                <h1>{{ evenement.titre }}</h1>
+                <div class="evenement-meta">
+                    <span><i class="fa fa-calendar"></i> {{ evenement.date_evenement|date:"d F Y à H:i" }}</span>
+                    {% if evenement.lieu %}
+                    <span><i class="fa fa-map-marker"></i> {{ evenement.lieu }}</span>
+                    {% endif %}
+                </div>
+                <p>{{ evenement.description|linebreaksbr }}</p>
+                <div class="evenement-actions">
+                    {% if evenement.lien_inscription %}
+                    <a href="{{ evenement.lien_inscription }}" class="box-btn" target="_blank" rel="noopener">
+                        {{ evenement.bouton_inscription }}
+                    </a>
+                    {% else %}
+                    <a href="{% url 'evenements:inscription' evenement.slug %}" class="box-btn">
+                        {{ evenement.bouton_inscription }}
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'portail_site:index' %}" class="border-btn">Retour à l’accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
