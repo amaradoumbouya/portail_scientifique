@@ -1,139 +1,864 @@
 {% extends "index.html" %}
 {% load static %}
 
+{% block title %}
+<title>{{ auteur.full_name }} - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .auteur-detail-page {
+        padding: 60px 0 90px;
+        background: #f7f8fa;
+    }
+
+    /* Stats */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+    .stat-box {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px 14px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        border-top: 4px solid #3c72fc;
+    }
+    .stat-box .stat-value {
+        display: block;
+        font-size: 30px;
+        font-weight: 700;
+        color: #3c72fc;
+        line-height: 1.1;
+    }
+    .stat-box .stat-label {
+        display: block;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #666;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    /* Carte INC */
+    .orcid-card {
+        border: 2px solid #3c72fc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        position: relative;
+        padding-top: 28px;
+        background: #fff;
+    }
+    .orcid-badge {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 40px;
+        background: #3c72fc;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .orcid-url {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+    }
+    .orcid-id {
+        margin: 5px 0 12px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        word-break: break-word;
+    }
+    .auteur-cover {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #e8effe;
+        margin: 0 auto 12px;
+        display: block;
+    }
+    .auteur-avatar-fallback {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #3c72fc;
+        color: #fff;
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0 auto 12px;
+    }
+    .auteur-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        margin: 8px 0 4px;
+    }
+    .auteur-role {
+        color: #3c72fc;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    /* Cartes info gauche */
+    .info-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        background: #fafafa;
+    }
+    .card-header-custom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 15px;
+        background: transparent;
+    }
+    .card-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
+    .card-body-custom {
+        padding: 15px;
+    }
+    .section-title {
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+    }
+    .text-muted.italic {
+        font-style: italic;
+        color: #777 !important;
+    }
+    .info-link {
+        color: #337ab7;
+        text-decoration: underline;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 6px;
+    }
+    .social-links-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+    }
+    .social-icon-link {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        color: #3c72fc;
+        box-shadow: 0 3px rgba(0, 0, 0, 0.08);
+        transition: .25s;
+        text-decoration: none !important;
+        line-height: 1;
+    }
+    .social-icon-link i,
+    .social-icon-link i:before {
+        font-size: 18px;
+        line-height: 1;
+        display: inline-block;
+    }
+    .social-icon-link:hover {
+        background: #3c72fc;
+        color: #fff !important;
+        transform: translateY(-3px);
+    }
+    .social-icon-link.web { color: #159a6c; }
+    .social-icon-link.web:hover { background: #159a6c; }
+    .social-icon-link.linkedin { color: #0a66c2; }
+    .social-icon-link.linkedin:hover { background: #0a66c2; }
+    .social-icon-link.facebook { color: #1877f2; }
+    .social-icon-link.facebook:hover { background: #1877f2; }
+    .social-icon-link.twitter { color: #1d9bf0; }
+    .social-icon-link.twitter:hover { background: #1d9bf0; }
+    .info-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .info-list li {
+        padding: 5px 0;
+        border-bottom: 1px solid #f0f0f0;
+        color: #333;
+    }
+    .info-list li:last-child {
+        border-bottom: none;
+    }
+
+    /* Panneaux CV */
+    .orcid-panel {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        background: #fff;
+    }
+    .orcid-panel-heading {
+        background-color: #f0f0f0 !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #ddd;
+    }
+    .orcid-panel-heading .panel-title {
+        font-weight: bold;
+        font-size: 18px;
+        margin: 0;
+        color: #333;
+    }
+    .orcid-panel-body {
+        padding: 20px;
+        position: relative;
+    }
+    .info-row {
+        display: flex;
+        flex-direction: column;
+    }
+    .info-label {
+        color: #999;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    .info-value {
+        font-size: 16px;
+        color: #333;
+        font-weight: 600;
+    }
+    .bio-text {
+        line-height: 1.7;
+        color: #333;
+        font-size: 15px;
+    }
+
+    /* Activités */
+    .activities-section {
+        margin-top: 30px;
+    }
+    .activities-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #eee;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+    .activities-header h3 {
+        margin: 0;
+        font-weight: 700;
+        color: #333;
+        font-size: 20px;
+    }
+    .activities-global-actions .btn-link {
+        color: #2196F3;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0 6px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+    .activities-global-actions .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .activity-category {
+        margin-bottom: 15px;
+    }
+    .category-header {
+        background-color: #3c72fc;
+        color: white;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 4px;
+        user-select: none;
+    }
+    .category-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        flex: 1;
+    }
+    .category-title i {
+        margin-right: 10px;
+    }
+    .count {
+        font-weight: normal;
+    }
+    .category-toggle-btn {
+        background: rgba(255, 255, 255, .18);
+        border: 1px solid rgba(255, 255, 255, .45);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        white-space: nowrap;
+        margin-left: 12px;
+    }
+    .category-toggle-btn:hover {
+        background: rgba(255, 255, 255, .28);
+        color: #fff;
+    }
+
+    .activity-card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-top: 15px;
+        background: #fff;
+    }
+    .activity-header {
+        background-color: #f0f0f0;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+    }
+    .activity-org {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .star-icon {
+        color: #f0ad4e;
+    }
+    .org-name {
+        font-weight: bold;
+        font-size: 15px;
+        color: #333;
+    }
+    .activity-body {
+        padding: 20px;
+    }
+    .activity-period {
+        margin-bottom: 5px;
+        color: #333;
+        font-size: 14px;
+    }
+    .activity-type {
+        color: #666;
+        font-size: 13px;
+    }
+
+    .pub-item {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-top: 12px;
+        background: #fff;
+        padding: 14px 18px;
+    }
+    .pub-item a {
+        color: #333;
+        font-weight: 700;
+        font-size: 15px;
+    }
+    .pub-item a:hover {
+        color: #3c72fc;
+    }
+    .pub-item .pub-type {
+        color: #666;
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    .auteur-actions {
+        margin-top: 10px;
+    }
+    .auteur-actions .border-btn {
+        display: inline-block;
+        border: 1px solid #3c72fc;
+        color: #3c72fc;
+        background: transparent;
+    }
+    .auteur-actions .border-btn:hover {
+        background: #3c72fc;
+        color: #fff;
+    }
+
+    .p-20 {
+        padding: 20px;
+    }
+</style>
+{% endblock style %}
 
 {% block content %}
-<div class="page-heading contact-heading header-text">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-content">
-                    <h4>Detail Auteur</h4>
-                    <!-- <h2>Restons en contact</h2> -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="find-us">
-    <div class="container">
-        <div class="row">
-            <!-- Titre principal -->
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Informations sur l’auteur</h2>
-                </div>
-            </div>
-
-            <!-- Informations auteur -->
-            <div class="col-md-8">
-                <div class="author-detail">
-                    <img src="{{ auteur.ImageUrl }}" alt="{{ auteur.nom }}" class="img-fluid rounded mb-3"
-                        style="max-height: 250px;">
-
-                    <h3>{{ auteur.prenoms }} {{ auteur.nom }}</h3>
-                    <p><strong>Email :</strong> {{ auteur.email }}</p>
-                    <p><strong>Institution :</strong> {{ auteur.institution }}</p>
-                    <p><strong>ORCID :</strong> <a href="https://orcid.org/{{auteur.orcid}}" target="_blank">{{
-                            auteur.orcid }}</a></p>
-                    <p><strong>Biographie :</strong> </p>
-
-                    <!-- Réseaux sociaux -->
-                    <div class="social-icons mt-3">
-                        <h5>Réseaux sociaux</h5>
-                        <ul class="list-inline">
-                            {% if auteur.facebook %}
-                            <li class="list-inline-item"><a href="{{ auteur.facebook }}"><i
-                                        class="fa fa-facebook"></i></a></li>
-                            {% endif %}
-                            {% if auteur.twitter %}
-                            <li class="list-inline-item"><a href="{{ auteur.twitter }}"><i
-                                        class="fa fa-twitter"></i></a></li>
-                            {% endif %}
-                            {% if auteur.linkedin %}
-                            <li class="list-inline-item"><a href="{{ auteur.linkedin }}"><i
-                                        class="fa fa-linkedin"></i></a></li>
-                            {% endif %}
-                            {% if auteur.site_web %}
-                            <li class="list-inline-item"><a href="{{ auteur.site_web }}"><i class="fa fa-globe"></i></a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- Fin informations auteur -->
-
-            <!-- Les articles auxquels l’auteur a participé -->
-            <div class="col-md-4">
-                <div class="left-content">
-                    <h4>
-                        Articles publiés par {{ auteur.prenoms }} {{ auteur.nom }}
-                        <span class="badge badge-primary">{{ publications|length }}</span>
-                    </h4>
-
-                    <ul class="list-group mt-3">
-                        {% for publication in publications %}
-                        <li class="list-group-item">
-                            <a href="{% url 'portail_site:detail_publication' publication.slug %}">
-                                {{ publication.titre }}
-                            </a>
+<div class="banner-area news-details">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Profil du chercheur</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active">{{ auteur.full_name }}</p>
                         </li>
-                        {% empty %}
-                        <li class="list-group-item">Aucune publication disponible.</li>
-                        {% endfor %}
                     </ul>
                 </div>
             </div>
-            <!-- Fin articles auteur -->
-
         </div>
     </div>
 </div>
 
-
-<div class="happy-clients">
+<section class="auteur-detail-page">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="section-heading">
-                    <h2>Partenaires de recherche</h2>
-                </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-value">{{ stats.nb_etudiants }}</span>
+                <span class="stat-label">Étudiants encadrés</span>
             </div>
-            <div class="col-md-12">
-                <div class="owl-clients owl-carousel">
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="1">
-                    </div>
 
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="2">
-                    </div>
+            <div class="stat-box">
+                <span class="stat-value">{{ stats.nb_articles }}</span>
+                <span class="stat-label">Articles scientifiques</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-value">{{ stats.nb_colloques }}</span>
+                <span class="stat-label">Communications/Colloques</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-value">{{ stats.nb_publications }}</span>
+                <span class="stat-label">Productions scientifiques</span>
+            </div>
 
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="3">
-                    </div>
+        </div>
 
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="4">
+        <div class="row">
+            <!-- Colonne gauche -->
+            <div class="col-lg-3 col-md-4">
+                <div class="orcid-card">
+                    <div class="orcid-badge">iD</div>
+                    <div class="card-body text-center" style="padding:16px;">
+                        {% if auteur.profile.photo %}
+                        <img src="{{ auteur.profile.photo.url }}" alt="{{ auteur.full_name }}" class="auteur-cover">
+                        {% else %}
+                        <div class="auteur-avatar-fallback">
+                            {{ auteur.prenoms|slice:":1"|upper }}{{ auteur.nom|slice:":1"|upper }}
+                        </div>
+                        {% endif %}
+                        <small>INC: Identifiant National de Chercheur</small>
+                        <h5 class="orcid-url">https://inc.org/</h5>
+                        <h3 class="orcid-id">{{ auteur.profile.profil_inc|default:"Non renseigné" }}</h3>
+                        <div class="auteur-name">{{ auteur.full_name }}</div>
+                        {% if auteur.profile.role %}
+                        <div class="auteur-role">{{ auteur.profile.get_role_display }}</div>
+                        {% endif %}
+                        {% if auteur.profile.grade or auteur.profile.specialite %}
+                        <p class="text-muted italic" style="margin:0;">
+                            {% if auteur.profile.grade %}{{ auteur.profile.grade }}{% endif %}
+                            {% if auteur.profile.grade and auteur.profile.specialite %} · {% endif %}
+                            {% if auteur.profile.specialite %}{{ auteur.profile.specialite }}{% endif %}
+                        </p>
+                        {% endif %}
                     </div>
+                </div>
 
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="5">
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <h4 class="card-title">Coordonnées</h4>
                     </div>
+                    <div class="card-body-custom">
+                        <h5 class="section-title">Adresse / Localisation</h5>
+                        <p class="text-muted italic">{{ auteur.profile.adresse|default:"Non renseignée" }}</p>
 
-                    <div class="client-item">
-                        <img src="{% static 'front/assets/images/client-01.png' %}" alt="6">
+                        <h5 class="section-title">Adresses e-mail</h5>
+                        <ul class="info-list">
+                            <li><a href="mailto:{{ auteur.email }}">{{ auteur.email }}</a></li>
+                        </ul>
+
+                        <h5 class="section-title">Téléphone</h5>
+                        <p class="text-muted italic">{{ auteur.tel|default:"Non renseigné" }}</p>
+
+                        {% if auteur.profile.orcid %}
+                        <h5 class="section-title">ORCID</h5>
+                        <p>
+                            <a class="info-link" href="https://orcid.org/{{ auteur.profile.orcid }}" target="_blank" rel="noopener">
+                                {{ auteur.profile.orcid }}
+                            </a>
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <h4 class="card-title">Sites Internet et Réseaux sociaux</h4>
+                    </div>
+                    <div class="card-body-custom">
+                        {% if auteur.profile.site_web or auteur.profile.reseau_social_linkedin or auteur.profile.reseau_social_facebook or auteur.profile.reseau_social_twitter %}
+                        <div class="social-links-row">
+                            {% if auteur.profile.site_web %}
+                            <a href="{{ auteur.profile.site_web }}" target="_blank" rel="noopener"
+                                class="social-icon-link web" title="Site Web">
+                                <i class="fas fa-globe"></i>
+                            </a>
+                            {% endif %}
+                            {% if auteur.profile.reseau_social_linkedin %}
+                            <a href="{{ auteur.profile.reseau_social_linkedin }}" target="_blank" rel="noopener"
+                                class="social-icon-link linkedin" title="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            {% endif %}
+                            {% if auteur.profile.reseau_social_facebook %}
+                            <a href="{{ auteur.profile.reseau_social_facebook }}" target="_blank" rel="noopener"
+                                class="social-icon-link facebook" title="Facebook">
+                                <i class="flaticon-facebook"></i>
+                            </a>
+                            {% endif %}
+                            {% if auteur.profile.reseau_social_twitter %}
+                            <a href="{{ auteur.profile.reseau_social_twitter }}" target="_blank" rel="noopener"
+                                class="social-icon-link twitter" title="Twitter">
+                                <i class="flaticon-twitter"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted italic">Aucun lien renseigné</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if auteur.profile.institution %}
+                <div class="info-card">
+                    <div class="card-header-custom">
+                        <h4 class="card-title">Institution</h4>
+                    </div>
+                    <div class="card-body-custom">
+                        <h5 class="section-title">Nom</h5>
+                        <p class="text-muted italic">{{ auteur.profile.institution.nom_institution }}</p>
+                        {% if auteur.profile.institution.email_institution %}
+                        <h5 class="section-title">Contact</h5>
+                        <p class="text-muted" style="margin-bottom:4px;">Email: {{ auteur.profile.institution.email_institution }}</p>
+                        {% endif %}
+                        {% if auteur.profile.institution.telephone_institution %}
+                        <p class="text-muted">Tel: {{ auteur.profile.institution.telephone_institution }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Colonne droite -->
+            <div class="col-lg-9 col-md-8">
+                <div class="orcid-panel">
+                    <div class="orcid-panel-heading">
+                        <h3 class="panel-title">Nom complet</h3>
+                    </div>
+                    <div class="orcid-panel-body">
+                        <div class="info-row">
+                            <div class="info-label">Nom complet</div>
+                            <div class="info-value">{{ auteur.prenoms }} {{ auteur.nom }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="orcid-panel">
+                    <div class="orcid-panel-heading">
+                        <h3 class="panel-title">Biographie</h3>
+                    </div>
+                    <div class="orcid-panel-body bio-text">
+                        {% if biographie %}
+                        {{ biographie|linebreaks }}
+                        {% else %}
+                        <p class="text-muted italic">Aucune biographie renseignée.</p>
+                        {% endif %}
+
+                        <div class="activities-section">
+                            <div class="activities-header">
+                                <h3>Activités</h3>
+                                <div class="activities-global-actions">
+                                    <button type="button" id="btn-show-all" class="btn-link" onclick="toggleAllActivities(true)">Tout afficher</button>
+                                    <button type="button" id="btn-hide-all" class="btn-link" style="display:none;" onclick="toggleAllActivities(false)">Tout réduire</button>
+                                </div>
+                            </div>
+
+                            <!-- Emploi -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" onclick="toggleSection('emploi-content', this)">
+                                        <i class="fa fa-chevron-down cat-chevron"></i>
+                                        Emploi <span class="count">({{ emplois|length }})</span>
+                                    </div>
+                                    <button type="button" class="category-toggle-btn"
+                                        onclick="toggleSection('emploi-content', this)">
+                                        Réduire
+                                    </button>
+                                </div>
+                                <div id="emploi-content" class="collapse show section-collapse">
+                                    {% for item in emplois %}
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="fa fa-star star-icon"></i>
+                                                <span class="org-name">
+                                                    {{ item.nom_institution|default:"Institution" }}
+                                                    {% if item.ville_emploi %} ({{ item.ville_emploi }}{% if item.pays_emploi %}, {{ item.pays_emploi }}{% endif %}){% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">
+                                                {{ item.date_debut_emploi|date:"Y-m"|default:"—" }} –
+                                                {{ item.date_fin_emploi|date:"Y-m"|default:"présent" }}
+                                                {% if item.poste_occupe %} | {{ item.poste_occupe }}{% endif %}
+                                                {% if item.departement_emploi %} ({{ item.departement_emploi }}){% endif %}
+                                            </div>
+                                            <div class="activity-type">Emploi</div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="p-20 text-muted italic">Aucun emploi renseigné.</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Formation -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" onclick="toggleSection('formation-content', this)">
+                                        <i class="fa fa-chevron-down cat-chevron"></i>
+                                        Formation et qualifications <span class="count">({{ formations|length }})</span>
+                                    </div>
+                                    <button type="button" class="category-toggle-btn"
+                                        onclick="toggleSection('formation-content', this)">
+                                        Réduire
+                                    </button>
+                                </div>
+                                <div id="formation-content" class="collapse show section-collapse">
+                                    {% for item in formations %}
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="fa fa-star star-icon"></i>
+                                                <span class="org-name">
+                                                    {{ item.nom_institution|default:"Institution" }}
+                                                    {% if item.ville_institution %} ({{ item.ville_institution }}{% if item.pays_institution %}, {{ item.pays_institution }}{% endif %}){% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">
+                                                {{ item.date_debut_etude|date:"Y-m"|default:"—" }} –
+                                                {{ item.date_fin_etude|date:"Y-m"|default:"présent" }}
+                                                {% if item.diplome_obtenu %} | {{ item.diplome_obtenu }}{% endif %}
+                                            </div>
+                                            <div class="activity-type">{{ item.type_formation|default:"Formation" }}</div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="p-20 text-muted italic">Aucune formation renseignée.</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Expériences -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" onclick="toggleSection('experience-content', this)">
+                                        <i class="fa fa-chevron-down cat-chevron"></i>
+                                        Expériences professionnelles <span class="count">({{ experiences|length }})</span>
+                                    </div>
+                                    <button type="button" class="category-toggle-btn"
+                                        onclick="toggleSection('experience-content', this)">
+                                        Réduire
+                                    </button>
+                                </div>
+                                <div id="experience-content" class="collapse show section-collapse">
+                                    {% for item in experiences %}
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="fa fa-star star-icon"></i>
+                                                <span class="org-name">{{ item.nom_institution|default:item.poste_occupe|default:"Expérience" }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">
+                                                {{ item.date_debut_experience|date:"Y-m"|default:"—" }} –
+                                                {{ item.date_fin_experience|date:"Y-m"|default:"présent" }}
+                                                {% if item.poste_occupe %} | {{ item.poste_occupe }}{% endif %}
+                                            </div>
+                                            <div class="activity-type">Expérience professionnelle</div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="p-20 text-muted italic">Aucune expérience renseignée.</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Travaux -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" onclick="toggleSection('travaux-content', this)">
+                                        <i class="fa fa-chevron-down cat-chevron"></i>
+                                        Travaux de recherche <span class="count">({{ travaux|length }})</span>
+                                    </div>
+                                    <button type="button" class="category-toggle-btn"
+                                        onclick="toggleSection('travaux-content', this)">
+                                        Réduire
+                                    </button>
+                                </div>
+                                <div id="travaux-content" class="collapse show section-collapse">
+                                    {% for item in travaux %}
+                                    <div class="activity-card">
+                                        <div class="activity-header">
+                                            <div class="activity-org">
+                                                <i class="fa fa-star star-icon"></i>
+                                                <span class="org-name">{{ item.titre_domaine_recherche|default:item.nom_institution|default:"Travail de recherche" }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="activity-body">
+                                            <div class="activity-period">
+                                                {{ item.date_de_debut_travaux|date:"Y-m"|default:"—" }} –
+                                                {{ item.date_de_fin_travaux|date:"Y-m"|default:"présent" }}
+                                                {% if item.poste_occupe %} | {{ item.poste_occupe }}{% endif %}
+                                            </div>
+                                            <div class="activity-type">Travaux de recherche</div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="p-20 text-muted italic">Aucun travail de recherche renseigné.</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Publications -->
+                            <div class="activity-category">
+                                <div class="category-header">
+                                    <div class="category-title" onclick="toggleSection('publications-content', this)">
+                                        <i class="fa fa-chevron-down cat-chevron"></i>
+                                        Publications <span class="count">({{ publications|length }})</span>
+                                    </div>
+                                    <button type="button" class="category-toggle-btn"
+                                        onclick="toggleSection('publications-content', this)">
+                                        Réduire
+                                    </button>
+                                </div>
+                                <div id="publications-content" class="collapse show section-collapse">
+                                    {% for publication in publications %}
+                                    <div class="pub-item">
+                                        <a href="{% url 'portail_site:detail_publication' publication.slug %}">
+                                            {{ publication.titre|default:"Sans titre" }}
+                                        </a>
+                                        {% if publication.get_type_publication_display %}
+                                        <div class="pub-type">{{ publication.get_type_publication_display }}</div>
+                                        {% endif %}
+                                    </div>
+                                    {% empty %}
+                                    <div class="p-20 text-muted italic">Aucune publication disponible.</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="auteur-actions">
+            <a href="javascript:history.back()" class="border-btn">Retour</a>
+        </div>
     </div>
-</div>
+</section>
 {% endblock content %}
 
 {% block scripts %}
+<script>
+    function updateSectionToggleUI($section, isOpen) {
+        var $category = $section.closest('.activity-category');
+        var $icon = $category.find('.cat-chevron');
+        var $btn = $category.find('.category-toggle-btn');
 
+        if (isOpen) {
+            $icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+            $btn.text('Réduire');
+        } else {
+            $icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+            $btn.text('Afficher');
+        }
+    }
+
+    function toggleSection(sectionId, triggerEl) {
+        var $section = $('#' + sectionId);
+        if (!$section.length) return;
+
+        $section.collapse('toggle');
+
+        $section.one('shown.bs.collapse', function () {
+            updateSectionToggleUI($section, true);
+            syncGlobalButtons();
+        }).one('hidden.bs.collapse', function () {
+            updateSectionToggleUI($section, false);
+            syncGlobalButtons();
+        });
+    }
+
+    function syncGlobalButtons() {
+        var total = $('.section-collapse').length;
+        var openCount = $('.section-collapse.show').length;
+        if (openCount === 0) {
+            $('#btn-show-all').show();
+            $('#btn-hide-all').hide();
+        } else if (openCount === total) {
+            $('#btn-show-all').hide();
+            $('#btn-hide-all').show();
+        } else {
+            $('#btn-show-all').show();
+            $('#btn-hide-all').show();
+        }
+    }
+
+    function toggleAllActivities(show) {
+        $('.section-collapse').each(function () {
+            var $section = $(this);
+            if (show) {
+                $section.collapse('show');
+                updateSectionToggleUI($section, true);
+            } else {
+                $section.collapse('hide');
+                updateSectionToggleUI($section, false);
+            }
+        });
+        if (show) {
+            $('#btn-show-all').hide();
+            $('#btn-hide-all').show();
+        } else {
+            $('#btn-show-all').show();
+            $('#btn-hide-all').hide();
+        }
+    }
+</script>
 {% endblock scripts %}

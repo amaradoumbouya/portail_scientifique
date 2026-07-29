@@ -109,6 +109,43 @@
     .content .table td {
         vertical-align: middle;
     }
+
+    /* ===== Diagrammes dashboard ===== */
+    .chart-panel {
+        margin-bottom: 24px;
+    }
+
+    .chart-panel .panel-heading {
+        background: linear-gradient(135deg, #3c72fc 0%, #5b8cff 100%) !important;
+        border: none;
+        color: #fff;
+    }
+
+    .chart-panel .panel-title {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .chart-panel .panel-body {
+        padding: 22px 18px 12px;
+        min-height: 340px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+    }
+
+    .chart-panel canvas {
+        max-width: 100%;
+    }
+
+    .chart-legend-note {
+        font-size: 12px;
+        color: #8a95a8;
+        text-align: center;
+        margin-top: 8px;
+        margin-bottom: 0;
+    }
 </style>
  {% endblock style %}
 </head>
@@ -134,7 +171,7 @@
                     {% block content %}
 
 
-                    {% if user.is_authenticated and user.role == 'admin' %}
+                    {% if user.is_authenticated and user.is_superuser %}
 
                     <div class="row">
                         <div class="col-sm-12">
@@ -149,142 +186,142 @@
                         </div>
                     </div>
 
-                    <!-- Statistique de la publication -->
+                    <!-- Statistiques — Personnel & étudiants -->
                     <div class="row">
 
-                        <div class="col-sm-6 col-lg-3">
+                        <div class="col-sm-6 col-lg-2">
                             <div class="stat-card" style="--c:#3c72fc;">
-                                <div class="stat-icon"><i class="mdi mdi-file-document"></i></div>
-                                <p class="stat-label">Publications</p>
-                                <h2 class="stat-value">{{ nb_publications }}</h2>
-                                <p class="stat-trend"><b>0%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
+                                <div class="stat-icon"><i class="mdi mdi-account"></i></div>
+                                <p class="stat-label">Enseignants</p>
+                                <h2 class="stat-value">{{ total_enseignants }}</h2>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
                             <div class="stat-card" style="--c:#1cc88a;">
-                                <div class="stat-icon"><i class="mdi mdi-account-multiple"></i></div>
-                                <p class="stat-label">Auteurs</p>
-                                <h2 class="stat-value">{{ nb_auteurs }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_auteur|default:"Aucune" }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-lg-2">
-                            <div class="stat-card" style="--c:#f6a821;">
                                 <div class="stat-icon"><i class="mdi mdi-school"></i></div>
-                                <p class="stat-label">Encadreurs</p>
-                                <h2 class="stat-value">{{ nb_encadreurs }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_encadreur|default:"Aucune" }}</p>
+                                <p class="stat-label">Enseignants chercheurs</p>
+                                <h2 class="stat-value">{{ total_chercheurs }}</h2>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-2">
                             <div class="stat-card" style="--c:#36b9cc;">
-                                <div class="stat-icon"><i class="mdi mdi-domain"></i></div>
-                                <p class="stat-label">Institutions</p>
-                                <h2 class="stat-value">{{ nb_institutions }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_institution|default:"Aucune" }}</p>
+                                <div class="stat-icon"><i class="mdi mdi-check-circle"></i></div>
+                                <p class="stat-label">Chercheurs actifs</p>
+                                <h2 class="stat-value">{{ enseignants_actifs }}</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="stat-card" style="--c:#e74a3b;">
+                                <div class="stat-icon"><i class="mdi mdi-close-circle"></i></div>
+                                <p class="stat-label">Chercheurs inactifs</p>
+                                <h2 class="stat-value">{{ enseignants_inactifs }}</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="stat-card" style="--c:#f6a821;">
+                                <div class="stat-icon"><i class="mdi mdi-account-multiple"></i></div>
+                                <p class="stat-label">Étudiants Master</p>
+                                <h2 class="stat-value">{{ total_master }}</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-2">
+                            <div class="stat-card" style="--c:#6f42c1;">
+                                <div class="stat-icon"><i class="mdi mdi-book-open-page-variant"></i></div>
+                                <p class="stat-label">Étudiants Doctorat</p>
+                                <h2 class="stat-value">{{ total_doctorat }}</h2>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Statistiques — Production scientifique -->
+                    <div class="row">
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="stat-card" style="--c:#3c72fc;">
+                                <div class="stat-icon"><i class="mdi mdi-file-document"></i></div>
+                                <p class="stat-label">Articles scientifiques</p>
+                                <h2 class="stat-value">{{ total_articles }}</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="stat-card" style="--c:#1cc88a;">
+                                <div class="stat-icon"><i class="mdi mdi-comment-multiple"></i></div>
+                                <p class="stat-label">Colloques</p>
+                                <h2 class="stat-value">{{ total_communications }}</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="stat-card" style="--c:#f6a821;">
+                                <div class="stat-icon"><i class="mdi mdi-flask"></i></div>
+                                <p class="stat-label">Production scientifique</p>
+                                <h2 class="stat-value">{{ total_production_scientifique }}</h2>
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-lg-3">
                             <div class="stat-card" style="--c:#6f42c1;">
-                                <div class="stat-icon"><i class="mdi mdi-folder-multiple"></i></div>
-                                <p class="stat-label">Documents</p>
-                                <h2 class="stat-value">{{ nb_publications }}</h2>
-                                <p class="stat-trend"><b>00%</b> {{ time_since_last_publication|default:"Aucune" }}</p>
+                                <div class="stat-icon"><i class="mdi mdi-earth"></i></div>
+                                <p class="stat-label">Publications indexées</p>
+                                <h2 class="stat-value">{{ total_publications_indexees }}</h2>
                             </div>
                         </div>
 
                     </div>
 
+                    <!-- Diagrammes liés aux cartes -->
                     <div class="row">
-
-                        <div class="col-sm-4">
-                            <div class="panel panel-primary">
+                        <div class="col-md-4">
+                            <div class="panel panel-primary chart-panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Personnel & étudiants</h3>
+                                </div>
                                 <div class="panel-body">
-                                    <h4 class="m-t-0">Nouvelles publications</h4>
-                                    <ul class="list-inline m-t-30 widget-chart text-center">
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_publications.jour|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Jour</h5>
-                                        </li>
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_publications.semaine|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Semaine</h5>
-                                        </li>
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_publications.mois|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Mois</h5>
-                                        </li>
-                                    </ul>
-                                    <div id="sparkline1" style="margin: 0 -21px -22px -22px;"></div>
+                                    <div style="width:100%; height:280px;">
+                                        <canvas id="chartPersonnel"></canvas>
+                                    </div>
+                                    <p class="chart-legend-note">Enseignants · Chercheurs · Master · Doctorat</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-4">
-                            <div class="panel panel-primary">
+                        <div class="col-md-4">
+                            <div class="panel panel-primary chart-panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Activité des chercheurs</h3>
+                                </div>
                                 <div class="panel-body">
-                                    <h4 class="m-t-0">Téléchargements</h4>
-                                    <ul class="list-inline m-t-30 widget-chart text-center">
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_telechargements.jour|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Jour</h5>
-                                        </li>
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_telechargements.semaine|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Semaine</h5>
-                                        </li>
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_telechargements.mois|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Mois</h5>
-                                        </li>
-                                    </ul>
-                                    <div id="sparkline2" style="margin: 0 -21px -22px -22px;"></div>
+                                    <div style="width:100%; height:280px;">
+                                        <canvas id="chartActivite"></canvas>
+                                    </div>
+                                    <p class="chart-legend-note">Actifs (avec publications) vs Inactifs</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-4">
-                            <div class="panel panel-primary">
+                        <div class="col-md-4">
+                            <div class="panel panel-primary chart-panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Production scientifique</h3>
+                                </div>
                                 <div class="panel-body">
-                                    <h4 class="m-t-0">Likes</h4>
-                                    <ul class="list-inline m-t-30 widget-chart text-center">
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_likes.jour|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Jour</h5>
-                                        </li>
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_likes.semaine|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Semaine</h5>
-                                        </li>
-                                        <li>
-                                            <i class="mdi mdi-arrow-up-bold-circle text-success"></i>
-                                            <h4 class=""><b>{{ stat_likes.mois|default:0 }}</b></h4>
-                                            <h5 class="text-muted m-b-0">Mois</h5>
-                                        </li>
-                                    </ul>
-                                    <div id="sparkline3" style="margin: 0 -21px -22px -22px;"></div>
+                                    <div style="width:100%; height:280px;">
+                                        <canvas id="chartProduction"></canvas>
+                                    </div>
+                                    <p class="chart-legend-note">Articles · Colloques · Production · Indexées</p>
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
-                    {{ stat_publications.serie|json_script:"serie-publications" }}
-                    {{ stat_telechargements.serie|json_script:"serie-telechargements" }}
-                    {{ stat_likes.serie|json_script:"serie-likes" }}
-
+                    {{ chart_dashboard|json_script:"chart-dashboard-data" }}
 
                     <!-- Liste des publications -->
                     <div class="row">
@@ -570,49 +607,124 @@
     <!-- Foot Start -->
     {% include "back/includes/foot.html" %}
     {% block scripts %}
-    {% if user.is_authenticated and user.role == 'admin' %}
+    {% if user.is_authenticated and user.is_superuser %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
         $(function () {
-            function lireSerie(id) {
-                var el = document.getElementById(id);
-                return el ? JSON.parse(el.textContent) : [];
-            }
+            var el = document.getElementById("chart-dashboard-data");
+            if (!el || typeof Chart === "undefined") return;
 
-            var series = {
-                sparkline1: { data: lireSerie("serie-publications"), line: "#3c72fc", fill: "rgba(60,114,252,.15)" },
-                sparkline2: { data: lireSerie("serie-telechargements"), line: "#1cc88a", fill: "rgba(28,200,138,.15)" },
-                sparkline3: { data: lireSerie("serie-likes"), line: "#e74a3b", fill: "rgba(231,74,59,.15)" }
+            var data = JSON.parse(el.textContent);
+            var commonLegend = {
+                position: "bottom",
+                labels: { boxWidth: 12, padding: 12, color: "#6b7a99", font: { size: 11 } }
             };
 
-            function dessinerSparklines() {
-                $.each(series, function (id, cfg) {
-                    var $el = $("#" + id);
-                    if ($el.length) {
-                        $el.sparkline(cfg.data, {
-                            type: "line",
-                            width: $el.width(),
-                            height: 60,
-                            lineColor: cfg.line,
-                            fillColor: cfg.fill,
-                            spotColor: false,
-                            minSpotColor: false,
-                            maxSpotColor: false,
-                            highlightLineColor: "rgba(0,0,0,.1)",
-                            highlightSpotColor: "rgba(0,0,0,.2)"
-                        });
-                    }
-                });
-            }
+            new Chart(document.getElementById("chartPersonnel"), {
+                type: "doughnut",
+                data: {
+                    labels: data.personnel.labels,
+                    datasets: [{
+                        data: data.personnel.values,
+                        backgroundColor: ["#3c72fc", "#1cc88a", "#f6a821", "#6f42c1"],
+                        borderWidth: 3,
+                        borderColor: "#ffffff",
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "58%",
+                    plugins: {
+                        legend: commonLegend,
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0);
+                                    var pct = total ? Math.round((ctx.raw / total) * 100) : 0;
+                                    return " " + ctx.label + " : " + ctx.raw + " (" + pct + "%)";
+                                }
+                            }
+                        }
+                    },
+                    animation: { duration: 900 }
+                }
+            });
 
-            dessinerSparklines();
-            // Redessine après le resize (le script de démo se déclenche aussi, on garde la main)
-            $(window).on("resize", function () {
-                setTimeout(dessinerSparklines, 350);
+            new Chart(document.getElementById("chartActivite"), {
+                type: "doughnut",
+                data: {
+                    labels: data.activite.labels,
+                    datasets: [{
+                        data: data.activite.values,
+                        backgroundColor: ["#36b9cc", "#e74a3b"],
+                        borderWidth: 3,
+                        borderColor: "#ffffff",
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "58%",
+                    plugins: {
+                        legend: commonLegend,
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0);
+                                    var pct = total ? Math.round((ctx.raw / total) * 100) : 0;
+                                    return " " + ctx.label + " : " + ctx.raw + " (" + pct + "%)";
+                                }
+                            }
+                        }
+                    },
+                    animation: { duration: 900 }
+                }
+            });
+
+            new Chart(document.getElementById("chartProduction"), {
+                type: "bar",
+                data: {
+                    labels: data.production.labels,
+                    datasets: [{
+                        label: "Total",
+                        data: data.production.values,
+                        backgroundColor: [
+                            "rgba(60,114,252,.85)",
+                            "rgba(28,200,138,.85)",
+                            "rgba(246,168,33,.85)",
+                            "rgba(111,66,193,.85)"
+                        ],
+                        borderRadius: 10,
+                        borderSkipped: false,
+                        maxBarThickness: 42
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: "#6b7a99", font: { size: 11 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0, color: "#6b7a99" },
+                            grid: { color: "rgba(107,122,153,.12)" }
+                        }
+                    },
+                    animation: { duration: 900 }
+                }
             });
         });
     </script>
     {% endif %}
     {% endblock scripts %}
+
 </body>
 
 </html>

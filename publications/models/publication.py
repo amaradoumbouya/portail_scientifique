@@ -29,6 +29,7 @@ class Publication(models.Model):
     langue                      = models.CharField(max_length=50, blank=True, default='français', verbose_name= 'Langue')
     doi                         = models.CharField(max_length=100, blank=True, null=True, verbose_name= 'Doi')
     statut_indexation           = models.CharField(max_length=50, choices=StatutIndexation.choices, default='En attente', verbose_name= 'Statut indexation')
+    bases_indexation            = models.CharField(max_length=255, blank=True, null=True, verbose_name='Bases d\'indexation')
     motif_rejet                 = models.TextField(blank=True, null=True, verbose_name='Motif rejet')
     mots_cles                   = models.TextField(blank=True, null=True, verbose_name='Mots cles')
     resume                      = models.TextField(blank=True, null=True, verbose_name= 'Resumé')
@@ -49,94 +50,88 @@ class Publication(models.Model):
 
 
     def indexer(self, fichier):
-        from publications.nlp_tools import (extraire_texte_du_pdf, nettoyer_texte, extraire_resume, extraire_mots_cles, classifier_domaine)
+        """
+        1) Enrichissement NLP (texte, résumé, mots-clés, domaine)
+        2) Vérification automatique d'indexation internationale
+           (Scopus | WoS | DOAJ | AJOL)
+        """
+        from publications.nlp_tools import (
+            extraire_texte_du_pdf,
+            nettoyer_texte,
+            extraire_resume,
+            extraire_mots_cles,
+            classifier_domaine,
+            verifier_indexation_internationale,
+        )
 
+        # Toujours démarrer en attente pendant la vérification
+        self.statut_indexation = 'En attente'
+        self.bases_indexation = ''
+        self.motif_rejet = "Vérification d'indexation en cours…"
+
+        texte = ""
         try:
             # ==========================
             # EXTRACTION TEXTE
             # ==========================
             fichier.seek(0)
-            texte = extraire_texte_du_pdf(fichier)
+            texte = extraire_texte_du_pdf(fichier) or ""
 
-            if not texte or len(texte.strip()) < 300:
-
-                self.statut_indexation = 'Rejetée'
-
+            if texte and len(texte.strip()) >= 300:
+                self.texte_integral = texte
+                texte_nettoye = nettoyer_texte(texte)
+                self.texte_nettoye = texte_nettoye
+                self.resume = extraire_resume(texte)
+                self.mots_cles = extraire_mots_cles(texte_nettoye) if texte_nettoye.strip() else ""
+                self.domaine = classifier_domaine(texte)
+            else:
+                # NLP incomplet : on continue quand même la vérif d'indexation
+                self.texte_integral = texte
                 self.motif_rejet = (
-                    "Le texte extrait est vide "
-                    "ou trop court pour être analysé."
+                    "Texte PDF court ou vide — enrichissement NLP limité. "
+                    "Vérification d'indexation en cours…"
                 )
 
-                return
-            
-            # ==========================
-            # SAUVEGARDE TEXTE BRUT
-            # ==========================
-            self.texte_integral = texte
-
-
-
-            # ==========================
-            # NETTOYAGE NLP
-            # ==========================
-            texte_nettoye = nettoyer_texte(texte)
-            self.texte_nettoye = texte_nettoye
-
-
-            # ==========================
-            # EXTRACTION RESUME
-            # ==========================
-            resume = extraire_resume(texte)
-
-            self.resume = resume
-
-
-
-            # ==========================
-            # EXTRACTION MOTS CLES
-            # ==========================
-            mots_cles = extraire_mots_cles(texte_nettoye)
-            self.mots_cles = mots_cles
-
-            # ==========================
-            # CLASSIFICATION DOMAINE
-            # ==========================
-            domaine = classifier_domaine(texte)
-            self.domaine = domaine
-
-
-            # ==========================
-            # VALIDATION
-            # ==========================
-            if not resume:
-
-                self.statut_indexation = 'Rejetée'
-
-                self.motif_rejet = ("Résumé introuvable.")
-
-            elif not mots_cles:
-
-                self.statut_indexation = 'Rejetée'
-
-                self.motif_rejet = ("Mots-clés introuvables.")
-
-            elif domaine == "Autres":
-
-                self.statut_indexation = 'En attente'
-
-                self.motif_rejet = ("Domaine non identifié.")
-
-            else:
-
-                self.statut_indexation = 'Acceptée'
-
-                self.statut_publication = True
-
-                self.motif_rejet = ""
-  
         except Exception as e:
-            self.statut_indexation = 'Rejetée'
-            self.motif_rejet = f"Erreur lors de l’analyse automatique : {str(e)}"
+            # Ne bloque pas l'indexation internationale
+            self.motif_rejet = (
+                f"Enrichissement NLP partiel ({e}). "
+                "Vérification d'indexation en cours…"
+            )
+
+        # ==========================
+        # INDEXATION INTERNATIONALE
+        # ==========================
+        nom_revue = None
+        try:
+            real = self.get_real_instance()
+            nom_revue = getattr(real, 'nom_revue', None)
+        except Exception:
+            nom_revue = None
+
+        resultat = verifier_indexation_internationale(
+            doi=self.doi,
+            nom_revue=nom_revue,
+            texte_pdf=texte or self.texte_integral or "",
+            titre=self.titre,
+        )
+
+        self.statut_indexation = resultat.get('statut', 'En attente')
+        bases = resultat.get('bases') or []
+        self.bases_indexation = ", ".join(bases) if bases else ""
+
+        if self.statut_indexation == 'Acceptée':
+            self.statut_publication = True
+            self.motif_rejet = ""
+        elif self.statut_indexation == 'Rejetée':
+            self.motif_rejet = resultat.get('motif') or (
+                "Non reconnu dans Scopus, WoS, DOAJ ni AJOL."
+            )
+        else:
+            # En attente
+            self.motif_rejet = resultat.get('motif') or (
+                "Vérification d'indexation en cours…"
+            )
 
 
     def get_notification_content(self):
@@ -149,7 +144,7 @@ class Publication(models.Model):
 
         Statut : {self.statut_indexation}.
 
-        {f"❌ Motif du rejet: {self.motif_rejet}" if self.statut_indexation == 'Rejetée' or self.statut_indexation == 'En attente' else "✅ Elle a été Acceptée avec succès."}.
+        {f"❌ Motif: {self.motif_rejet}" if self.statut_indexation in ('Rejetée', 'En attente') else f"✅ Indexation acceptée ({self.bases_indexation or 'base internationale'})."}.
 
         Vous pouvvez consultez le detail ici {f"http://127.0.0.1:8000/publications/detail-publication/{self.slug}/"}
 

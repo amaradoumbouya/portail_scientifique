@@ -92,59 +92,73 @@
                 <h3 class="panel-title">Liste des Admins</h3>
             </div>
             <div class="panel-body">
-
                 <div class="row">
+
+                    <!-- Sidebar : recherche & filtre -->
                     <div class="col-sm-3">
                         <h3><small>Rechercher</small></h3>
-                        <form method="post" id="add_event_form">
-                            <input type="text" class="form-control" placeholder="Rechercher ici" />
+                        <form method="get" action="{% url 'accounts:index' %}" role="search">
+                            <div class="input-group">
+                                <input type="text"
+                                       name="q"
+                                       class="form-control"
+                                       placeholder="Nom, email, téléphone…"
+                                       value="{{ request.GET.q|default:'' }}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit" title="Rechercher">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
                         </form>
 
                         <div class="list-group b-0 m-t-20">
-                            <a href="#" class="list-group-item b-0"><span
-                                    class="fa fa-circle text-info m-r-10"></span>Les administrateurs <b>(23)</b></a>
+                            <a href="{% url 'accounts:index' %}"
+                               class="list-group-item b-0 {% if not request.GET.q %}active{% endif %}">
+                                <span class="fa fa-circle text-info m-r-10"></span>
+                                Les administrateurs
+                                <b>({{ page_obj.paginator.count }})</b>
+                            </a>
                         </div>
-                    </div> <!-- end col -->
+                    </div>
 
+                    <!-- Grille des cartes admin -->
                     <div class="col-sm-9">
-
                         <div class="row">
                             {% for cust in page_obj %}
                             <div class="col-sm-4">
                                 <div class="panel">
                                     <div class="panel-body user-card">
                                         <div class="media-main">
-                                            <a class="pull-left" href="#">
-                                                <img class="thumb-lg img-circle" src="{{ cust.ImageUrl }}" alt="">
+                                            <a class="pull-left" href="{% url 'accounts:update' cust.slug %}">
+                                                <img class="thumb-lg img-circle"
+                                                     src="{{ cust.ImageUrl }}"
+                                                     alt="{{ cust.prenoms }} {{ cust.nom }}">
                                             </a>
                                             <div class="info">
                                                 <h4>{{ cust.prenoms }} {{ cust.nom }}</h4>
-                                                <p class="text-muted">Rôle : {{ cust.role }}</p>
+                                                <p class="text-muted">Rôle : {{ cust.role|default:"—" }}</p>
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
-                                        <p class="text-muted info-text">Adresse : {{ cust.adresse }}</p>
-                                        <p class="text-muted info-text">Email : {{ cust.email }}</p>
-                                        <p class="text-muted info-text">Téléphone : {{ cust.tel }}</p>
+
+                                        <p class="text-muted info-text">Adresse : {{ cust.adresse|default:"—" }}</p>
+                                        <p class="text-muted info-text">Email : {{ cust.email|default:"—" }}</p>
+                                        <p class="text-muted info-text">Téléphone : {{ cust.tel|default:"—" }}</p>
                                         <hr>
+
                                         <ul class="social-links list-inline m-b-0">
-                                            <li><a href="#" data-original-title="Facebook"><i
-                                                        class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#" data-original-title="Instagram"><i
-                                                        class="fa fa-instagram"></i></a></li>
                                             <li>
-                                                <form action="{% url 'accounts:update_state' %}" method="post"
-                                                    style="display: inline">
+                                                <form action="{% url 'accounts:update_state' %}" method="post" style="display:inline;">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="is_active" value="{{ cust.is_active }}">
                                                     <input type="hidden" name="id_state" value="{{ cust.id }}">
                                                     {% if cust.is_active %}
-                                                    <button class="btn btn-sm btn-primary" type="submit" title="Actif">
+                                                    <button class="btn btn-sm btn-primary" type="submit" title="Actif — cliquer pour suspendre">
                                                         <i class="ti-unlock"></i>
                                                     </button>
                                                     {% else %}
-                                                    <button class="btn btn-sm btn-warning" type="submit"
-                                                        title="Suspendu">
+                                                    <button class="btn btn-sm btn-warning" type="submit" title="Suspendu — cliquer pour activer">
                                                         <i class="ti-lock"></i>
                                                     </button>
                                                     {% endif %}
@@ -152,16 +166,20 @@
                                             </li>
                                             <li>
                                                 <a href="{% url 'accounts:update' cust.slug %}"
-                                                    class="tooltips bg-success" title="Modifier">
+                                                   class="btn btn-sm btn-success"
+                                                   title="modifier">
                                                     <i class="ti-pencil-alt"></i>
                                                 </a>
                                             </li>
                                             <li>
-                                                <form action="{% url 'accounts:delete' cust.slug %}" method="post"
-                                                    style="display:inline" data-bs-placement="top" data-bs-toggle="tooltip" title="Supprimer">
+                                                <form action="{% url 'accounts:delete' cust.slug %}"
+                                                      method="post"
+                                                      style="display:inline;"
+                                                      title="Supprimer">
                                                     {% csrf_token %}
-                                                    <button class="btn btn-sm btn-danger delete-confirm" type="submit"
-                                                        title="Supprimer">
+                                                    <button class="btn btn-sm btn-danger delete-confirm"
+                                                            type="submit"
+                                                            title="Supprimer">
                                                         <i class="ti-trash"></i>
                                                     </button>
                                                 </form>
@@ -170,15 +188,30 @@
                                     </div>
                                 </div>
                             </div>
+                            {# Reset float toutes les 3 cartes (col-sm-4) pour éviter le saut de ligne #}
+                            {% if forloop.counter|divisibleby:3 %}
+                            <div class="clearfix"></div>
+                            {% endif %}
+                            {% empty %}
+                            <div class="col-sm-12">
+                                <div class="alert alert-info text-center m-t-20">
+                                    {% if request.GET.q %}
+                                    Aucun administrateur ne correspond à « {{ request.GET.q }} ».
+                                    {% else %}
+                                    Aucun administrateur enregistré pour le moment.
+                                    {% endif %}
+                                </div>
+                            </div>
                             {% endfor %}
                         </div>
 
-
-                        <!-- Pagination -->
+                        {% if page_obj.paginator.num_pages > 1 %}
                         <div class="text-center">
                             <ul class="pagination">
                                 {% if page_obj.has_previous %}
-                                <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                <li>
+                                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo;</a>
+                                </li>
                                 {% else %}
                                 <li class="disabled"><span>&laquo;</span></li>
                                 {% endif %}
@@ -187,28 +220,30 @@
                                 {% if page_obj.number == num %}
                                 <li class="active"><span>{{ num }}</span></li>
                                 {% else %}
-                                <li><a href="?page={{ num }}">{{ num }}</a></li>
+                                <li>
+                                    <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a>
+                                </li>
                                 {% endif %}
                                 {% endfor %}
 
                                 {% if page_obj.has_next %}
-                                <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                <li>
+                                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&raquo;</a>
+                                </li>
                                 {% else %}
                                 <li class="disabled"><span>&raquo;</span></li>
                                 {% endif %}
                             </ul>
                         </div>
+                        {% endif %}
+                    </div>
 
-
-
-                    </div> <!-- end col -->
                 </div>
-
             </div>
         </div>
     </div>
-
-</div> <!-- End Row -->
+</div>
+<!-- Liste End -->
 
 {% endblock content %}
 

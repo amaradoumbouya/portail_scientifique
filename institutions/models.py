@@ -21,7 +21,7 @@ class Institution(models.Model):
     adresse_institution          = models.CharField(max_length=30, verbose_name= "Adresse de l'Institution")
     ville                        = models.CharField(max_length=20, blank=True, null=True, verbose_name= "Ville")
     pays                         = models.CharField(max_length=20, blank=True, null=True, default='Guinée', verbose_name= "Pays")
-    ror                          = models.CharField(max_length=255, verbose_name= "ROR")
+    ror                          = models.CharField(max_length=255, blank=True, null=True, verbose_name= "ROR")
     site_web_institution         = models.URLField(verbose_name= "Site web")
     logo_institution             = models.ImageField(upload_to='institutions/logos/', blank=True, null=True, verbose_name= "Logo de l'Institution")
     reseau_social_facebook_inst  = models.URLField(blank=True, null=True, verbose_name= "Facebook")

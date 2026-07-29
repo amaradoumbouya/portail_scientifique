@@ -121,7 +121,7 @@ class UserProfile(models.Model):
     fonction_poste         = models.CharField(max_length=150, blank=True, null=True, verbose_name='Fonction/postale :')
     grade                  = models.CharField(max_length=150, blank=True, null=True, choices=GRADE, verbose_name='Grade :')
     specialite             = models.CharField(max_length=150, blank=True, null=True, choices=SPECIALITE, verbose_name='Spécialité :')
-    orcid                  = models.CharField(max_length=150, verbose_name='ORCID :')
+    orcid                  = models.CharField(max_length=150, blank=True, null=True, verbose_name='ORCID :')
     role                   = models.CharField(max_length=150, blank=True, null=True, choices=ROLES, verbose_name='Rôle :')
     photo                  = models.ImageField(upload_to='accounts', blank=True, null=True, verbose_name='Photo :')
     reseau_social_facebook = models.URLField(blank=True, null=True, verbose_name= "Facebook")

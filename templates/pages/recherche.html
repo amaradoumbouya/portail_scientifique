@@ -523,6 +523,7 @@
                     <div class="col-lg-6">
                         <div class="result-card">
                             <div class="result-card-pub">
+
                                 <div class="pub-thumb">
                                     {% if publication.photo %}
                                     <img src="{{ publication.photo.url }}" alt="{{ publication.titre|default:'publication' }}">
@@ -530,6 +531,7 @@
                                     <div class="no-thumb"><i class="fa fa-file-text-o"></i></div>
                                     {% endif %}
                                 </div>
+
                                 <div class="result-card-body">
                                     {% if publication.domaine %}
                                     <span class="result-badge">{{ publication.domaine }}</span>
@@ -579,6 +581,9 @@
                                     <i class="fa fa-book"></i>
                                     {{ auteur.nb_publications }} publication{{ auteur.nb_publications|pluralize }}
                                 </p>
+                                <a href="{% url 'portail_site:detail_auteur' auteur.slug %}" class="result-link">
+                                    Voir le profil <i class="fa fa-angle-right"></i>
+                                </a>
                             </div>
                         </div>
                     </div>

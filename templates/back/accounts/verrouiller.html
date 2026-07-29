@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "back/includes/head.html" %}
+    <title>Verrouiller - Portail Scientifique</title>
+</head>
+<body>
+    <div class="wrapper-page">
+        <div class="panel panel-color panel-primary panel-pages">
+            <div class="panel-heading text-center">
+                <div class="user-thumb">
+                    {% if user.profile.ImageUrl %}
+                    <img src="{{ user.profile.ImageUrl }}" class="img-responsive img-circle img-thumbnail" alt="{{ user.full_name }}">
+                    {% else %}
+                    <div class="img-circle img-thumbnail" style="width:88px;height:88px;margin:0 auto;line-height:88px;background:#3c72fc;color:#fff;font-size:28px;">
+                        {{ user.prenoms|slice:":1"|upper }}{{ user.nom|slice:":1"|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+                <h3 class="text-white m-t-10">{{ user.full_name }}</h3>
+                <p class="text-white m-b-0" style="opacity:.85;">Écran verrouillé</p>
+            </div>
+            <div class="panel-body">
+                <form method="post" class="form-horizontal m-t-20" novalidate>
+                    {% csrf_token %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control input-lg" type="password" name="password" required
+                                placeholder="Mot de passe" autofocus autocomplete="current-password">
+                        </div>
+                    </div>
+                    <div class="form-group text-center m-t-20">
+                        <div class="col-xs-12">
+                            <button class="btn btn-primary btn-lg w-lg waves-effect waves-light" type="submit">
+                                Déverrouiller
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="text-center m-t-20">
+                    <form method="post" action="{% url 'portail_site:deconnexion' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link text-muted" style="border:none;background:none;padding:0;">
+                            Se déconnecter
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "back/includes/foot.html" %}
+</body>
+</html>

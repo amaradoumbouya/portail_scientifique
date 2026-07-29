@@ -30,9 +30,41 @@ class CustumerUserChangeForm(UserChangeForm):
         }
 
 class CustumerUserChangePasswordForm(forms.Form):
-    old_password = forms.CharField(widget=forms.TextInput(attrs={'type': 'password', 'class': 'form-control form-control-rounded'}), label='Mot de passe actuel :')
-    new_password1 = forms.CharField(widget=forms.TextInput(attrs={'type': 'password', 'class': 'form-control form-control-rounded'}), label='Nouveau mot de passe :')
-    new_password2 = forms.CharField(widget=forms.TextInput(attrs={'type': 'password', 'class': 'form-control form-control-rounded'}), label='Confirmer le nouveau mot de passe :')
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control form-control-rounded'}),
+        label='Mot de passe actuel :',
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control form-control-rounded'}),
+        label='Nouveau mot de passe :',
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control form-control-rounded'}),
+        label='Confirmer le nouveau mot de passe :',
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get('old_password')
+        if not self.user.check_password(old_password):
+            raise forms.ValidationError("Le mot de passe actuel est incorrect.")
+        return old_password
+
+    def clean(self):
+        cleaned_data = super().clean()
+        pwd1 = cleaned_data.get('new_password1')
+        pwd2 = cleaned_data.get('new_password2')
+        if pwd1 and pwd2 and pwd1 != pwd2:
+            raise forms.ValidationError("Les nouveaux mots de passe ne correspondent pas.")
+        return cleaned_data
+
+    def save(self):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        self.user.save()
+        return self.user
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

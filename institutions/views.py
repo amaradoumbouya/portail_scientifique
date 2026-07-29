@@ -190,6 +190,12 @@ def institut_dashboard(request):
     # Total des publications (perimetre du role)
     total_publications = publications_qs.count()
 
+    # Publications indexées (Scopus / WoS / DOAJ / AJOL → statut Acceptée)
+    total_publications_indexees = publications_qs.filter(
+        type_publication='article',
+        statut_indexation='Acceptée',
+    ).count()
+
     # =====================================================
     # PRODUCTION SCIENTIFIQUE
     # =====================================================
@@ -211,6 +217,44 @@ def institut_dashboard(request):
     )
 
     # =====================================================
+    # DONNEES DIAGRAMMES (liées aux cartes stats)
+    # =====================================================
+    chart_dashboard = {
+        "personnel": {
+            "labels": [
+                "Enseignants",
+                "Enseignants chercheurs",
+                "Étudiants Master",
+                "Étudiants Doctorat",
+            ],
+            "values": [
+                total_enseignants,
+                total_chercheurs,
+                total_master,
+                total_doctorat,
+            ],
+        },
+        "activite": {
+            "labels": ["Chercheurs actifs", "Chercheurs inactifs"],
+            "values": [enseignants_actifs, enseignants_inactifs],
+        },
+        "production": {
+            "labels": [
+                "Articles",
+                "Colloques",
+                "Production",
+                "Indexées",
+            ],
+            "values": [
+                total_articles,
+                total_communications,
+                total_production_scientifique,
+                total_publications_indexees,
+            ],
+        },
+    }
+
+    # =====================================================
     # CONTEXT
     # =====================================================
 
@@ -226,6 +270,7 @@ def institut_dashboard(request):
         "total_enseignants": total_enseignants,
         "total_chercheurs": total_chercheurs,
         "total_publications": total_publications,
+        "total_publications_indexees": total_publications_indexees,
         "enseignants_actifs": enseignants_actifs,
         "enseignants_inactifs": enseignants_inactifs,
         "total_master": total_master,
@@ -237,6 +282,9 @@ def institut_dashboard(request):
 
         # Production scientifique
         "total_production_scientifique": total_production_scientifique,
+
+        # Diagrammes
+        "chart_dashboard": chart_dashboard,
 
         # Top chercheurs
         "top_chercheurs": top_chercheurs,

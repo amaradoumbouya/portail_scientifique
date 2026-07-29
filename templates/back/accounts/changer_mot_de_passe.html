@@ -1,0 +1,57 @@
+{% extends "back/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Modifier mon mot de passe</h4>
+            <ol class="breadcrumb pull-right">
+                <a href="{% url 'accounts:profil_user' %}" class="btn btn-info btn-sm">Retour au profil</a>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sécurité du compte</h3>
+            </div>
+            <div class="panel-body">
+                <p class="text-muted" style="margin-bottom:20px;">
+                    Pour des raisons de sécurité, saisissez votre mot de passe actuel puis choisissez un nouveau mot de passe.
+                </p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        {{ form.old_password|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.new_password1|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.new_password2|as_crispy_field }}
+                    </div>
+                    <div class="m-t-20">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                            Enregistrer le nouveau mot de passe
+                        </button>
+                        <a href="{% url 'accounts:profil_user' %}" class="btn btn-default waves-effect">
+                            Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

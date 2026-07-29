@@ -178,11 +178,60 @@ def recherche_template_view(request):
         },
     )
 
-# Informations sur l'auteur
+# Informations sur l'auteur / chercheur (utilisateur du portail)
 def detail_auteur_template_view(request, slug):
-    auteur = get_object_or_404(Auteur, slug=slug)
-    publications = Publication.objects.filter(auteurs__in=[auteur]).order_by('-id')[:10]
-    return render(request, 'pages/detail_auteur.html', {'auteur': auteur, 'publications': publications,})
+    auteur = get_object_or_404(
+        User.objects.select_related('profile', 'profile__institution', 'biographie'),
+        slug=slug,
+    )
+    publications = list(
+        Publication.objects.filter(
+            publicationauteur__auteur=auteur,
+            statut_publication=True,
+        )
+        .distinct()
+        .order_by('-date_ajout_systeme')
+    )
+    biographie = ''
+    if hasattr(auteur, 'biographie') and auteur.biographie:
+        biographie = auteur.biographie.biographie or ''
+
+    from projets_detudes.models.participant import Participant
+
+    projets_encadres = Participant.objects.filter(
+        user=auteur,
+        role__in=[Participant.Role.DIRECTEUR, Participant.Role.CO_DIRECTEUR],
+    ).select_related('projet').distinct()
+
+    nb_publications = len(publications)
+    nb_articles = sum(1 for p in publications if p.type_publication == 'article')
+    nb_colloques = sum(1 for p in publications if p.type_publication == 'colloque')
+    nb_etudiants = projets_encadres.values('projet_id').distinct().count()
+
+    emplois = list(auteur.emploi.all().order_by('-date_debut_emploi'))
+    formations = list(auteur.etude_academique.all().order_by('-date_debut_etude'))
+    experiences = list(auteur.experience_professionnelle.all().order_by('-date_debut_experience'))
+    travaux = list(auteur.travaux_recherche.all().order_by('-date_de_debut_travaux'))
+
+    return render(
+        request,
+        'pages/detail_auteur.html',
+        {
+            'auteur': auteur,
+            'publications': publications,
+            'biographie': biographie,
+            'stats': {
+                'nb_publications': nb_publications,
+                'nb_articles': nb_articles,
+                'nb_colloques': nb_colloques,
+                'nb_etudiants': nb_etudiants,
+            },
+            'emplois': emplois,
+            'formations': formations,
+            'experiences': experiences,
+            'travaux': travaux,
+        },
+    )
 
 # Informations sur l'encadreur
 def detail_encadreur_template_view(request, slug):

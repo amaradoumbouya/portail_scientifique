@@ -145,6 +145,43 @@
         text-decoration: none;
         color: inherit;
     }
+
+    /* ===== Diagrammes ===== */
+    .chart-panel {
+        margin-bottom: 24px;
+    }
+
+    .chart-panel .panel-heading {
+        background: linear-gradient(135deg, #3c72fc 0%, #5b8cff 100%) !important;
+        border: none;
+        color: #fff;
+    }
+
+    .chart-panel .panel-title {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .chart-panel .panel-body {
+        padding: 22px 18px 12px;
+        min-height: 340px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+    }
+
+    .chart-panel canvas {
+        max-width: 100%;
+    }
+
+    .chart-legend-note {
+        font-size: 12px;
+        color: #8a95a8;
+        text-align: center;
+        margin-top: 8px;
+        margin-bottom: 0;
+    }
 </style>
 {% endblock style %}
 
@@ -238,7 +275,7 @@
             <div class="stat-icon"><i class="fa fa-comments"></i></div>
             <i class="fa fa-comments stat-bg-icon"></i>
             <h2 class="stat-value">{{ total_communications }}</h2>
-            <div class="stat-label">Communications colloques</div>
+            <div class="stat-label">Communications/colloques</div>
         </div>
     </div>
 
@@ -252,18 +289,68 @@
         </div>
     </div>
 
-    <!-- Publications scientifiques reconnues à l'internations au compte de l'institution -->
+    <!-- Publications scientifiques reconnues à l'international -->
     <div class="col-md-3">
         <div class="stat-card">
             <div class="stat-icon"><i class="fa fa-book"></i></div>
             <i class="fa fa-book stat-bg-icon"></i>
-            <h2 class="stat-value">{{ total_publications }}</h2>
-            <div class="stat-label">Publications scientifiques</div>
+            <h2 class="stat-value">{{ total_publications_indexees }}</h2>
+            <div class="stat-label">Publications scientifiques (indexées)</div>
         </div>
     </div>
 
 
 </div>
+
+<!-- ========================================= -->
+<!-- Diagrammes liés aux statistiques -->
+<!-- ========================================= -->
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-primary chart-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Personnel & étudiants</h3>
+            </div>
+            <div class="panel-body">
+                <div style="width:100%; height:280px;">
+                    <canvas id="chartPersonnel"></canvas>
+                </div>
+                <p class="chart-legend-note">Enseignants · Chercheurs · Master · Doctorat</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-primary chart-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Activité des chercheurs</h3>
+            </div>
+            <div class="panel-body">
+                <div style="width:100%; height:280px;">
+                    <canvas id="chartActivite"></canvas>
+                </div>
+                <p class="chart-legend-note">Actifs (avec publications) vs Inactifs</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-primary chart-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Production scientifique</h3>
+            </div>
+            <div class="panel-body">
+                <div style="width:100%; height:280px;">
+                    <canvas id="chartProduction"></canvas>
+                </div>
+                <p class="chart-legend-note">Articles · Colloques · Production · Indexées</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ chart_dashboard|json_script:"chart-institut-data" }}
 
 <!-- ========================================= -->
 <!-- TOP ENSEIGNANTS CHERCHEURS -->
@@ -576,6 +663,8 @@
 
 {% block scripts %}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
 <!-- Parsley -->
 <script type="text/javascript" src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}">
 </script>
@@ -585,6 +674,116 @@
     $(document).ready(function () {
 
         $('form').parsley();
+
+        var el = document.getElementById("chart-institut-data");
+        if (!el || typeof Chart === "undefined") return;
+
+        var data = JSON.parse(el.textContent);
+        var commonLegend = {
+            position: "bottom",
+            labels: { boxWidth: 12, padding: 12, color: "#6b7a99", font: { size: 11 } }
+        };
+
+        new Chart(document.getElementById("chartPersonnel"), {
+            type: "doughnut",
+            data: {
+                labels: data.personnel.labels,
+                datasets: [{
+                    data: data.personnel.values,
+                    backgroundColor: ["#3c72fc", "#1cc88a", "#f6a821", "#6f42c1"],
+                    borderWidth: 3,
+                    borderColor: "#ffffff",
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "58%",
+                plugins: {
+                    legend: commonLegend,
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0);
+                                var pct = total ? Math.round((ctx.raw / total) * 100) : 0;
+                                return " " + ctx.label + " : " + ctx.raw + " (" + pct + "%)";
+                            }
+                        }
+                    }
+                },
+                animation: { duration: 900 }
+            }
+        });
+
+        new Chart(document.getElementById("chartActivite"), {
+            type: "doughnut",
+            data: {
+                labels: data.activite.labels,
+                datasets: [{
+                    data: data.activite.values,
+                    backgroundColor: ["#36b9cc", "#e74a3b"],
+                    borderWidth: 3,
+                    borderColor: "#ffffff",
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "58%",
+                plugins: {
+                    legend: commonLegend,
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0);
+                                var pct = total ? Math.round((ctx.raw / total) * 100) : 0;
+                                return " " + ctx.label + " : " + ctx.raw + " (" + pct + "%)";
+                            }
+                        }
+                    }
+                },
+                animation: { duration: 900 }
+            }
+        });
+
+        new Chart(document.getElementById("chartProduction"), {
+            type: "bar",
+            data: {
+                labels: data.production.labels,
+                datasets: [{
+                    label: "Total",
+                    data: data.production.values,
+                    backgroundColor: [
+                        "rgba(60,114,252,.85)",
+                        "rgba(28,200,138,.85)",
+                        "rgba(246,168,33,.85)",
+                        "rgba(111,66,193,.85)"
+                    ],
+                    borderRadius: 10,
+                    borderSkipped: false,
+                    maxBarThickness: 42
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: "#6b7a99", font: { size: 11 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0, color: "#6b7a99" },
+                        grid: { color: "rgba(107,122,153,.12)" }
+                    }
+                },
+                animation: { duration: 900 }
+            }
+        });
 
     });
 

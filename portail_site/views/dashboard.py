@@ -1,36 +1,27 @@
-from datetime import timedelta
-from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.utils import timezone
 from django.db.models import Count
-from django.db.models.functions import TruncDate
-from publications.models.publication import Publication, Auteur, Encadreur, Institution, PublicationLike, PublicationComment, PublicationDownload
+from publications.models.publication import (
+    Publication,
+    PublicationLike,
+    PublicationComment,
+    PublicationDownload,
+)
+from accounts.models import UserProfile
+from institutions.views import _etudiants_queryset, _filter_etudiants_par_niveau
 
 
-# Calcule le compte jour/semaine/mois + la série des 7 derniers jours (pour la sparkline)
-def periode_stats(qs, champ_date, now):
-    debut_jour = now - timedelta(days=1)
-    debut_semaine = now - timedelta(days=7)
-    debut_mois = now - timedelta(days=30)
-
-    stats = {
-        "jour": qs.filter(**{f"{champ_date}__gte": debut_jour}).count(),
-        "semaine": qs.filter(**{f"{champ_date}__gte": debut_semaine}).count(),
-        "mois": qs.filter(**{f"{champ_date}__gte": debut_mois}).count(),
-    }
-
-    comptage = (
-        qs.filter(**{f"{champ_date}__gte": debut_semaine})
-          .annotate(jour=TruncDate(champ_date))
-          .values("jour")
-          .annotate(total=Count("id"))
-    )
-    par_jour = {c["jour"]: c["total"] for c in comptage}
-    stats["serie"] = [
-        par_jour.get((now - timedelta(days=i)).date(), 0)
-        for i in range(6, -1, -1)  # du plus ancien au plus récent
-    ]
-    return stats
+def count_publications_indexees(qs=None):
+    """
+    Articles scientifiques publiés et indexés à l'international
+    (statut_indexation = Acceptée → reconnu Scopus/WoS/DOAJ/AJOL).
+    """
+    qs = qs if qs is not None else Publication.objects.all()
+    return qs.filter(
+        type_publication="article",
+        statut_publication=True,
+        statut_indexation="Acceptée",
+    ).count()
 
 
 # Fonction permettant de formater la durée en mois, jours, heures, minutes et secondes
@@ -66,38 +57,73 @@ class DashboardTemplateView(TemplateView):
         def time_since(obj, attr):
             return (now - getattr(obj, attr)).total_seconds() if obj else None
 
-        # ADMIN : Voir toutes les publications et stats globales
-        if user.is_authenticated and getattr(user, "role", "") == "admin":
+        # SUPERUSER : stats globales plateforme
+        if user.is_authenticated and user.is_superuser:
             context['publications'] = Publication.objects.order_by('-date_ajout_systeme')
-            context['nb_publications'] = Publication.objects.count()
-            context['nb_auteurs'] = Auteur.objects.count()
-            context['nb_encadreurs'] = Encadreur.objects.count()
-            context['nb_institutions'] = Institution.objects.count()
 
-            # Derniers éléments
-            context['time_since_last_publication'] = format_duration(time_since(
-                Publication.objects.order_by('-date_ajout_systeme').first(), 'date_ajout_systeme'
-            ))
-            context['time_since_last_auteur'] = format_duration(time_since(
-                Auteur.objects.order_by('-created_at').first(), 'created_at'
-            ))
-            context['time_since_last_encadreur'] = format_duration(time_since(
-                Encadreur.objects.order_by('-created_at').first(), 'created_at'
-            ))
-            context['time_since_last_institution'] = format_duration(time_since(
-                Institution.objects.order_by('-created_at').first(), 'created_at'
-            ))
+            # Personnel (enseignants / enseignants-chercheurs)
+            personnel = (
+                UserProfile.objects
+                .filter(role__in=['enseignant', 'enseignant chercheur'])
+                .annotate(nbre_publications=Count('user__publications', distinct=True))
+            )
+            context['total_enseignants'] = personnel.filter(role='enseignant').count()
+            context['total_chercheurs'] = personnel.filter(role='enseignant chercheur').count()
+            context['enseignants_actifs'] = personnel.filter(nbre_publications__gt=0).count()
+            context['enseignants_inactifs'] = personnel.count() - context['enseignants_actifs']
 
-            # Statistiques par période (jour / semaine / mois) + série sparkline
-            context['stat_publications'] = periode_stats(
-                Publication.objects.all(), 'date_ajout_systeme', now
+            # Étudiants Master / Doctorat (toute la plateforme)
+            etudiants_qs = _etudiants_queryset(is_superuser=True)
+            context['total_master'] = _filter_etudiants_par_niveau(etudiants_qs, "master").count()
+            context['total_doctorat'] = _filter_etudiants_par_niveau(etudiants_qs, "doctorat").count()
+
+            # Production scientifique
+            publications_qs = Publication.objects.all()
+            context['total_articles'] = publications_qs.filter(type_publication='article').count()
+            context['total_communications'] = publications_qs.filter(type_publication='colloque').count()
+            context['total_production_scientifique'] = (
+                context['total_articles'] + context['total_communications']
             )
-            context['stat_telechargements'] = periode_stats(
-                PublicationDownload.objects.all(), 'downloaded_at', now
-            )
-            context['stat_likes'] = periode_stats(
-                PublicationLike.objects.all(), 'liked_at', now
-            )
+            context['total_publications_indexees'] = count_publications_indexees(publications_qs)
+
+            # Données pour les diagrammes (liées aux cartes)
+            context['chart_dashboard'] = {
+                "personnel": {
+                    "labels": [
+                        "Enseignants",
+                        "Enseignants chercheurs",
+                        "Étudiants Master",
+                        "Étudiants Doctorat",
+                    ],
+                    "values": [
+                        context['total_enseignants'],
+                        context['total_chercheurs'],
+                        context['total_master'],
+                        context['total_doctorat'],
+                    ],
+                },
+                "activite": {
+                    "labels": ["Chercheurs actifs", "Chercheurs inactifs"],
+                    "values": [
+                        context['enseignants_actifs'],
+                        context['enseignants_inactifs'],
+                    ],
+                },
+                "production": {
+                    "labels": [
+                        "Articles",
+                        "Colloques",
+                        "Production",
+                        "Indexées",
+                    ],
+                    "values": [
+                        context['total_articles'],
+                        context['total_communications'],
+                        context['total_production_scientifique'],
+                        context['total_publications_indexees'],
+                    ],
+                },
+            }
 
         # UTILISATEUR SIMPLE : Voir uniquement ses propres stats
         else:
