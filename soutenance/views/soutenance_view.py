@@ -273,6 +273,9 @@ def modal_planifier_soutenance(request, slug):
 
                 demande.save()
 
+                # Projet : en_revue → valide (+ date_validation)
+                demande.projet.passer_en_valide()
+
                 # ==========================================
                 # SUCCESS
                 # ==========================================
@@ -434,6 +437,9 @@ def modal_demande_soutenance(request, slug):
             demande.responsable_institution = request.user
 
             demande.save()
+
+            # Projet : en_cours / soumis → en_revue
+            projet.passer_en_revue()
 
             # ==================================
             # RECUPERATION DES DIRECTEURS
@@ -683,6 +689,9 @@ def ajouter_deliberation(request, slug):
             deliberation.mention = calculer_mention(float(deliberation.note_finale))
 
             deliberation.save()
+
+            # Projet : valide → termine
+            soutenance.projet.passer_en_termine()
 
             messages.success(request, "La délibération a été enregistrée avec succès.")
 

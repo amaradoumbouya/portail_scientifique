@@ -347,78 +347,71 @@
 
                                         </li>
 
-                                        <!-- Canevas projet.id-->
+                                        <!-- Définir un canevas -->
                                         <li>
-
                                             <a href="javascript:void(0);"
                                                 data-url="{% url 'projets_detudes:modal_canevas' participant.projet.slug %}"
-                                                data-title="Canevas du projet"
+                                                data-title="Ajouter un canevas"
                                                 onclick="openModal(this.dataset.url, this.dataset.title)">
-
                                                 <i class="ti-layers"></i>
-
-                                                Canevas
-
+                                                Définir un canevas
                                             </a>
-
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'projets_detudes:liste_canevas' participant.projet.slug %}">
+                                                <i class="ti-files"></i>
+                                                Liste des canevas
+                                            </a>
                                         </li>
 
-                                        <!-- Planning projet.id-->
+                                        <!-- Définir un planning -->
                                         <li>
-
                                             <a href="javascript:void(0);"
                                                 data-url="{% url 'projets_detudes:modal_planing' participant.projet.slug %}"
-                                                data-title="Planifier une rendez-vous"
+                                                data-title="Planifier un rendez-vous"
                                                 onclick="openModal(this.dataset.url, this.dataset.title)">
-
                                                 <i class="ti-calendar"></i>
-
-                                                Planning
-
+                                                Définir un planning
                                             </a>
-
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'projets_detudes:liste_planing' participant.projet.slug %}">
+                                                <i class="ti-time"></i>
+                                                Liste des plannings
+                                            </a>
                                         </li>
 
-                                        <!-- Ajouter tâche projet.id-->
+                                        <!-- Assigner une tâche -->
                                         <li>
-
                                             <a href="javascript:void(0);"
                                                 data-url="{% url 'projets_detudes:modal_tache' participant.projet.slug %}"
-                                                data-title="Ajouter une tâche"
+                                                data-title="Assigner une tâche"
                                                 onclick="openModal(this.dataset.url, this.dataset.title)">
-
                                                 <i class="ti-plus"></i>
-
-                                                Tâche
-
+                                                Assigner une tâche
                                             </a>
-
                                         </li>
-
-                                        <!-- Liste des tâches projet.id-->
                                         <li>
-
                                             <a href="{% url 'projets_detudes:liste_des_taches' participant.projet.slug %}">
-
                                                 <i class="ti-book"></i>
-
                                                 Liste des tâches
-
                                             </a>
-
                                         </li>
 
-                                        <!-- Progression projet.id-->
+                                        <!-- Progression -->
                                         <li>
-
-                                            <a href="{% url 'projets_detudes:progression' %}">
-
+                                            <a href="{% url 'projets_detudes:progression' participant.projet.slug %}">
                                                 <i class="ti-bar-chart"></i>
-
                                                 Progression
-
                                             </a>
+                                        </li>
 
+                                        <!-- Discussion -->
+                                        <li>
+                                            <a href="{% url 'projets_detudes:chat_projet' participant.projet.slug %}">
+                                                <i class="ti-comments"></i>
+                                                Discussion
+                                            </a>
                                         </li>
 
                                         <!-- Demande soutenance projet.id-->

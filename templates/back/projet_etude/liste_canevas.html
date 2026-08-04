@@ -1,0 +1,92 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Canevas du projet</h4>
+            <ol class="breadcrumb pull-right">
+                <li>
+                    {% if est_encadrant %}
+                    <a href="{% url 'projets_detudes:etudiants_a_encadrer' %}">Encadrements</a>
+                    {% else %}
+                    <a href="{% url 'projets_detudes:index' %}">Mes projets</a>
+                    {% endif %}
+                </li>
+                <li class="active">Canevas</li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="ti-book"></i> {{ projet.titre }}</h3>
+            </div>
+            <div class="panel-body">
+                <p class="text-muted" style="margin:0;">
+                    Documents de canevas définis par l'encadrant pour guider l'élaboration du projet.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="ti-layers"></i> Liste des canevas</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>Ajouté par</th>
+                            <th>Date</th>
+                            <th>Fichier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for canevas in canevas_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><strong>{{ canevas.titre }}</strong></td>
+                            <td>{{ canevas.description|truncatechars:120|linebreaksbr }}</td>
+                            <td>
+                                {% if canevas.cree_par %}
+                                {{ canevas.cree_par.prenoms }} {{ canevas.cree_par.nom }}
+                                {% else %}—{% endif %}
+                            </td>
+                            <td>{{ canevas.created_at|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                {% if canevas.canevas_pdf %}
+                                <a href="{{ canevas.canevas_pdf.url }}" target="_blank" class="btn btn-success btn-sm">
+                                    <i class="ti-download"></i> Télécharger
+                                </a>
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                Aucun canevas n'a encore été défini par l'encadrant.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

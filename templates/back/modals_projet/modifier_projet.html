@@ -1,0 +1,23 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form action="{% url 'projets_detudes:modal_modifier_projet' projet.slug %}" method="post">
+    {% csrf_token %}
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="form-group col-md-12">
+                {{ form.titre|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-12">
+                {{ form.description|as_crispy_field }}
+                <small class="text-muted">Faites une description détaillée du thème du projet</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary waves-effect waves-light">Enregistrer</button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+    </div>
+</form>

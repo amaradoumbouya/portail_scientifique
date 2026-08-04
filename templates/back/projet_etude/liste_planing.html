@@ -1,0 +1,139 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Planning d'encadrement</h4>
+            <ol class="breadcrumb pull-right">
+                <li>
+                    {% if est_encadrant %}
+                    <a href="{% url 'projets_detudes:etudiants_a_encadrer' %}">Encadrements</a>
+                    {% else %}
+                    <a href="{% url 'projets_detudes:index' %}">Mes projets</a>
+                    {% endif %}
+                </li>
+                <li class="active">Planning</li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="ti-book"></i> {{ projet.titre }}</h3>
+            </div>
+            <div class="panel-body">
+                <p class="text-muted" style="margin:0;">
+                    Rendez-vous et séances planifiés par l'encadrant.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="ti-calendar"></i> Liste des plannings</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Titre</th>
+                            <th>Date</th>
+                            <th>Horaire</th>
+                            <th>Lieu / Visio</th>
+                            <th>Statut</th>
+                            {% if est_encadrant %}
+                            <th>Actions</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for planning in planings %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <strong>{{ planning.titre }}</strong>
+                                <br><small class="text-muted">{{ planning.description|truncatechars:80 }}</small>
+                            </td>
+                            <td>{{ planning.date_rendez_vous|date:"d/m/Y" }}</td>
+                            <td>{{ planning.heure_debut }} – {{ planning.heure_fin }}</td>
+                            <td>
+                                {% if planning.lieu %}{{ planning.lieu }}{% endif %}
+                                {% if planning.lien_visio %}
+                                <br><a href="{{ planning.lien_visio }}" target="_blank">Lien visio</a>
+                                {% endif %}
+                                {% if not planning.lieu and not planning.lien_visio %}—{% endif %}
+                            </td>
+                            <td>
+                                <span class="label label-info">{{ planning.get_statut_display }}</span>
+                            </td>
+                            {% if est_encadrant %}
+                            <td>
+                                <a href="javascript:void(0);"
+                                    class="btn btn-primary btn-sm"
+                                    data-url="{% url 'projets_detudes:modal_modification_planing' planning.slug %}"
+                                    data-title="Modifier le planning"
+                                    onclick="openModal(this.dataset.url, this.dataset.title)">
+                                    <i class="ti-pencil-alt"></i>
+                                </a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="{% if est_encadrant %}7{% else %}6{% endif %}" class="text-center text-muted">
+                                Aucun planning n'a encore été défini par l'encadrant.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if est_encadrant %}
+<div id="main-modal" class="modal fade" tabindex="-1" role="dialog" style="display:none;">
+    <div class="modal-dialog" style="width:55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="modal-title">Chargement...</h4>
+            </div>
+            <div class="modal-body" id="modal-body"><p>Chargement...</p></div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block scripts %}
+{% if est_encadrant %}
+<script>
+    function openModal(url, title = "") {
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+        fetch(url)
+            .then(r => r.text())
+            .then(data => {
+                document.getElementById("modal-body").innerHTML = data;
+                $('#main-modal').modal('show');
+            })
+            .catch(() => {
+                document.getElementById("modal-body").innerHTML = "Erreur de chargement";
+            });
+    }
+</script>
+{% endif %}
+{% endblock scripts %}

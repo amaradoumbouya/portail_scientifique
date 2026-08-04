@@ -1,19 +1,127 @@
-Bonjour M./Mme {{ user.nom }},
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activation de votre compte</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f6fb; font-family:Arial, Helvetica, sans-serif; color:#2a323c;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f4f6fb; padding:24px 12px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 14px rgba(0,0,0,.06);">
 
-Vous avez été invité(e) à participer à un projet de mémoire en qualité de {{ role }}.
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:linear-gradient(135deg,#3c72fc 0%,#5b8cff 100%); padding:22px 28px; color:#ffffff;">
+                            <h1 style="margin:0; font-size:20px; font-weight:700;">Portail Scientifique</h1>
+                            <p style="margin:6px 0 0; font-size:13px; opacity:.9;">Invitation à rejoindre un projet</p>
+                        </td>
+                    </tr>
 
-Afin d’accéder à la plateforme et de collaborer avec les autres participants du projet, veuillez activer votre compte en cliquant sur le lien ci-dessous :
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:28px;">
+                            <p style="margin:0 0 16px; font-size:15px; line-height:1.6;">
+                                Bonjour <strong>{{ user.prenoms }} {{ user.nom }}</strong>,
+                            </p>
 
-{{ activation_url }}
+                            <p style="margin:0 0 16px; font-size:15px; line-height:1.6;">
+                                Vous avez été invité(e) à participer
+                                {% if titre_projet %}
+                                    au projet <strong>« {{ titre_projet }} »</strong>
+                                {% else %}
+                                    à un projet d’étude
+                                {% endif %}
+                                {% if type_projet_label %}
+                                    ({{ type_projet_label }})
+                                {% endif %}
+                                en qualité de <strong>{{ role|default:"participant" }}</strong>.
+                            </p>
 
-Vos informations de connexion sont les suivantes :
+                            <p style="margin:0 0 20px; font-size:15px; line-height:1.6;">
+                                Pour accéder à la plateforme et collaborer avec les autres participants,
+                                veuillez d’abord activer votre compte :
+                            </p>
 
-* **Adresse e-mail :** {{ user.email }}
-* **Mot de passe provisoire :** {{ password }}
+                            <!-- CTA activation -->
+                            <p style="margin:0 0 24px; text-align:center;">
+                                <a href="{{ activation_url }}"
+                                   style="display:inline-block; background:#3c72fc; color:#ffffff; text-decoration:none; padding:12px 22px; border-radius:8px; font-size:14px; font-weight:600;">
+                                    Activer mon compte
+                                </a>
+                            </p>
 
-Pour des raisons de sécurité, nous vous recommandons de modifier votre mot de passe après votre première connexion.
+                            <p style="margin:0 0 8px; font-size:13px; color:#6b7a99; line-height:1.5;">
+                                Ou copiez ce lien dans votre navigateur :<br>
+                                <a href="{{ activation_url }}" style="color:#3c72fc; word-break:break-all;">{{ activation_url }}</a>
+                            </p>
 
-Si vous n’êtes pas à l’origine de cette invitation, vous pouvez ignorer ce message.
+                            {% if accept_url and refuse_url %}
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:22px 0; background:#f7f9fc; border:1px solid #e6ecf7; border-radius:10px;">
+                                <tr>
+                                    <td style="padding:16px 18px; text-align:center;">
+                                        <p style="margin:0 0 14px; font-size:14px; font-weight:700; color:#3c72fc;">
+                                            Répondre à l'invitation d'encadrement
+                                        </p>
+                                        <p style="margin:0 0 16px; font-size:14px; line-height:1.6; color:#2a323c;">
+                                            Merci d'indiquer si vous acceptez ou refusez cet encadrement.
+                                        </p>
+                                        <a href="{{ accept_url }}"
+                                           style="display:inline-block; background:#28a745; color:#ffffff; text-decoration:none; padding:11px 18px; border-radius:8px; font-size:14px; font-weight:600; margin:0 6px 8px;">
+                                            Accepter
+                                        </a>
+                                        <a href="{{ refuse_url }}"
+                                           style="display:inline-block; background:#dc3545; color:#ffffff; text-decoration:none; padding:11px 18px; border-radius:8px; font-size:14px; font-weight:600; margin:0 6px 8px;">
+                                            Refuser
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            {% endif %}
 
-Cordialement,
-**L’équipe du Portail Scientifique**
+
+                            <!-- Credentials box -->
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:22px 0; background:#f7f9fc; border:1px solid #e6ecf7; border-radius:10px;">
+                                <tr>
+                                    <td style="padding:16px 18px;">
+                                        <p style="margin:0 0 10px; font-size:14px; font-weight:700; color:#3c72fc;">
+                                            Vos identifiants de connexion
+                                        </p>
+                                        <p style="margin:0 0 6px; font-size:14px; line-height:1.6;">
+                                            <strong>Adresse e-mail :</strong> {{ user.email }}
+                                        </p>
+                                        <p style="margin:0; font-size:14px; line-height:1.6;">
+                                            <strong>Mot de passe provisoire :</strong> {{ password }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin:0 0 16px; font-size:14px; line-height:1.6; color:#6b7a99;">
+                                Pour des raisons de sécurité, nous vous recommandons de modifier votre mot de passe
+                                après votre première connexion.
+                            </p>
+
+                            <p style="margin:0; font-size:13px; line-height:1.6; color:#8a95a8;">
+                                Si vous n’êtes pas à l’origine de cette invitation, vous pouvez ignorer ce message.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:16px 28px 22px; border-top:1px solid #eef1f6; background:#fafbfe;">
+                            <p style="margin:0; font-size:13px; color:#6b7a99; line-height:1.5;">
+                                Cordialement,<br>
+                                <strong style="color:#2a323c;">L’équipe du Portail Scientifique</strong>
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

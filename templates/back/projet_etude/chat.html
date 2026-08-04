@@ -1,0 +1,280 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block style %}
+{{ block.super }}
+<style>
+    .chat-shell {
+        border: 1px solid #e9edf5;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+    }
+
+    .chat-header {
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #3c72fc 0%, #5b8cff 100%);
+        color: #fff;
+    }
+
+    .chat-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .chat-header p {
+        margin: 4px 0 0;
+        opacity: .9;
+        font-size: 13px;
+    }
+
+    .chat-messages {
+        height: 420px;
+        overflow-y: auto;
+        padding: 20px;
+        background: #f7f9fc;
+    }
+
+    .chat-empty {
+        text-align: center;
+        color: #8a95a8;
+        padding: 60px 20px;
+    }
+
+    .chat-bubble {
+        max-width: 75%;
+        margin-bottom: 14px;
+        clear: both;
+    }
+
+    .chat-bubble.mine {
+        float: right;
+        text-align: right;
+    }
+
+    .chat-bubble.theirs {
+        float: left;
+        text-align: left;
+    }
+
+    .chat-bubble .meta {
+        font-size: 11px;
+        color: #8a95a8;
+        margin-bottom: 4px;
+    }
+
+    .chat-bubble .body {
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 14px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        word-break: break-word;
+        text-align: left;
+    }
+
+    .chat-bubble.mine .body {
+        background: #3c72fc;
+        color: #fff;
+        border-bottom-right-radius: 4px;
+    }
+
+    .chat-bubble.theirs .body {
+        background: #fff;
+        color: #2d3748;
+        border: 1px solid #e9edf5;
+        border-bottom-left-radius: 4px;
+    }
+
+    .chat-compose {
+        padding: 14px 16px;
+        border-top: 1px solid #e9edf5;
+        background: #fff;
+    }
+
+    .chat-compose .input-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .chat-compose textarea {
+        flex: 1;
+        resize: none;
+        border-radius: 10px;
+        border: 1px solid #dce3f0;
+        padding: 10px 12px;
+        min-height: 44px;
+        max-height: 120px;
+    }
+
+    .chat-compose .btn-send {
+        border-radius: 10px;
+        padding: 10px 18px;
+        background: #3c72fc;
+        border-color: #3c72fc;
+        white-space: nowrap;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Espace de discussion</h4>
+            <ol class="breadcrumb pull-right">
+                <li>
+                    {% if est_encadrant %}
+                    <a href="{% url 'projets_detudes:etudiants_a_encadrer' %}">Encadrements</a>
+                    {% else %}
+                    <a href="{% url 'projets_detudes:index' %}">Mes projets</a>
+                    {% endif %}
+                </li>
+                <li class="active">Chat</li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="chat-shell">
+            <div class="chat-header">
+                <h3><i class="ti-comments"></i> {{ projet.titre }}</h3>
+                <p>Échanges entre étudiant(s) et encadrant(s)</p>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                {% for msg in messages_chat %}
+                <div class="chat-bubble {% if msg.auteur_id == request.user.id %}mine{% else %}theirs{% endif %}"
+                    data-id="{{ msg.id }}">
+                    <div class="meta">
+                        {% if msg.auteur_id == request.user.id %}Vous{% else %}{{ msg.auteur.full_name }}{% endif %}
+                        · {{ msg.created_at|date:"d/m/Y H:i" }}
+                    </div>
+                    <div class="body">{{ msg.contenu }}</div>
+                </div>
+                {% empty %}
+                <div class="chat-empty" id="chat-empty">
+                    Aucun message pour le moment.<br>
+                    Commencez la discussion ci-dessous.
+                </div>
+                {% endfor %}
+                <div style="clear:both;"></div>
+            </div>
+
+            <div class="chat-compose">
+                <form id="chat-form">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <textarea id="chat-input" name="contenu" rows="2"
+                            placeholder="Écrire un message..." required maxlength="4000"></textarea>
+                        <button type="submit" class="btn btn-primary btn-send">
+                            <i class="ti-location-arrow"></i> Envoyer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+(function () {
+    var messagesEl = document.getElementById('chat-messages');
+    var form = document.getElementById('chat-form');
+    var input = document.getElementById('chat-input');
+    var csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
+    var sendUrl = "{% url 'projets_detudes:chat_envoyer' projet.slug %}";
+    var pollUrl = "{% url 'projets_detudes:chat_messages' projet.slug %}";
+    var lastId = 0;
+
+    messagesEl.querySelectorAll('.chat-bubble[data-id]').forEach(function (el) {
+        var id = parseInt(el.getAttribute('data-id'), 10);
+        if (id > lastId) lastId = id;
+    });
+
+    function scrollBottom() {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+        var d = document.createElement('div');
+        d.textContent = text;
+        return d.innerHTML;
+    }
+
+    function appendMessage(msg) {
+        var empty = document.getElementById('chat-empty');
+        if (empty) empty.remove();
+
+        var bubble = document.createElement('div');
+        bubble.className = 'chat-bubble ' + (msg.est_moi ? 'mine' : 'theirs');
+        bubble.setAttribute('data-id', msg.id);
+        bubble.innerHTML =
+            '<div class="meta">' +
+            escapeHtml(msg.est_moi ? 'Vous' : msg.auteur) +
+            ' · ' + escapeHtml(msg.created_at) +
+            '</div><div class="body">' + escapeHtml(msg.contenu) + '</div>';
+        messagesEl.appendChild(bubble);
+        if (msg.id > lastId) lastId = msg.id;
+        scrollBottom();
+    }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var contenu = (input.value || '').trim();
+        if (!contenu) return;
+
+        var fd = new FormData();
+        fd.append('contenu', contenu);
+        fd.append('csrfmiddlewaretoken', csrf);
+
+        fetch(sendUrl, { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+            .then(function (res) {
+                if (!res.ok) {
+                    alert(res.d.error || 'Erreur d\'envoi');
+                    return;
+                }
+                appendMessage(res.d.message);
+                input.value = '';
+                input.focus();
+            })
+            .catch(function () { alert('Erreur réseau'); });
+    });
+
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            form.dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+    });
+
+    function poll() {
+        fetch(pollUrl + '?after_id=' + lastId, { credentials: 'same-origin' })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                (data.messages || []).forEach(function (msg) {
+                    if (!messagesEl.querySelector('.chat-bubble[data-id="' + msg.id + '"]')) {
+                        appendMessage(msg);
+                    } else if (msg.id > lastId) {
+                        lastId = msg.id;
+                    }
+                });
+            })
+            .catch(function () {});
+    }
+
+    scrollBottom();
+    setInterval(poll, 4000);
+})();
+</script>
+{% endblock scripts %}

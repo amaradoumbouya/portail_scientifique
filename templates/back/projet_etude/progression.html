@@ -1,0 +1,154 @@
+{% extends "back/dashboard.html" %}
+{% load static %}
+
+{% block style %}
+{{ block.super }}
+<style>
+    a.stat-card-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    a.stat-card-link:hover,
+    a.stat-card-link:focus {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    a.stat-card-link .stat-trend {
+        color: var(--c, #3c72fc);
+        font-weight: 600;
+    }
+
+    #progression-fill {
+        min-width: 2em;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Progression du projet</h4>
+            <ol class="breadcrumb pull-right">
+                <li>
+                    {% if est_encadrant %}
+                    <a href="{% url 'projets_detudes:etudiants_a_encadrer' %}">Encadrements</a>
+                    {% else %}
+                    <a href="{% url 'projets_detudes:index' %}">Mes projets</a>
+                    {% endif %}
+                </li>
+                <li class="active">Progression</li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="ti-book"></i> {{ projet.titre }}</h3>
+            </div>
+            <div class="panel-body">
+                <p><strong>Statut :</strong> {{ projet.get_statut_display }}</p>
+                <div class="progress" style="height:24px;">
+                    <div id="progression-fill" class="progress-bar progress-bar-success"
+                        role="progressbar"
+                        data-pct="{{ progression_moyenne|default:0 }}"
+                        aria-valuenow="{{ progression_moyenne }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100">
+                        {{ progression_moyenne }}%
+                    </div>
+                </div>
+                <small class="text-muted">Progression moyenne des tâches</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 col-sm-6">
+        <a href="{% url 'projets_detudes:liste_canevas' projet.slug %}" class="stat-card-link" title="Voir les canevas">
+            <div class="stat-card" style="--c:#3c72fc;">
+                <div class="stat-icon"><i class="ti-layout"></i></div>
+                <p class="stat-label">Canevas</p>
+                <h2 class="stat-value" style="color:var(--c);">{{ nb_canevas }}</h2>
+                <p class="stat-trend">Voir →</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <a href="{% url 'projets_detudes:liste_planing' projet.slug %}" class="stat-card-link" title="Voir les plannings">
+            <div class="stat-card" style="--c:#6f42c1;">
+                <div class="stat-icon"><i class="ti-calendar"></i></div>
+                <p class="stat-label">Plannings</p>
+                <h2 class="stat-value" style="color:var(--c);">{{ nb_planings }}</h2>
+                <p class="stat-trend">Voir →</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <a href="{% url 'projets_detudes:liste_des_taches' projet.slug %}" class="stat-card-link" title="Voir les tâches">
+            <div class="stat-card" style="--c:#36b9cc;">
+                <div class="stat-icon"><i class="ti-agenda"></i></div>
+                <p class="stat-label">Tâches</p>
+                <h2 class="stat-value" style="color:var(--c);">{{ total_taches }}</h2>
+                <p class="stat-trend">Voir →</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card" style="--c:#1cc88a;">
+            <div class="stat-icon"><i class="ti-check-box"></i></div>
+            <p class="stat-label">Tâches terminées</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ taches_terminees }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-sm-4">
+        <div class="stat-card" style="--c:#f6a821;">
+            <div class="stat-icon"><i class="ti-reload"></i></div>
+            <p class="stat-label">En cours</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ taches_en_cours }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-4">
+        <div class="stat-card" style="--c:#8a95a8;">
+            <div class="stat-icon"><i class="ti-time"></i></div>
+            <p class="stat-label">En attente</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ taches_en_attente }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-4">
+        <div class="stat-card" style="--c:#e74a3b;">
+            <div class="stat-icon"><i class="ti-alert"></i></div>
+            <p class="stat-label">En retard</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ taches_retard }}</h2>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+    (function () {
+        var bar = document.getElementById('progression-fill');
+        if (bar) {
+            bar.style.width = (bar.getAttribute('data-pct') || '0') + '%';
+        }
+    })();
+</script>
+{% endblock scripts %}

@@ -2,6 +2,39 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block style %}
+{{ block.super }}
+<style>
+    /* Le menu Actions ne doit pas être coupé par overflow:hidden du panel */
+    .content .panel.panel-actions-open,
+    .content .panel.panel-actions-open .panel-body,
+    .content .panel.panel-actions-open .dataTables_wrapper,
+    .content .panel.panel-actions-open .dataTables_scroll,
+    .content .panel.panel-actions-open .table-responsive {
+        overflow: visible !important;
+    }
+
+    .content .panel .btn-group.open,
+    .content .panel .dropdown.open {
+        position: relative;
+        z-index: 1050;
+    }
+
+    .content .panel .dropdown-menu {
+        z-index: 1060;
+        max-height: none;
+    }
+
+    /* Sur les dernières lignes, ouvrir vers le haut pour rester visible */
+    table#datatable-buttons tbody tr:nth-last-child(-n+3) .btn-group > .dropdown-menu,
+    table#datatable-buttons tbody tr:nth-last-child(-n+3) .dropdown > .dropdown-menu {
+        top: auto;
+        bottom: 100%;
+        margin-bottom: 2px;
+    }
+</style>
+{% endblock style %}
+
 {% block content %}
 <!-- Page-Title -->
 <div class="row">
@@ -43,7 +76,7 @@
 <!-- Liste Start -->
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-primary">
+        <div class="panel panel-primary panel-actions-open">
             <div class="panel-heading">
                 <h3 class="panel-title">Liste des projets d'étude</h3>
             </div>
@@ -53,86 +86,142 @@
                     <thead>
                         <tr>
                             <th>N°</th>
-                            <th>Photo</th>
+                            <th>Type</th>
                             <th>Titre</th>
-                            <th>Auteur</th>
-                            <th>Encadreur</th>
-                            <th>Inst Contributrice</th>
-                            <th>Statut indexation</th>
-                            <th>Publié</th>
-                            <th style='width:11%'>Action</th>
+                            <th>Auteur(s)</th>
+                            <th>Encadreur(s)</th>
+                            <th>Institution</th>
+                            <th>Statut</th>
+                            <th>Soumis le</th>
+                            <th style="width:11%">Action</th>
                         </tr>
                     </thead>
 
-
                     <tbody>
-                        {% for pub in publications %}
+                        {% for projet in projets %}
                         <tr>
-                            <td>{{forloop.counter}}</td>
+                            <td>{{ forloop.counter }}</td>
                             <td>
-                                <img height="100" width="100" src=" {{ pub.ImageUrl }} " alt="">
-                            </td>
-                            <td>{{pub.titre}}</td>
-                            <td>
-                                {% for auteur in pub.auteurs.all %}
-                                {{ auteur.prenoms }} {{ auteur.nom }}{% if not forloop.last %}, {% endif %}
-                                {% empty %}
-                                Aucun auteur
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for encadreur in pub.encadreurs.all %}
-                                {{ encadreur.prenoms }} {{ encadreur.nom }}{% if not forloop.last %}, {% endif %}
-                                {% empty %}
-                                Aucun encadreur
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for institution in pub.institutions_contributrices.all %}
-                                {{ institution.nom }}{% if not forloop.last %}, {% endif %}
-                                {% empty %}
-                                Aucune institution
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% if pub.statut_indexation == 'Indexée' %}
-                                <span style="color:green;">✔ Indexée</span>
-                                {% elif pub.statut_indexation == 'Rejetée' %}
-                                <span style="color:red;">✘ Rejetée</span>
+                                {% if projet.type_projet == "memoire" %}
+                                <span class="label label-info">Mémoire</span>
                                 {% else %}
-                                <span style="color:orange;">⏳ En attente</span>
+                                <span class="label label-primary">Thèse</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ projet.titre }}</td>
+                            <td>
+                                {% for p in projet.projet.all %}
+                                    {% if p.role == "Auteur principal" or p.role == "Co-auteur" %}
+                                    <div>{{ p.user.prenoms }} {{ p.user.nom }}{% if p.role == "Co-auteur" %} <small>(Co-auteur)</small>{% endif %}</div>
+                                    {% endif %}
+                                {% empty %}
+                                —
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for p in projet.projet.all %}
+                                    {% if p.role == "Directeur" or p.role == "Co-directeur" or p.role == "Co-Directeur" %}
+                                    <div>{{ p.user.prenoms }} {{ p.user.nom }} <small>({{ p.role }})</small></div>
+                                    {% endif %}
+                                {% empty %}
+                                —
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if projet.candidate.institution %}
+                                {{ projet.candidate.institution.nom_institution }}
+                                {% else %}
+                                —
                                 {% endif %}
                             </td>
                             <td>
-                                <form action="{% url 'publications:statut_publication' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="text" name="statut_publication" value="{{pub.statut_publication}}"
-                                        hidden>
-                                    <input type="text" name="idpublier" value="{{pub.id}}" hidden>
-                                    {% if pub.statut_publication and pub.statut_indexation == 'Acceptée' %}
-                                    <button type="submit" class="btn btn-primary btn-sm">OUI</button>
-                                    {% else %}
-                                    <button type="submit" class="btn btn-danger btn-sm">NON</button>
-                                    {% endif %} 
-                                </form>
+                                {% if projet.statut == "soumis" %}
+                                <span class="label label-warning">Soumis</span>
+                                {% elif projet.statut == "en_cours" %}
+                                <span class="label label-info">En cours</span>
+                                {% elif projet.statut == "en_revue" %}
+                                <span class="label label-primary">En revue</span>
+                                {% elif projet.statut == "valide" %}
+                                <span class="label label-success">Validé</span>
+                                {% elif projet.statut == "termine" %}
+                                <span class="label label-success">Terminé</span>
+                                {% elif projet.statut == "rejete" %}
+                                <span class="label label-danger">Rejeté</span>
+                                {% else %}
+                                {{ projet.statut }}
+                                {% endif %}
                             </td>
+                            <td>{{ projet.date_soumission|date:"d/m/Y" }}</td>
+
                             <td>
-                                <a href="{% url 'publications:detail' pub.slug %}" class="btn btn-info btn-sm"><i
-                                        class="ti-eye"></i></a>&nbsp;&nbsp;&nbsp;
-                                <a href="{% url 'publications:update' pub.slug %}" class="btn btn-success btn-sm "><i
-                                        class="ti-pencil-alt"></i></a>&nbsp;&nbsp;&nbsp;
-                                <form action="{% url 'publications:delete' pub.slug %}" method="post"
-                                    style="display: inline" data-bs-placement="top" data-bs-toggle="tooltip"
-                                    title="Supprimer">
-                                    {% csrf_token %}
-                                    <button class="btn  btn-sm btn-danger delete-confirm" type="submit">
-                                        <i class="ti-trash"></i>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Actions <span class="caret"></span>
                                     </button>
-                                </form>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>
+                                            <a href="javascript:void(0);"
+                                                data-url="{% url 'projets_detudes:modal_voir_plus' projet.slug %}"
+                                                data-title="Détail du projet"
+                                                onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                <i class="ti-eye"></i> Voir le projet
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'projets_detudes:liste_canevas' projet.slug %}">
+                                                <i class="ti-layers"></i> Canevas reçus
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'projets_detudes:liste_planing' projet.slug %}">
+                                                <i class="ti-calendar"></i> Planning reçu
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'projets_detudes:liste_des_taches' projet.slug %}">
+                                                <i class="ti-book"></i> Mes tâches
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'projets_detudes:progression' projet.slug %}">
+                                                <i class="ti-bar-chart"></i> Progression
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'projets_detudes:chat_projet' projet.slug %}">
+                                                <i class="ti-comments"></i> Discussion
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="javascript:void(0);"
+                                                data-url="{% url 'projets_detudes:modal_modifier_projet' projet.slug %}"
+                                                data-title="Modifier le projet"
+                                                onclick="openModal(this.dataset.url, this.dataset.title)">
+                                                <i class="ti-pencil-alt"></i> Modifier
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <form action="{% url 'projets_detudes:supprimer_projet' projet.slug %}"
+                                                method="post"
+                                                onsubmit="return confirm('Supprimer définitivement ce projet ?');">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-link text-danger"
+                                                    style="padding:3px 20px; text-align:left; width:100%;">
+                                                    <i class="ti-trash"></i> Supprimer
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="text-center">Aucun projet d'étude pour le moment.</td>
+                        </tr>
                         {% endfor %}
-
                     </tbody>
                 </table>
 

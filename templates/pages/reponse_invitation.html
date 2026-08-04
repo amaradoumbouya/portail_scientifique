@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-heading header-text text-center py-5" style="background-color:#f5f5f5;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="text-content">
+          <h4 class="text-muted">Invitation d'encadrement</h4>
+          <h2 class="fw-bold">
+            {% if success %}
+              {% if action == 'accepte' %}Invitation acceptée{% else %}Invitation refusée{% endif %}
+            {% else %}
+              Lien invalide
+            {% endif %}
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 text-center">
+      {% if success %}
+        <div class="alert {% if action == 'accepte' %}alert-success{% else %}alert-warning{% endif %}" role="alert">
+          {{ message }}
+        </div>
+        {% if participant %}
+          <p class="text-muted mb-4">
+            Projet : <strong>{{ participant.projet.titre }}</strong><br>
+            Rôle : <strong>{{ participant.role }}</strong>
+          </p>
+        {% endif %}
+        {% if deja_traite %}
+          <p class="small text-muted">Aucune autre action n'est nécessaire.</p>
+        {% endif %}
+      {% else %}
+        <div class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+      {% endif %}
+      <a href="{% url 'portail_site:index' %}" class="btn btn-primary mt-2">Retour à l'accueil</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -20,13 +20,11 @@
             <ol class="breadcrumb pull-right">
 
                 <li>
-
-                    <a href="{% url 'projets_detudes:etudiants_a_encadrer'%}">
-
-                        Retour
-
-                    </a>
-
+                    {% if est_encadrant %}
+                    <a href="{% url 'projets_detudes:etudiants_a_encadrer' %}">Encadrements</a>
+                    {% else %}
+                    <a href="{% url 'projets_detudes:index' %}">Mes projets</a>
+                    {% endif %}
                 </li>
 
                 <li class="active">
@@ -49,112 +47,36 @@
 <!-- Statistiques -->
 <div class="row">
 
-    <!-- Total -->
-    <div class="col-md-3">
-
-        <div class="panel panel-primary">
-
-            <div class="panel-body text-center">
-
-                <i class="ti-agenda fa-3x"></i>
-
-                <h2 style="margin-top: 15px;">
-
-                    {{ total_taches }}
-
-                </h2>
-
-                <h4>
-
-                    Total tâches
-
-                </h4>
-
-            </div>
-
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card" style="--c:#3c72fc;">
+            <div class="stat-icon"><i class="ti-agenda"></i></div>
+            <p class="stat-label">Total tâches</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ total_taches }}</h2>
         </div>
-
     </div>
 
-    <!-- Terminées -->
-    <div class="col-md-3">
-
-        <div class="panel panel-success">
-
-            <div class="panel-body text-center">
-
-                <i class="ti-check-box fa-3x"></i>
-
-                <h2 style="margin-top: 15px;">
-
-                    {{ taches_terminees }}
-
-                </h2>
-
-                <h4>
-
-                    Terminées
-
-                </h4>
-
-            </div>
-
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card" style="--c:#1cc88a;">
+            <div class="stat-icon"><i class="ti-check-box"></i></div>
+            <p class="stat-label">Terminées</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ taches_terminees }}</h2>
         </div>
-
     </div>
 
-    <!-- En cours -->
-    <div class="col-md-3">
-
-        <div class="panel panel-warning">
-
-            <div class="panel-body text-center">
-
-                <i class="ti-reload fa-3x"></i>
-
-                <h2 style="margin-top: 15px;">
-
-                    {{ taches_en_cours }}
-
-                </h2>
-
-                <h4>
-
-                    En cours
-
-                </h4>
-
-            </div>
-
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card" style="--c:#f6a821;">
+            <div class="stat-icon"><i class="ti-reload"></i></div>
+            <p class="stat-label">En cours</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ taches_en_cours }}</h2>
         </div>
-
     </div>
 
-    <!-- Retard -->
-    <div class="col-md-3">
-
-        <div class="panel panel-danger">
-
-            <div class="panel-body text-center">
-
-                <i class="ti-alert fa-3x"></i>
-
-                <h2 style="margin-top: 15px;">
-
-                    {{ taches_retard }}
-
-                </h2>
-
-                <h4>
-
-                    En retard
-
-                </h4>
-
-            </div>
-
+    <div class="col-md-3 col-sm-6">
+        <div class="stat-card" style="--c:#e74a3b;">
+            <div class="stat-icon"><i class="ti-alert"></i></div>
+            <p class="stat-label">En retard</p>
+            <h2 class="stat-value" style="color:var(--c);">{{ taches_retard }}</h2>
         </div>
-
     </div>
 
 </div>
@@ -372,18 +294,14 @@
                                 <td>
 
                                     <div class="progress progress-sm">
-
-                                        <div class="progress-bar progress-bar-success"
+                                        <div class="progress-bar progress-bar-danger tache-progress-bar"
                                             role="progressbar"
-                                            aria-valuenow="{{ tache.progression }}"
                                             aria-valuemin="0"
                                             aria-valuemax="100"
-                                            style="width: {{ tache.progression }}%;">
-
-                                            {{ tache.progression }}%
-
+                                            aria-valuenow="{{ tache.progression|default:0 }}"
+                                            data-progress="{{ tache.progression|default:0 }}">
+                                            {{ tache.progression|default:0 }}%
                                         </div>
-
                                     </div>
 
                                 </td>
@@ -399,20 +317,16 @@
 
                                     </a>
 
-                                    <!-- Modifier -->
+                                    {% if est_encadrant %}
+                                    <!-- Modifier (encadrant) -->
                                     <a href="javascript:void(0);"
-
                                         data-url="{% url 'projets_detudes:modal_update_tache' tache.slug %}"
-
                                         data-title="Modifier la tâche"
-
                                         onclick="openModal(this.dataset.url, this.dataset.title)"
-
                                         class="btn btn-primary btn-sm">
-
                                         <i class="ti-pencil-alt"></i>
-
                                     </a>
+                                    {% endif %}
 
                                     <!-- Télécharger -->
                                     {% if tache.fichier_pdf_tache %}
@@ -460,6 +374,20 @@
 
 </div>
 
+{% if est_encadrant %}
+<div id="main-modal" class="modal fade" tabindex="-1" role="dialog" style="display:none;">
+    <div class="modal-dialog" style="width:55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="modal-title">Chargement...</h4>
+            </div>
+            <div class="modal-body" id="modal-body"><p>Chargement...</p></div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% endblock content %}
 
 
@@ -469,13 +397,32 @@
     src="{% static 'back/assets/plugins/parsleyjs/parsley.min.js' %}"></script>
 
 <script type="text/javascript">
-
     $(document).ready(function () {
-
         $('form').parsley();
-
+        document.querySelectorAll('.tache-progress-bar').forEach(function (bar) {
+            var value = bar.getAttribute('data-progress') || '0';
+            bar.style.width = value + '%';
+        });
     });
-
 </script>
+
+{% if est_encadrant %}
+<script type="text/javascript">
+    function openModal(url, title) {
+        title = title || "";
+        document.getElementById("modal-title").innerText = title;
+        document.getElementById("modal-body").innerHTML = "Chargement...";
+        fetch(url)
+            .then(function (r) { return r.text(); })
+            .then(function (data) {
+                document.getElementById("modal-body").innerHTML = data;
+                $('#main-modal').modal('show');
+            })
+            .catch(function () {
+                document.getElementById("modal-body").innerHTML = "Erreur de chargement";
+            });
+    }
+</script>
+{% endif %}
 
 {% endblock scripts %}
