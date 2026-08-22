@@ -4,6 +4,9 @@ from auteurs.models import Auteur
 from encadreurs.models import Encadreur
 from institutions.models import Institution
 
+MAX_PUBLICATION_FILE_SIZE = 50 * 1024 * 1024  # 50 Mo (aligné Nginx)
+
+
 class PublicationForm(forms.ModelForm):
     class Meta:
         model = Publication
@@ -16,13 +19,28 @@ class PublicationForm(forms.ModelForm):
             'fichier_pdf'
         ]
         widgets = {
-            "type_publication":forms.Select(attrs={'class': 'form-control form-control-rounded'}),
-            "photo":forms.ClearableFileInput(attrs={'class': 'form-control form-control-rounded'}),
-            "titre":forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
-            "langue":forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
-            "doi":forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
-            "fichier_pdf":forms.ClearableFileInput(attrs={'class': 'form-control form-control-rounded'}),
+            "type_publication": forms.Select(attrs={'class': 'form-control form-control-rounded'}),
+            "photo": forms.ClearableFileInput(attrs={'class': 'form-control form-control-rounded'}),
+            "titre": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
+            "langue": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
+            "doi": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
+            "fichier_pdf": forms.ClearableFileInput(attrs={'class': 'form-control form-control-rounded'}),
         }
+
+    def _validate_file_size(self, field_name, label):
+        fichier = self.cleaned_data.get(field_name)
+        if fichier and hasattr(fichier, 'size') and fichier.size > MAX_PUBLICATION_FILE_SIZE:
+            max_mo = MAX_PUBLICATION_FILE_SIZE // (1024 * 1024)
+            raise forms.ValidationError(
+                f"Le fichier « {label} » est trop volumineux (max. {max_mo} Mo)."
+            )
+        return fichier
+
+    def clean_fichier_pdf(self):
+        return self._validate_file_size('fichier_pdf', 'article')
+
+    def clean_photo(self):
+        return self._validate_file_size('photo', 'photo')
 
 
 class ArticleForm(forms.ModelForm):

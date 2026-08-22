@@ -16,6 +16,7 @@ autoevaluation/
 autoevaluation_irs/
 cd/
 portailscientifique/
+deploy/
 
 # Fichiers Python
 __pycache__/
