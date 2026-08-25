@@ -525,11 +525,7 @@
                             <div class="result-card-pub">
 
                                 <div class="pub-thumb">
-                                    {% if publication.photo %}
-                                    <img src="{{ publication.photo.url }}" alt="{{ publication.titre|default:'publication' }}">
-                                    {% else %}
-                                    <div class="no-thumb"><i class="fa fa-file-text-o"></i></div>
-                                    {% endif %}
+                                    {% include "includes/publication_cover.html" with titre=publication.titre size="sm" detail_url=publication.get_absolute_url %}
                                 </div>
 
                                 <div class="result-card-body">
@@ -605,9 +601,13 @@
                         <div class="result-card">
                             <div class="result-card-body result-card-these">
                                 <div class="these-icon"><i class="fa fa-graduation-cap"></i></div>
-                                <span class="result-badge">{{ these.get_type_projet_display }}</span>
-                                <h4>{{ these.titre|truncatewords:16 }}</h4>
-                                <p class="result-excerpt">{{ these.description|truncatewords:28 }}</p>
+                                <span class="result-badge">{{ these.get_type_publication_display }}</span>
+                                <h4>
+                                    <a href="{% url 'portail_site:detail_publication' these.slug %}">
+                                        {{ these.titre|truncatewords:16 }}
+                                    </a>
+                                </h4>
+                                <p class="result-excerpt">{{ these.resume|default:"Aucun résumé disponible."|truncatewords:28 }}</p>
                             </div>
                         </div>
                     </div>

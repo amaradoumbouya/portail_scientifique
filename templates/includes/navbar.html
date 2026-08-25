@@ -23,6 +23,11 @@
                             <li class="nav-item">
                                 <a href="{% url 'portail_site:publication_par_type' %}" class="nav-link dropdown-toggle">Publications</a>
                                 <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a href="{% url 'portail_site:publication' %}" class="nav-link">
+                                            Toutes les publications
+                                        </a>
+                                    </li>
                                     {% for type_doc in request.type_document %}
                                     <li class="nav-item">
                                         <a href="{% url 'portail_site:publication_par_type_detail' type_doc.slug %}" class="nav-link">
@@ -35,6 +40,10 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{% url 'statistiques:index' %}" class="nav-link">Statistiques</a>
                             </li>
 
                             <li class="nav-item">

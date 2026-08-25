@@ -3,6 +3,9 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.crypto import get_random_string
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ProjetEtude(models.Model):
@@ -79,7 +82,16 @@ class ProjetEtude(models.Model):
         """valide → termine (délibération enregistrée)."""
         if self.statut not in (self.StatutProjet.VALIDE, self.StatutProjet.EN_REVUE):
             return False
-        return self._changer_statut(self.StatutProjet.TERMINE)
+        change = self._changer_statut(self.StatutProjet.TERMINE)
+        if change:
+            try:
+                from projets_detudes.catalogage import publier_projet_termine
+                publier_projet_termine(self)
+            except Exception:
+                logger.exception(
+                    "Indexation NLP du projet terminé %s impossible.", self.pk
+                )
+        return change
 
     def passer_en_rejete(self):
         """soumis / en_cours → rejeté (refus du directeur)."""

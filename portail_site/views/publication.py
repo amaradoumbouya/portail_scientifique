@@ -1,23 +1,44 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView
 from django.db.models import Q, Count
 from types_document.models import TypeDocument
 from publications.models.publication import Publication
 from django.core.paginator import Paginator
-from auteurs.models import Auteur
 from encadreurs.models import Encadreur
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from publications.forms.publication_forms import PublicationForm
-from projets_detudes.models.projet import ProjetEtude
 from django.shortcuts import redirect
+from publications.metadata import json_ld, json_ld_script, metadonnees_publication
 
 User = get_user_model()
 
 
-# La vue de toutes les publications
-class PublicationTemplateView(TemplateView):
-    template_name = 'pages/publication.html'
+def _publications_publiees():
+    return (
+        Publication.objects.filter(statut_publication=True)
+        .prefetch_related('publicationauteur_set__auteur')
+        .order_by('-date_ajout_systeme')
+    )
+
+
+def catalogue_publications(request):
+    """Catalogue public de toutes les publications indexées / publiées."""
+    qs = _publications_publiees()
+    type_filtre = (request.GET.get('type') or '').strip()
+    if type_filtre in ('article', 'colloque', 'memoire', 'these'):
+        qs = qs.filter(type_publication=type_filtre)
+
+    paginator = Paginator(qs, 9)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(
+        request,
+        'pages/publication.html',
+        {
+            'page_obj': page_obj,
+            'type_filtre': type_filtre,
+            'total': qs.count(),
+        },
+    )
 
 
 def _resolver_contenu_par_type(type_document):
@@ -44,14 +65,20 @@ def _resolver_contenu_par_type(type_document):
 
     if any(mot in libelle for mot in ('mémoire', 'memoire', 'master')):
         return (
-            'projet',
-            ProjetEtude.objects.filter(type_projet='memoire').order_by('-date_soumission'),
+            'publication',
+            Publication.objects.filter(
+                type_publication='memoire',
+                statut_publication=True,
+            ).order_by('-date_ajout_systeme'),
         )
 
     if any(mot in libelle for mot in ('thèse', 'these', 'doctorat')):
         return (
-            'projet',
-            ProjetEtude.objects.filter(type_projet='these').order_by('-date_soumission'),
+            'publication',
+            Publication.objects.filter(
+                type_publication='these',
+                statut_publication=True,
+            ).order_by('-date_ajout_systeme'),
         )
 
     return ('publication', Publication.objects.none())
@@ -88,20 +115,42 @@ def publication_par_type_template_view(request, slug=None):
 
 # Detail_d'une_publication
 def detail_publication_template(request, slug):
-    publication = get_object_or_404(Publication, slug=slug, statut_publication=True)
+    publication = get_object_or_404(
+        Publication.objects.select_related('indexation').prefetch_related(
+            'publicationauteur_set__auteur__profile'
+        ),
+        slug=slug,
+        statut_publication=True,
+    )
     publications_categorie = (
         Publication.objects.filter(domaine=publication.domaine, statut_publication=True)
         .exclude(id=publication.id)
         .order_by('-date_ajout_systeme')[:10]
     )
     comments = publication.comments.order_by('-id')[:5]
+    pdf_url = (
+        request.build_absolute_uri(publication.fichier_pdf.url)
+        if publication.fichier_pdf
+        else ''
+    )
+    photo_url = (
+        request.build_absolute_uri(publication.photo.url)
+        if publication.photo
+        else ''
+    )
+    meta = metadonnees_publication(publication, request)
     return render(
         request,
         'pages/detail_publication.html',
         {
             'publication': publication,
+            'publication_reelle': publication.get_real_instance(),
             'publications_categorie': publications_categorie,
             'comments': comments,
+            'citation_pdf_url': pdf_url,
+            'citation_image_url': photo_url,
+            'meta': meta,
+            'json_ld_payload': json_ld_script(json_ld(meta)),
         },
     )
 
@@ -140,10 +189,15 @@ def _filtre_auteurs(query):
 
 
 def _filtre_theses(query):
-    return ProjetEtude.objects.filter(
-        Q(titre__icontains=query) | Q(description__icontains=query),
-        type_projet__in=['these', 'memoire'],
-    ).order_by('-date_soumission')
+    return Publication.objects.filter(
+        statut_publication=True,
+        type_publication__in=['these', 'memoire'],
+    ).filter(
+        Q(titre__icontains=query)
+        | Q(resume__icontains=query)
+        | Q(mots_cles__icontains=query)
+        | Q(domaine__icontains=query)
+    ).order_by('-date_ajout_systeme')
 
 
 def recherche_template_view(request):

@@ -98,13 +98,12 @@
             <div class="col-lg-4 col-sm-6">
                 <div class="single-sp-class">
                     <div class="course-img">
-                        {% if kind == 'publication' and item.photo %}
-                        <img src="{{ item.photo.url }}" alt="{{ item.titre }}" />
+                        {% if kind == 'publication' %}
+                        {% include "includes/publication_cover.html" with titre=item.titre detail_url=item.get_absolute_url %}
                         {% else %}
-                        <img src="{% static 'front/assets/images/courses/chercheur_1.png' %}" alt="{{ item.titre }}" />
+                        {% include "includes/publication_cover.html" with titre=item.titre %}
                         {% endif %}
                         <div class="course-content">
-                            <h2>{{ item.titre|truncatewords:12 }}</h2>
                             <p>
                                 {% if kind == 'publication' %}
                                 {{ item.resume|default:item.domaine|default:"Publication scientifique"|truncatewords:25 }}

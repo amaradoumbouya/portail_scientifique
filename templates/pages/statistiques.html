@@ -1,0 +1,436 @@
+{% extends "index.html" %}
+{% load static %}
+{% block title %}
+<title>Statistiques de la production scientifique - Portail Scientifique</title>
+{% endblock title %}
+
+{% block style %}
+<style>
+    .stats-kpis { margin-bottom: 40px; }
+    .stats-kpi {
+        background: #fff;
+        border: 1px solid #e9edf5;
+        border-radius: 12px;
+        padding: 22px 18px;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(0,0,0,.04);
+        margin-bottom: 20px;
+        min-height: 140px;
+    }
+    .stats-kpi .kpi-n {
+        font-size: 32px;
+        font-weight: 700;
+        color: #3c72fc;
+        margin: 0 0 6px;
+        font-family: "Playfair Display", serif;
+    }
+    .stats-kpi .kpi-l {
+        margin: 0;
+        color: #616161;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .stats-panel {
+        background: #fff;
+        border: 1px solid #e9edf5;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 28px;
+        box-shadow: 0 4px 14px rgba(0,0,0,.04);
+    }
+    .stats-panel h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        margin: 0 0 18px;
+        color: #181818;
+    }
+    .stats-table { width: 100%; }
+    .stats-table th, .stats-table td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #f0f2f7;
+        vertical-align: middle;
+    }
+    .stats-table th {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: #616161;
+        font-weight: 600;
+    }
+    .stats-bar {
+        display: block;
+        height: 8px;
+        background: #e9edf5;
+        border-radius: 6px;
+        overflow: hidden;
+        min-width: 80px;
+    }
+    .stats-bar > span {
+        display: block;
+        height: 100%;
+        width: var(--bar-pct, 0%);
+        background: #3c72fc;
+        border-radius: 6px;
+    }
+    .stats-empty { color: #616161; padding: 12px 0; margin: 0; }
+    .stats-canvas-wrap {
+        position: relative;
+        height: 260px;
+        margin-bottom: 8px;
+    }
+    .stats-inst-row { cursor: pointer; }
+    .stats-inst-row:hover td { background: rgba(60, 114, 252, 0.06); }
+    .stats-inst-row.is-selected td { background: rgba(60, 114, 252, 0.12); }
+    .stats-panel-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+    .stats-panel-head h3 { margin: 0; }
+    .stats-hint { font-size: 13px; color: #616161; margin: 0 0 12px; }
+    .stats-reset {
+        border: 0;
+        background: none;
+        color: #3c72fc;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 0;
+        cursor: pointer;
+        display: none;
+    }
+    .stats-reset.is-on { display: inline; }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="banner-area special-class">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Statistiques publiques</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active">Statistiques</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="special-single-class">
+    <div class="container">
+        <p class="text-center" style="margin-bottom:28px;color:#616161;">
+            Production scientifique publiée sur le portail, par type, domaine, institution et auteur.
+            Les articles indexés sont ceux reconnus dans Scopus, WoS, DOAJ ou AJOL.
+        </p>
+
+        <div class="row stats-kpis">
+            <div class="col-lg-2 col-sm-4 col-6">
+                <div class="stats-kpi">
+                    <p class="kpi-n">{{ nb_publications }}</p>
+                    <p class="kpi-l">Publications</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-4 col-6">
+                <div class="stats-kpi">
+                    <p class="kpi-n">{{ nb_indexees }}</p>
+                    <p class="kpi-l">Articles indexés</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-4 col-6">
+                <div class="stats-kpi">
+                    <p class="kpi-n">{{ nb_domaines }}</p>
+                    <p class="kpi-l">Domaines</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-4 col-6">
+                <div class="stats-kpi">
+                    <p class="kpi-n">{{ nb_auteurs }}</p>
+                    <p class="kpi-l">Auteurs</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-4 col-6">
+                <div class="stats-kpi">
+                    <p class="kpi-n">{{ nb_institutions }}</p>
+                    <p class="kpi-l">Institutions</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-4 col-6">
+                <div class="stats-kpi">
+                    <p class="kpi-n">{{ nb_theses|add:nb_memoires }}</p>
+                    <p class="kpi-l">Thèses &amp; mémoires</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="stats-panel">
+                    <h3>Par type de document</h3>
+                    <div class="stats-canvas-wrap">
+                        <canvas id="chartTypes"></canvas>
+                    </div>
+                    {% if types %}
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Nombre</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in types %}
+                            <tr>
+                                <td>{{ row.libelle }}</td>
+                                <td>{{ row.n }}</td>
+                                <td>
+                                    <span class="stats-bar"><span style="--bar-pct: {{ row.pct }}%;"></span></span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="stats-empty">Aucune publication publiée pour le moment.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="stats-panel">
+                    <h3>Par domaine scientifique</h3>
+                    <div class="stats-canvas-wrap">
+                        <canvas id="chartDomaines"></canvas>
+                    </div>
+                    {% if domaines %}
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Domaine</th>
+                                <th>Nombre</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in domaines %}
+                            <tr>
+                                <td>{{ row.libelle }}</td>
+                                <td>{{ row.n }}</td>
+                                <td>
+                                    <span class="stats-bar"><span style="--bar-pct: {{ row.pct }}%;"></span></span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="stats-empty">Aucun domaine identifié.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-panel">
+            <h3>Évolution annuelle</h3>
+            {% if annees %}
+            <div class="stats-canvas-wrap">
+                <canvas id="chartAnnees"></canvas>
+            </div>
+            {% else %}
+            <p class="stats-empty">Pas encore assez de données temporelles.</p>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="stats-panel" id="section-institutions">
+                    <h3>Par institution</h3>
+                    <p class="stats-hint">Cliquez une institution pour afficher uniquement ses auteurs.</p>
+                    {% if institutions %}
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Institution</th>
+                                <th>Publications</th>
+                                <th>Auteurs</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="stats-inst-row is-selected" data-institution-id="" data-institution-name="" role="button" tabindex="0">
+                                <td colspan="4"><strong>Toutes les institutions</strong></td>
+                            </tr>
+                            {% for inst in institutions %}
+                            <tr class="stats-inst-row" data-institution-id="{{ inst.pk }}" data-institution-name="{{ inst.nom_institution }}" role="button" tabindex="0">
+                                <td>
+                                    {{ inst.nom_institution }}
+                                    {% if inst.sigle_institution %}<br><small>{{ inst.sigle_institution }}</small>{% endif %}
+                                </td>
+                                <td>{{ inst.nb_publications }}</td>
+                                <td>{{ inst.nb_auteurs }}</td>
+                                <td>
+                                    <span class="stats-bar"><span style="--bar-pct: {{ inst.pct }}%;"></span></span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="stats-empty">Aucune institution rattachée à une publication publiée.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="stats-panel" id="section-auteurs">
+                    <div class="stats-panel-head">
+                        <h3 id="titre-auteurs">Par auteur</h3>
+                        <button type="button" class="stats-reset" id="reset-auteurs">Afficher tous les auteurs</button>
+                    </div>
+                    {% if auteurs %}
+                    <table class="stats-table" id="table-auteurs">
+                        <thead>
+                            <tr>
+                                <th>Auteur</th>
+                                <th>Publications</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for auteur in auteurs %}
+                            <tr class="stats-auteur-row" data-institution-id="{{ auteur.profile.institution_id|default_if_none:'' }}">
+                                <td>
+                                    <a href="{% url 'portail_site:detail_auteur' auteur.slug %}">
+                                        {{ auteur.prenoms }} {{ auteur.nom }}
+                                    </a>
+                                    {% if auteur.profile.institution %}
+                                    <br><small>{{ auteur.profile.institution.sigle_institution|default:auteur.profile.institution.nom_institution }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>{{ auteur.nb_publications }}</td>
+                                <td>
+                                    <span class="stats-bar"><span style="--bar-pct: {{ auteur.pct }}%;"></span></span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <p class="stats-empty" id="auteurs-filtre-vide" hidden>Aucun auteur publié pour cette institution.</p>
+                    {% else %}
+                    <p class="stats-empty">Aucun auteur rattaché à une publication publiée.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ chart_types|json_script:"chart-types" }}
+{{ chart_domaines|json_script:"chart-domaines" }}
+{{ chart_annees|json_script:"chart-annees" }}
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+    if (typeof Chart === "undefined") return;
+    var bleu = "#3c72fc";
+    var palette = ["#3c72fc", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#ec4899", "#64748b"];
+
+    function dataOf(id) {
+        var el = document.getElementById(id);
+        return el ? JSON.parse(el.textContent) : {labels: [], values: []};
+    }
+    function makeChart(canvasId, type, payload, extra) {
+        var canvas = document.getElementById(canvasId);
+        if (!canvas || !payload.labels || !payload.labels.length) return;
+        var cfg = {
+            type: type,
+            data: {
+                labels: payload.labels,
+                datasets: [{
+                    data: payload.values,
+                    backgroundColor: type === "line" ? "rgba(60,114,252,.15)" : palette,
+                    borderColor: bleu,
+                    borderWidth: type === "line" ? 2 : 0,
+                    fill: type === "line",
+                    tension: 0.25
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: type === "doughnut" } }
+            }
+        };
+        if (extra) Object.assign(cfg.options, extra);
+        new Chart(canvas, cfg);
+    }
+    makeChart("chartTypes", "doughnut", dataOf("chart-types"));
+    makeChart("chartDomaines", "bar", dataOf("chart-domaines"), {
+        indexAxis: "y",
+        plugins: { legend: { display: false } }
+    });
+    makeChart("chartAnnees", "line", dataOf("chart-annees"), {
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    });
+})();
+
+(function () {
+    var titre = document.getElementById("titre-auteurs");
+    var resetBtn = document.getElementById("reset-auteurs");
+    var table = document.getElementById("table-auteurs");
+    var vide = document.getElementById("auteurs-filtre-vide");
+    var rowsInst = document.querySelectorAll(".stats-inst-row");
+    var rowsAuteur = document.querySelectorAll(".stats-auteur-row");
+    if (!titre || !rowsInst.length) return;
+
+    function filtrer(id, nom) {
+        var visible = 0;
+        rowsAuteur.forEach(function (row) {
+            var show = !id || row.getAttribute("data-institution-id") === String(id);
+            row.hidden = !show;
+            if (show) visible += 1;
+        });
+        if (table) table.hidden = visible === 0;
+        if (vide) vide.hidden = visible !== 0;
+        titre.textContent = id ? "Auteurs — " + nom : "Par auteur";
+        if (resetBtn) resetBtn.classList.toggle("is-on", Boolean(id));
+        rowsInst.forEach(function (row) {
+            row.classList.toggle("is-selected", row.getAttribute("data-institution-id") === String(id || ""));
+        });
+        if (id) {
+            var cible = document.getElementById("section-auteurs");
+            if (cible && window.matchMedia("(max-width: 991px)").matches) {
+                cible.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }
+    }
+
+    rowsInst.forEach(function (row) {
+        function activer() {
+            filtrer(row.getAttribute("data-institution-id") || "", row.getAttribute("data-institution-name") || "");
+        }
+        row.addEventListener("click", activer);
+        row.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                activer();
+            }
+        });
+    });
+    if (resetBtn) {
+        resetBtn.addEventListener("click", function () { filtrer("", ""); });
+    }
+})();
+</script>
+{% endblock scripts %}

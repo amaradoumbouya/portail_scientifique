@@ -10,14 +10,9 @@
 
             <input type="text" class="form-control hidden" id="type_publication" name="type_publication" value="colloque" hidden>
 
-            <div class="form-group col-md-6">
-                {{form_publication.photo|as_crispy_field}}
-                <small>Ajoutez une image concernant votre publication. Ex: La couverture du document</small>
-            </div>
-
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
                 {{form_publication.fichier_pdf|as_crispy_field}}
-                <small>Téléverser la thèse</small>
+                <small>Téléverser la communication. La langue est détectée automatiquement.</small>
             </div>
 
             <div class="form-group col-md-6">
@@ -34,6 +29,11 @@
 
             <div class="form-group col-md-6">
                 {{form_colloque.date_colloque|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-12">
+                {{form_publication.licence|as_crispy_field}}
+                <small>Licence de diffusion (science ouverte). CC BY 4.0 est recommandé.</small>
             </div>
 
             <div class="form-group col-md-12">

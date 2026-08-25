@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.urls import reverse
 from auteurs.models import Auteur
 from encadreurs.models import Encadreur
 from types_document.models import TypeDocument
@@ -15,12 +16,32 @@ class Publication(models.Model):
     class TypePublication(models.TextChoices):
         ARTICLE = "article", "Article scientifique"
         COLLOQUE = "colloque", "Communication de Colloque"
+        MEMOIRE = "memoire", "Mémoire"
+        THESE = "these", "Thèse"
 
     class StatutIndexation(models.TextChoices):
         EN_ATTENTE = "En attente", "En attente"
         ACCEPTEE = "Acceptée", "Acceptée"
         REJETEE = "Rejetée", "Rejetée"
-        
+
+    class Licence(models.TextChoices):
+        CC_BY = "CC-BY-4.0", "CC BY 4.0 — Attribution"
+        CC_BY_SA = "CC-BY-SA-4.0", "CC BY-SA 4.0 — Attribution, Partage à l'identique"
+        CC_BY_NC = "CC-BY-NC-4.0", "CC BY-NC 4.0 — Pas d'utilisation commerciale"
+        CC_BY_NC_SA = "CC-BY-NC-SA-4.0", "CC BY-NC-SA 4.0"
+        CC_BY_ND = "CC-BY-ND-4.0", "CC BY-ND 4.0 — Pas de modification"
+        CC_BY_NC_ND = "CC-BY-NC-ND-4.0", "CC BY-NC-ND 4.0"
+        TOUS_DROITS = "tous-droits-reserves", "Tous droits réservés"
+
+    LICENCE_URLS = {
+        "CC-BY-4.0": "https://creativecommons.org/licenses/by/4.0/",
+        "CC-BY-SA-4.0": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "CC-BY-NC-4.0": "https://creativecommons.org/licenses/by-nc/4.0/",
+        "CC-BY-NC-SA-4.0": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "CC-BY-ND-4.0": "https://creativecommons.org/licenses/by-nd/4.0/",
+        "CC-BY-NC-ND-4.0": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    }
+
     photo                       = models.ImageField(upload_to='publicatons/photos', blank=True, null=True, verbose_name='Photo :')
     titre                       = models.CharField(max_length=300, blank=True, null=True, verbose_name= 'Titre')
     type_publication            = models.CharField(max_length=50, choices=TypePublication.choices, default='', verbose_name= 'Type du publication')
@@ -36,6 +57,13 @@ class Publication(models.Model):
     texte_integral              = models.TextField(blank=True, null=True, verbose_name="Texte intégral")
     texte_nettoye               = models.TextField(blank=True, null=True, verbose_name="Texte nettoyé")
     statut_publication          = models.BooleanField(default=False)
+    licence                     = models.CharField(
+        max_length=40,
+        choices=Licence.choices,
+        default=Licence.CC_BY,
+        blank=True,
+        verbose_name='Licence',
+    )
     user                        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="publications")
     slug                        = models.SlugField(max_length=255, unique=True, editable=False)
     date_ajout_systeme          = models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -48,12 +76,56 @@ class Publication(models.Model):
             return self.colloque
         return self
 
+    def get_absolute_url(self):
+        return reverse('portail_site:detail_publication', kwargs={'slug': self.slug})
 
-    def indexer(self, fichier):
+    @property
+    def licence_url(self):
+        return self.LICENCE_URLS.get(self.licence or '')
+
+    @property
+    def citation_language(self):
+        langue = (self.langue or 'fr').strip().lower()
+        mapping = {
+            'fr': 'fr', 'français': 'fr', 'francais': 'fr', 'french': 'fr',
+            'en': 'en', 'anglais': 'en', 'english': 'en',
+            'es': 'es', 'espagnol': 'es', 'spanish': 'es',
+            'pt': 'pt', 'portugais': 'pt', 'portuguese': 'pt',
+        }
+        return mapping.get(langue, 'fr')
+
+    @property
+    def doi_url(self):
+        identifiant = self.doi_identifiant
+        if not identifiant:
+            return ''
+        return f'https://doi.org/{identifiant}'
+
+    @property
+    def doi_identifiant(self):
+        doi = (self.doi or '').strip()
+        prefixes = (
+            'https://doi.org/',
+            'http://doi.org/',
+            'https://dx.doi.org/',
+            'http://dx.doi.org/',
+        )
+        lower = doi.lower()
+        for prefix in prefixes:
+            if lower.startswith(prefix):
+                return doi[len(prefix):]
+        return doi
+
+
+    def indexer(self, fichier, verifier_international=True):
         """
-        1) Enrichissement NLP (texte, résumé, mots-clés, domaine)
-        2) Vérification automatique d'indexation internationale
-           (Scopus | WoS | DOAJ | AJOL)
+        1) Enrichissement NLP (texte, résumé, mots-clés, domaine, langue)
+        2) Enregistrement du modèle Indexation
+        3) Vérification d'indexation internationale (articles / colloques)
+
+        Un article ou une communication de colloque n'est Accepté(e)
+        que s'il est reconnu dans Scopus, WoS, DOAJ ou AJOL.
+        Les mémoires / thèses passent uniquement par l'indexation NLP locale.
         """
         from publications.nlp_tools import (
             extraire_texte_du_pdf,
@@ -61,21 +133,32 @@ class Publication(models.Model):
             extraire_resume,
             extraire_mots_cles,
             classifier_domaine,
+            detecter_langue,
+            calculer_score_pertinence,
             verifier_indexation_internationale,
         )
+        from indexations.models import Indexation
 
-        # Toujours démarrer en attente pendant la vérification
-        self.statut_indexation = 'En attente'
-        self.bases_indexation = ''
-        self.motif_rejet = "Vérification d'indexation en cours…"
+        # Verrou métier : articles et colloques ne peuvent pas contourner
+        # la vérification internationale, même si l'appelant passe False.
+        if self.type_publication in (
+            self.TypePublication.ARTICLE,
+            self.TypePublication.COLLOQUE,
+            'article',
+            'colloque',
+        ):
+            verifier_international = True
+
+        if verifier_international:
+            self.statut_indexation = 'En attente'
+            self.bases_indexation = ''
+            self.motif_rejet = "Vérification d'indexation en cours…"
 
         texte = ""
         try:
-            # ==========================
-            # EXTRACTION TEXTE
-            # ==========================
             fichier.seek(0)
             texte = extraire_texte_du_pdf(fichier) or ""
+            self.langue = detecter_langue(texte)
 
             if texte and len(texte.strip()) >= 300:
                 self.texte_integral = texte
@@ -85,23 +168,43 @@ class Publication(models.Model):
                 self.mots_cles = extraire_mots_cles(texte_nettoye) if texte_nettoye.strip() else ""
                 self.domaine = classifier_domaine(texte)
             else:
-                # NLP incomplet : on continue quand même la vérif d'indexation
                 self.texte_integral = texte
+                if verifier_international:
+                    self.motif_rejet = (
+                        "Texte PDF court ou vide — enrichissement NLP limité. "
+                        "Vérification d'indexation en cours…"
+                    )
+
+        except Exception as e:
+            if verifier_international:
                 self.motif_rejet = (
-                    "Texte PDF court ou vide — enrichissement NLP limité. "
+                    f"Enrichissement NLP partiel ({e}). "
                     "Vérification d'indexation en cours…"
                 )
 
-        except Exception as e:
-            # Ne bloque pas l'indexation internationale
-            self.motif_rejet = (
-                f"Enrichissement NLP partiel ({e}). "
-                "Vérification d'indexation en cours…"
+        score = calculer_score_pertinence(
+            texte or self.texte_integral or "",
+            self.mots_cles or "",
+            self.domaine or "",
+        )
+        if self.pk:
+            Indexation.objects.update_or_create(
+                publication=self,
+                defaults={
+                    'mots_cles_ai': self.mots_cles or '',
+                    'resume_ia': self.resume or '',
+                    'score_pertinence': score,
+                    'outil_indexation': 'spaCy + TF-IDF + NLTK',
+                },
             )
 
-        # ==========================
-        # INDEXATION INTERNATIONALE
-        # ==========================
+        if not verifier_international:
+            self.statut_indexation = 'Acceptée'
+            self.statut_publication = True
+            self.bases_indexation = 'Portail CRICT (NLP)'
+            self.motif_rejet = ''
+            return
+
         nom_revue = None
         try:
             real = self.get_real_instance()
@@ -128,7 +231,6 @@ class Publication(models.Model):
                 "Non reconnu dans Scopus, WoS, DOAJ ni AJOL."
             )
         else:
-            # En attente
             self.motif_rejet = resultat.get('motif') or (
                 "Vérification d'indexation en cours…"
             )

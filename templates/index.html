@@ -8,6 +8,8 @@
     {% block title %}
     <title>Accueil - Portail Scientifique</title>
     {% endblock title %}
+
+    {% block extra_head %}{% endblock extra_head %}
     
 
     {% block style %}
@@ -262,6 +264,11 @@
                 </div>
 
             </div>
+            <div class="row">
+                <div class="col-12 text-center" style="margin-top: 10px;">
+                    <a href="{% url 'statistiques:index' %}" class="box-btn">Voir les statistiques détaillées</a>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -287,14 +294,9 @@
                 <div class="col-lg-3 col-md-6{% if forloop.last %} sst-10{% endif %}">
                     <div class="single-ragular-course">
                         <div class="course-img">
-                            {% if publication.photo %}
-                            <img src="{{ publication.photo.url }}" alt="{{ publication.titre|default:'publication' }}" />
-                            {% else %}
-                            <img src="{% static 'front/assets/images/courses/publication_1.png' %}" alt="{{ publication.titre|default:'publication' }}" />
-                            {% endif %}
+                            {% include "includes/publication_cover.html" with titre=publication.titre size="home" detail_url=publication.get_absolute_url %}
                         </div>
                         <div class="course-content">
-                            <h3>{{ publication.titre|default:publication.domaine|default:"Publication"|truncatewords:10 }}</h3>
                             <p>
                                 {% if publication.resume %}
                                     {{ publication.resume|truncatewords:25 }}
@@ -311,6 +313,9 @@
                     <p>Aucune publication récente pour le moment.</p>
                 </div>
                 {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'portail_site:publication' %}" class="box-btn">Toutes les publications</a>
             </div>
         </div>
     </section>
@@ -461,14 +466,9 @@
                 {% for publication in autres_publications %}
                 <div class="single-home-special-course">
                     <div class="course-img">
-                        {% if publication.photo %}
-                        <img src="{{ publication.photo.url }}" alt="{{ publication.titre|default:'publication' }}" />
-                        {% else %}
-                        <img src="{% static 'front/assets/images/courses/chercheur_1.png' %}" alt="{{ publication.titre|default:'publication' }}" />
-                        {% endif %}
+                        {% include "includes/publication_cover.html" with titre=publication.titre detail_url=publication.get_absolute_url %}
 
                         <div class="course-content">
-                            <h2>{{ publication.titre|default:publication.domaine|default:"Publication"|truncatewords:8 }}</h2>
                             <p>
                                 {% if publication.resume %}
                                     {{ publication.resume|truncatewords:18 }}
@@ -726,8 +726,8 @@
                         <h2>Navigation</h2>
                         <ul>
                             <li><a href="{% url 'portail_site:index' %}"><i class="flaticon-next"></i> Accueil</a></li>
-                            <li><a href="#"><i class="flaticon-next"></i> Publications</a></li>
-                            <li><a href="#"><i class="flaticon-next"></i> Recherches</a></li>
+                            <li><a href="{% url 'portail_site:publication' %}"><i class="flaticon-next"></i> Publications</a></li>
+                            <li><a href="{% url 'statistiques:index' %}"><i class="flaticon-next"></i> Statistiques</a></li>
                             <li><a href="{% url 'portail_site:a_propos' %}"><i class="flaticon-next"></i> À propos</a></li>
                             <li><a href="#"><i class="flaticon-next"></i> FAQ</a></li>
                         </ul>

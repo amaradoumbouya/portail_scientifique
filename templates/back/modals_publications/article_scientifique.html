@@ -10,22 +10,13 @@
 
             <input type="text" class="form-control hidden" id="type_publication" name="type_publication" value="article" hidden>
 
-            <div class="form-group col-md-6">
-                {{form_publication.photo|as_crispy_field}}
-                <small>Ajoutez une image concernant votre publication. Ex: La couverture du document</small>
-            </div>
-
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
                 {{form_publication.fichier_pdf|as_crispy_field}}
-                <small>Téléverser l'article</small>
+                <small>Téléverser l'article. La langue est détectée automatiquement.</small>
             </div>
 
             <div class="form-group col-md-6">
                 {{form_publication.titre|as_crispy_field}}
-            </div>
-
-            <div class="form-group col-md-6">
-                {{form_publication.langue|as_crispy_field}}
             </div>
 
             <div class="form-group col-md-6">
@@ -36,8 +27,13 @@
                 {{form_article.nom_revue|as_crispy_field}}
             </div>
 
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
                 {{form_publication.doi|as_crispy_field}}
+            </div>
+
+            <div class="form-group col-md-12">
+                {{form_publication.licence|as_crispy_field}}
+                <small>Licence de diffusion (science ouverte). CC BY 4.0 est recommandé.</small>
             </div>
 
             <div class="form-group col-md-12">

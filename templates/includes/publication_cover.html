@@ -1,0 +1,13 @@
+{% if detail_url %}
+<a href="{{ detail_url }}" class="pub-cover-blue{% if size %} pub-cover-{{ size }}{% endif %}">
+    <span class="pub-cover-title">{{ titre|default:"Sans titre" }}</span>
+</a>
+{% elif heading %}
+<div class="pub-cover-blue{% if size %} pub-cover-{{ size }}{% endif %}">
+    <h1 class="pub-cover-title">{{ titre|default:"Sans titre" }}</h1>
+</div>
+{% else %}
+<div class="pub-cover-blue{% if size %} pub-cover-{{ size }}{% endif %}">
+    <p class="pub-cover-title">{{ titre|default:"Sans titre" }}</p>
+</div>
+{% endif %}

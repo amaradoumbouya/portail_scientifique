@@ -9,8 +9,10 @@ app_name = 'portail_site'
 
 urlpatterns = [
     path('', IndexTemplateView.as_view(), name='index'),
+    path('robots.txt', views.robots_txt, name='robots'),
+    path('sitemap.xml', views.sitemap_xml, name='sitemap'),
     path('dashboard/', login_required(DashboardTemplateView.as_view()), name='dashboard'),
-    path('publication/', PublicationTemplateView.as_view(), name='publication'),
+    path('publication/', views.catalogue_publications, name='publication'),
     path('publication-par-type/', views.publication_par_type_template_view, name='publication_par_type'),
     path('publication-par-type/<slug:slug>/', views.publication_par_type_template_view, name='publication_par_type_detail'),
     
@@ -33,6 +35,9 @@ urlpatterns = [
     path('messages/',login_required(MessagesTemplateView.as_view()), name='messages'),
     path('notifications/',login_required(NotificationsTemplateView.as_view()), name='notifications'),
     path('detail-publication/<slug:slug>/', views.detail_publication_template, name='detail_publication'),
+    path('detail-publication/<slug:slug>/dublin-core.xml', views.publication_dc_xml, name='publication_dc_xml'),
+    path('detail-publication/<slug:slug>/hal.json', views.publication_hal_json, name='publication_hal_json'),
+    path('export/dublin-core.xml', views.catalogue_dc_xml, name='catalogue_dc_xml'),
     path('recherche/', views.recherche_template_view, name='recherche'),
     path('detail-auteur/<slug:slug>/', views.detail_auteur_template_view, name='detail_auteur'),
     path('detail-encadreur/<slug:slug>/', views.detail_encadreur_template_view, name='detail_encadreur'),

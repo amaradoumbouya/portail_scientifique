@@ -4,13 +4,17 @@ from django.utils.crypto import get_random_string
 from publications.models.publication import Publication
 
 class Indexation(models.Model):
-    publication = models.OneToOneField(Publication, on_delete=models.CASCADE)
+    publication = models.OneToOneField(
+        Publication,
+        on_delete=models.CASCADE,
+        related_name='indexation',
+    )
     slug = models.SlugField(max_length=255, unique=True, editable=False)
     date_indexation = models.DateTimeField(auto_now_add=True)
-    mots_cles_ai = models.TextField()
-    resume_ia = models.TextField()
-    score_pertinence = models.FloatField()
-    outil_indexation = models.CharField(max_length=100)
+    mots_cles_ai = models.TextField(blank=True, default='')
+    resume_ia = models.TextField(blank=True, default='')
+    score_pertinence = models.FloatField(default=0)
+    outil_indexation = models.CharField(max_length=100, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -19,7 +23,8 @@ class Indexation(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.publication.titre) + '-' + get_random_string(5)
+            base = slugify(self.publication.titre or 'publication') or 'publication'
+            self.slug = base + '-' + get_random_string(5)
         super(Indexation, self).save(*args, **kwargs)
 
     class Meta:

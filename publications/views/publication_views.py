@@ -92,7 +92,13 @@ class PublicationUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         messages.success(self.request, f"publication {self.request.POST.get('titre')} modifié avec succès !")
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        if 'fichier_pdf' in form.changed_data:
+            fichier = form.cleaned_data.get('fichier_pdf')
+            if fichier:
+                self.object.indexer(fichier)
+                self.object.save()
+        return response
 
 # Suppression_d'une_publication
 class PublicationDeleteView(LoginRequiredMixin, DeleteView):

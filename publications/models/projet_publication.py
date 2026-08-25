@@ -4,7 +4,7 @@ from django.utils.crypto import get_random_string
 
 
 class ProjetPublication(models.Model):
-    projet        = models.ForeignKey("Projets_etudes.ProjetEtude", on_delete=models.CASCADE)
+    projet        = models.ForeignKey("projets_detudes.ProjetEtude", on_delete=models.CASCADE)
     publication   = models.ForeignKey("publications.Publication", on_delete=models.CASCADE)
     relation_type = models.CharField(max_length=50)  # extrait, dérivé, principal
     slug          = models.SlugField(max_length=255, unique=True, editable=False ,blank=True, null=True)

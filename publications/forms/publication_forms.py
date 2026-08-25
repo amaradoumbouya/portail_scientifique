@@ -12,18 +12,16 @@ class PublicationForm(forms.ModelForm):
         model = Publication
         fields = [
             'type_publication',
-            'photo',
             'titre',
-            'langue',
             'doi',
+            'licence',
             'fichier_pdf'
         ]
         widgets = {
             "type_publication": forms.Select(attrs={'class': 'form-control form-control-rounded'}),
-            "photo": forms.ClearableFileInput(attrs={'class': 'form-control form-control-rounded'}),
             "titre": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
-            "langue": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
             "doi": forms.TextInput(attrs={'class': 'form-control form-control-rounded'}),
+            "licence": forms.Select(attrs={'class': 'form-control form-control-rounded'}),
             "fichier_pdf": forms.ClearableFileInput(attrs={'class': 'form-control form-control-rounded'}),
         }
 
@@ -38,9 +36,6 @@ class PublicationForm(forms.ModelForm):
 
     def clean_fichier_pdf(self):
         return self._validate_file_size('fichier_pdf', 'article')
-
-    def clean_photo(self):
-        return self._validate_file_size('photo', 'photo')
 
 
 class ArticleForm(forms.ModelForm):

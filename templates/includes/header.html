@@ -27,6 +27,8 @@
               Publications
             </a>
             <div class="dropdown-menu" aria-labelledby="publicationsDropdown">
+              <a class="dropdown-item" href="{% url 'portail_site:publication' %}">Toutes les publications</a>
+              <div class="dropdown-divider"></div>
               {% for type_doc in request.type_document %}
               <a class="dropdown-item" href="{% url 'portail_site:publication_par_type_detail' type_doc.slug %}"> {{type_doc.libelle}} </a>
               <div class="dropdown-divider"></div>
@@ -35,6 +37,7 @@
           </li>
 
           <!-- A propos et Contact -->
+          <li class="nav-item"><a class="nav-link" href="{% url 'statistiques:index' %}">Statistiques</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'portail_site:contact' %}">Contact</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'portail_site:a_propos' %}">À propos</a></li>
           <!-- <li class="nav-item"><a class="nav-link" href="">S'inscrire</a></li>
@@ -88,6 +91,8 @@
               Publications
             </a>
             <div class="dropdown-menu" aria-labelledby="publicationsDropdown">
+              <a class="dropdown-item" href="{% url 'portail_site:publication' %}">Toutes les publications</a>
+              <div class="dropdown-divider"></div>
               {% for type_doc in request.type_document %}
               <a class="dropdown-item" href="{% url 'portail_site:publication_par_type_detail' type_doc.slug %}"> {{type_doc.libelle}} </a>
               <div class="dropdown-divider"></div>
@@ -96,6 +101,7 @@
           </li>
 
           <!-- A propos et Contact -->
+          <li class="nav-item"><a class="nav-link" href="{% url 'statistiques:index' %}">Statistiques</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'portail_site:contact' %}">Contact</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'portail_site:a_propos' %}">À propos</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'portail_site:inscription' %}">S'inscrire</a></li>

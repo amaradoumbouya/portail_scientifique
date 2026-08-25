@@ -39,6 +39,49 @@ def extraire_texte_du_pdf(fichier):
 
 
 # ================================
+# DETECTION LANGUE
+# ================================
+_LANGUES_NLTK = (
+    ("français", "french"),
+    ("anglais", "english"),
+    ("espagnol", "spanish"),
+    ("portugais", "portuguese"),
+    ("allemand", "german"),
+    ("italien", "italian"),
+)
+
+
+def detecter_langue(texte):
+    """
+    Détecte la langue dominante du PDF via le recouvrement
+    avec les stopwords NLTK (déjà chargés pour le NLP).
+    """
+    if not texte or not str(texte).strip():
+        return "français"
+
+    mots = re.findall(r"[a-zà-ÿ']+", texte.lower())
+    if len(mots) < 20:
+        return "français"
+
+    echantillon = mots[:500]
+    scores = {}
+    for libelle, nom_nltk in _LANGUES_NLTK:
+        try:
+            stops = set(stopwords.words(nom_nltk))
+        except LookupError:
+            continue
+        scores[libelle] = sum(1 for mot in echantillon if mot in stops)
+
+    if not scores:
+        return "français"
+
+    meilleure = max(scores, key=scores.get)
+    if scores[meilleure] == 0:
+        return "français"
+    return meilleure
+
+
+# ================================
 # NETTOYAGE NLP
 # ================================
 def nettoyer_texte(texte):
@@ -99,62 +142,85 @@ def extraire_mots_cles(texte_nettoye):
 # ================================
 def classifier_domaine(texte):
 
-    texte = texte.lower()
+    texte = (texte or "").lower()
 
     domaines = {
-
         "Informatique": [
-            "intelligence artificielle",
-            "machine learning",
-            "deep learning",
-            "réseau",
-            "algorithme",
-            "base de données",
-            "programmation"
+            "intelligence artificielle", "machine learning", "deep learning",
+            "apprentissage automatique", "algorithme", "programmation",
+            "logiciel", "informatique", "réseau", "cyber", "données",
+            "base de données", "système d'information", "hadoop", "python",
+            "reconnaissance vocale", "traitement automatique",
         ],
-
         "Santé": [
-            "médical",
-            "santé",
-            "patient",
-            "hôpital",
-            "diagnostic"
+            "médical", "santé", "patient", "hôpital", "diagnostic",
+            "clinique", "épidémi", "pharmac", "thérapie", "maladie",
+            "public health", "soins",
         ],
-
         "Biologie": [
-            "biologie",
-            "génétique",
-            "cellule",
-            "adn"
+            "biologie", "génétique", "cellule", "adn", "génom",
+            "microbiolog", "écologie", "espèce", "biodiversité",
         ],
-
         "Mathématiques": [
-            "équation",
-            "algèbre",
-            "statistique",
-            "probabilité"
-        ]
+            "équation", "algèbre", "statistique", "probabilité",
+            "mathématique", "modélisation", "optimisation", "théorème",
+        ],
+        "Agronomie": [
+            "agronom", "agriculture", "agricole", "culture", "sol",
+            "élevage", "sécurité alimentaire", "rural",
+        ],
+        "Chimie": [
+            "chimie", "chimique", "molécule", "catalyse", "synthèse",
+            "phytochimique", "composé",
+        ],
+        "Physique": [
+            "physique", "énergie", "optique", "mécanique", "quantique",
+            "thermodynamique",
+        ],
+        "Sciences sociales": [
+            "sociolog", "socio-économique", "anthropolog", "politique",
+            "éducation", "gouvernance", "communauté",
+        ],
+        "Économie": [
+            "économie", "économique", "marché", "finance", "développement",
+            "pauvreté", "emploi",
+        ],
+        "Environnement": [
+            "environnement", "climat", "eau", "hydrique", "pollution",
+            "développement durable", "ressource", "sahel",
+        ],
+        "Ingénierie": [
+            "génie", "ingénier", "infrastructure", "électrique",
+            "civil", "industriel", "réseau électrique", "énergie renouvelable",
+        ],
+        "Linguistique": [
+            "langue", "linguist", "poular", "soussou", "malinké",
+            "traduction", "corpus",
+        ],
     }
 
     scores = {}
-
     for domaine, mots in domaines.items():
-
         score = 0
-
         for mot in mots:
-
             if mot in texte:
-                score += 1
-
+                score += texte.count(mot)
         scores[domaine] = score
 
     meilleur_domaine = max(scores, key=scores.get)
-
     if scores[meilleur_domaine] == 0:
         return "Autres"
-
     return meilleur_domaine
+
+
+def calculer_score_pertinence(texte, mots_cles, domaine):
+    """Score 0–1 : longueur du texte, mots-clés extraits, domaine identifié."""
+    n = len((texte or "").strip())
+    score_longueur = min(n / 8000.0, 1.0) * 0.4
+    nb_mots = len([m for m in (mots_cles or "").split(",") if m.strip()])
+    score_mots = min(nb_mots / 15.0, 1.0) * 0.3
+    score_domaine = 0.3 if domaine and domaine != "Autres" else 0.05
+    return round(min(score_longueur + score_mots + score_domaine, 1.0), 2)
 
 
 # ================================

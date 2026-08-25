@@ -1,20 +1,149 @@
 {% extends "index.html" %}
-{% load crispy_forms_tags %}
 {% load static %}
 {% block title %}
 <title>Toutes les publications - Portail Scientifique</title>
 {% endblock title %}
 
 {% block style %}
-
+<style>
+    .special-single-class .single-sp-class {
+        margin-bottom: 30px;
+    }
+    .special-single-class .course-img img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+    .special-single-class .empty-type {
+        padding: 40px 20px;
+        text-align: center;
+        color: #616161;
+    }
+    .catalog-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 28px;
+        justify-content: center;
+    }
+    .catalog-filters a {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 20px;
+        border: 1px solid #e9edf5;
+        color: #181818;
+        font-size: 14px;
+        font-weight: 600;
+        background: #fff;
+    }
+    .catalog-filters a.active,
+    .catalog-filters a:hover {
+        background: #3c72fc;
+        border-color: #3c72fc;
+        color: #fff;
+    }
+    .catalog-count {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #616161;
+    }
+</style>
 {% endblock style %}
 
-
 {% block content %}
+<div class="banner-area special-class">
+    <div class="d-table">
+        <div class="d-table-cell">
+            <div class="container">
+                <div class="page-title-content">
+                    <h2>Publications scientifiques</h2>
+                    <ul>
+                        <li>
+                            <a href="{% url 'portail_site:index' %}"> Accueil </a>
+                            <i class="flaticon-fast-forward"></i>
+                            <p class="active">Publications</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<section class="special-single-class">
+    <div class="container">
+        <div class="catalog-filters">
+            <a href="{% url 'portail_site:publication' %}" class="{% if not type_filtre %}active{% endif %}">Toutes</a>
+            <a href="?type=article" class="{% if type_filtre == 'article' %}active{% endif %}">Articles scientifiques</a>
+            <a href="?type=colloque" class="{% if type_filtre == 'colloque' %}active{% endif %}">Communications de colloque</a>
+            <a href="?type=memoire" class="{% if type_filtre == 'memoire' %}active{% endif %}">Mémoires</a>
+            <a href="?type=these" class="{% if type_filtre == 'these' %}active{% endif %}">Thèses</a>
+            <a href="{% url 'portail_site:publication_par_type' %}">Par type de document</a>
+        </div>
 
+        <p class="catalog-count">
+            {{ total }} publication{{ total|pluralize }} en accès ouvert
+        </p>
+
+        <div class="row">
+            {% for item in page_obj %}
+            <div class="col-lg-4 col-sm-6">
+                <div class="single-sp-class">
+                    <div class="course-img">
+                        {% include "includes/publication_cover.html" with titre=item.titre detail_url=item.get_absolute_url %}
+                        <div class="course-content">
+                            <p>
+                                <small>{{ item.get_type_publication_display }}{% if item.domaine %} · {{ item.domaine }}{% endif %}</small><br>
+                                {{ item.resume|default:"Publication scientifique"|truncatewords:22 }}
+                            </p>
+                            <a href="{% url 'portail_site:detail_publication' item.slug %}" class="box-btn">
+                                Lire la publication
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="empty-type">
+                    <p>Aucune publication disponible pour le moment.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if type_filtre %}type={{ type_filtre }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">
+                            <i class="flaticon-left-arrow"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?{% if type_filtre %}type={{ type_filtre }}&amp;{% endif %}page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if type_filtre %}type={{ type_filtre }}&amp;{% endif %}page={{ page_obj.next_page_number }}">
+                            <i class="flaticon-next"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
 {% endblock content %}
 
 {% block scripts %}
-
 {% endblock scripts %}

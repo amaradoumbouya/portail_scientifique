@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.views.generic import TemplateView
+from django.urls import reverse
 from contact_us.forms import ContactUsForm
 from django.core.mail import send_mail
 from django.conf import settings
@@ -10,6 +12,7 @@ from projets_detudes.models.projet import ProjetEtude
 from accounts.models import UserProfile
 from evenements.models import Evenement
 from actualites.models import Actualite
+from types_document.models import TypeDocument
 from datetime import datetime, date
 from django.utils import timezone
 from django.db.models import Count, Q
@@ -205,3 +208,52 @@ def contact_us_template_view(request):
         form = ContactUsForm()
 
     return render(request, "pages/contact.html", {"form": form})
+
+
+def robots_txt(request):
+    sitemap_url = request.build_absolute_uri(reverse('portail_site:sitemap'))
+    body = "\n".join([
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /dashboard/",
+        "Disallow: /accounts/",
+        "Disallow: /modal/",
+        "",
+        f"Sitemap: {sitemap_url}",
+        "",
+    ])
+    return HttpResponse(body, content_type="text/plain; charset=utf-8")
+
+
+def sitemap_xml(request):
+    abs_url = request.build_absolute_uri
+    urls = [
+        {"loc": abs_url(reverse("portail_site:index")), "changefreq": "daily", "priority": "1.0"},
+        {"loc": abs_url(reverse("portail_site:publication")), "changefreq": "daily", "priority": "0.9"},
+        {"loc": abs_url(reverse("portail_site:publication_par_type")), "changefreq": "weekly", "priority": "0.8"},
+        {"loc": abs_url(reverse("portail_site:a_propos")), "changefreq": "monthly", "priority": "0.4"},
+        {"loc": abs_url(reverse("portail_site:contact")), "changefreq": "monthly", "priority": "0.3"},
+        {"loc": abs_url(reverse("portail_site:recherche")), "changefreq": "weekly", "priority": "0.5"},
+        {"loc": abs_url(reverse("statistiques:index")), "changefreq": "daily", "priority": "0.7"},
+        {"loc": abs_url(reverse("portail_site:catalogue_dc_xml")), "changefreq": "daily", "priority": "0.4"},
+    ]
+    for type_doc in TypeDocument.objects.order_by("libelle"):
+        urls.append({
+            "loc": abs_url(reverse("portail_site:publication_par_type_detail", kwargs={"slug": type_doc.slug})),
+            "changefreq": "weekly",
+            "priority": "0.7",
+        })
+    for pub in Publication.objects.filter(statut_publication=True).only("slug", "updated_at"):
+        urls.append({
+            "loc": abs_url(pub.get_absolute_url()),
+            "lastmod": pub.updated_at.date().isoformat() if pub.updated_at else "",
+            "changefreq": "monthly",
+            "priority": "0.8",
+        })
+    return render(
+        request,
+        "sitemap.xml",
+        {"urls": urls},
+        content_type="application/xml; charset=utf-8",
+    )

@@ -5,6 +5,71 @@
 {% block title %}
 <title>{{ publication.titre|default:"Détail publication" }} - Portail Scientifique</title>
 {% endblock title %}
+{% block extra_head %}
+<meta name="citation_title" content="{{ publication.titre|default:'' }}" />
+{% for aut in publication.publicationauteur_set.all %}
+<meta name="citation_author" content="{{ aut.auteur.nom }}, {{ aut.auteur.prenoms }}" />
+{% empty %}
+{% if publication.user %}
+<meta name="citation_author" content="{{ publication.user.nom }}, {{ publication.user.prenoms }}" />
+{% endif %}
+{% endfor %}
+{% if publication.date_ajout_systeme %}
+<meta name="citation_publication_date" content="{{ publication.date_ajout_systeme|date:'Y/m/d' }}" />
+{% endif %}
+<meta name="citation_language" content="{{ publication.citation_language }}" />
+{% if publication_reelle.nom_revue %}
+<meta name="citation_journal_title" content="{{ publication_reelle.nom_revue }}" />
+{% endif %}
+{% if publication_reelle.nom_colloque %}
+<meta name="citation_conference_title" content="{{ publication_reelle.nom_colloque }}" />
+{% endif %}
+{% if publication.doi %}
+<meta name="citation_doi" content="{{ publication.doi_identifiant }}" />
+{% endif %}
+{% if citation_pdf_url %}
+<meta name="citation_pdf_url" content="{{ citation_pdf_url }}" />
+{% endif %}
+{% if publication.resume %}
+<meta name="citation_abstract" content="{{ publication.resume|striptags|truncatechars:1500 }}" />
+{% endif %}
+{% if publication.mots_cles %}
+<meta name="citation_keywords" content="{{ publication.mots_cles }}" />
+{% endif %}
+{% if publication.licence %}
+<meta name="dc.rights" content="{{ publication.get_licence_display }}" />
+{% endif %}
+<link rel="canonical" href="{{ request.build_absolute_uri }}" />
+<link rel="alternate" type="application/xml" title="Dublin Core" href="{% url 'portail_site:publication_dc_xml' publication.slug %}" />
+<link rel="alternate" type="application/json" title="HAL JSON" href="{% url 'portail_site:publication_hal_json' publication.slug %}" />
+<meta name="DC.title" content="{{ meta.title|default:'' }}" />
+{% for auteur in meta.auteurs %}
+<meta name="DC.creator" content="{{ auteur.citation }}" />
+{% endfor %}
+{% if meta.date %}
+<meta name="DC.date" content="{{ meta.date }}" />
+{% endif %}
+<meta name="DC.language" content="{{ meta.language }}" />
+<meta name="DC.type" content="{{ meta.type_openaire }}" />
+<meta name="DC.publisher" content="{{ meta.publisher }}" />
+<meta name="DC.identifier" content="{{ meta.html_url }}" />
+{% if meta.doi %}
+<meta name="DC.identifier" content="doi:{{ meta.doi }}" />
+{% endif %}
+{% if meta.domaine %}
+<meta name="DC.subject" content="{{ meta.domaine }}" />
+{% endif %}
+{% for mot in meta.subjects %}
+<meta name="DC.subject" content="{{ mot }}" />
+{% endfor %}
+{% if meta.description %}
+<meta name="DC.description" content="{{ meta.description|striptags|truncatechars:1500 }}" />
+{% endif %}
+{% if meta.licence %}
+<meta name="DC.rights" content="{{ meta.licence }}" />
+{% endif %}
+<script type="application/ld+json">{{ json_ld_payload }}</script>
+{% endblock extra_head %}
 
 {% block style %}
 <style>
@@ -106,20 +171,16 @@
 
                 <div class="single-slider">
                     <div class="pub-cover">
-                        {% if publication.photo %}
-                        <img src="{{ publication.photo.url }}" alt="{{ publication.titre|default:'publication' }}" />
-                        {% else %}
-                        <img src="{% static 'front/assets/images/news/news11.png' %}" alt="{{ publication.titre|default:'publication' }}" />
-                        {% endif %}
+                        {% include "includes/publication_cover.html" with titre=publication.titre size="lg" heading=True %}
                     </div>
 
                     <div class="content">
                         {% if publication.domaine %}
                         <span class="pub-domaine">{{ publication.domaine }}</span>
                         {% endif %}
-                        <h1 class="pub-title">
-                            {{ publication.titre|default:"Sans titre" }}
-                        </h1>
+                        {% if publication.get_type_publication_display %}
+                        <span class="pub-domaine">{{ publication.get_type_publication_display }}</span>
+                        {% endif %}
 
                         <p>
                             <strong>Auteurs :</strong>
@@ -138,7 +199,18 @@
                         {% if publication.doi %}
                         <p>
                             <strong>DOI :</strong>
-                            <a href="https://doi.org/{{ publication.doi }}" target="_blank" rel="noopener">{{ publication.doi }}</a>
+                            <a href="{{ publication.doi_url }}" target="_blank" rel="noopener">{{ publication.doi_identifiant }}</a>
+                        </p>
+                        {% endif %}
+
+                        {% if publication.licence %}
+                        <p>
+                            <strong>Licence :</strong>
+                            {% if publication.licence_url %}
+                            <a href="{{ publication.licence_url }}" target="_blank" rel="noopener">{{ publication.get_licence_display }}</a>
+                            {% else %}
+                            {{ publication.get_licence_display }}
+                            {% endif %}
                         </p>
                         {% endif %}
 
@@ -160,13 +232,29 @@
                         </div>
                         {% endif %}
 
+                        {% if publication.indexation %}
+                        <p class="mt-3 text-muted">
+                            Indexation automatique
+                            {% if publication.indexation.outil_indexation %}
+                            ({{ publication.indexation.outil_indexation }})
+                            {% endif %}
+                            — score de pertinence {{ publication.indexation.score_pertinence|floatformat:2 }}
+                        </p>
+                        {% endif %}
+
                         {% if publication.fichier_pdf %}
                         <div class="mt-4">
                             <a href="{{ publication.fichier_pdf.url }}" class="btn btn-success" target="_blank" rel="noopener">
-                                Télécharger l'article
+                                Télécharger le PDF
                             </a>
                         </div>
                         {% endif %}
+                        <p class="mt-3">
+                            <strong>Métadonnées :</strong>
+                            <a href="{% url 'portail_site:publication_dc_xml' publication.slug %}">Dublin Core (XML)</a>
+                            ·
+                            <a href="{% url 'portail_site:publication_hal_json' publication.slug %}">HAL (JSON)</a>
+                        </p>
                     </div>
                 </div>
 
