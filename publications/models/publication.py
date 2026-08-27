@@ -76,6 +76,14 @@ class Publication(models.Model):
             return self.colloque
         return self
 
+    @property
+    def motif_rejet_structure(self):
+        from publications.motif_affichage import structurer_motif_rejet
+        return structurer_motif_rejet(
+            self.motif_rejet or "",
+            self.statut_indexation or "",
+        )
+
     def get_absolute_url(self):
         return reverse('portail_site:detail_publication', kwargs={'slug': self.slug})
 
@@ -234,7 +242,7 @@ class Publication(models.Model):
             self.statut_indexation = "Rejetée"
             self.statut_publication = False
             self.bases_indexation = ""
-            self.motif_rejet = " ".join(motifs_niveau1)
+            self.motif_rejet = "\n\n".join(motifs_niveau1)
             return
 
         # --------------------------------------------------

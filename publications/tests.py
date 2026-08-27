@@ -322,3 +322,37 @@ class CoauteursDepuisArticleTests(TestCase):
         )
         self.assertIn("n'a pas de compte", analyse["rejets"][0])
         self.assertIn("Aucun compte n'a été créé", analyse["rejets"][0])
+
+
+class MotifAffichageTests(TestCase):
+    def test_decoupe_auteurs_et_affiliations(self):
+        from publications.motif_affichage import structurer_motif_rejet
+
+        texte = (
+            "Rejet (vérification des affiliations) : "
+            "Alice Smith est cité(e) dans l'article mais n'a pas de compte "
+            "sur la plateforme. Aucun compte n'a été créé : l'article ne "
+            "contient pas d'email. Cette personne doit d'abord s'inscrire "
+            "et rattacher son institution.\n"
+            "Rejet (vérification des affiliations) :\n"
+            "les affiliations suivantes ne correspondent à aucune institution "
+            "inscrite sur la plateforme (règle nationale stricte) : MIT."
+        )
+        motif = structurer_motif_rejet(texte, "Rejetée")
+        self.assertEqual(motif["niveau"], "affiliations")
+        self.assertGreaterEqual(len(motif["points"]), 2)
+        self.assertTrue(any("Alice Smith" in p for p in motif["points"]))
+        self.assertTrue(any("affiliations suivantes" in p.lower() for p in motif["points"]))
+        self.assertIn("niveau 1", motif["intro"])
+
+    def test_indexation_internationale(self):
+        from publications.motif_affichage import structurer_motif_rejet
+
+        motif = structurer_motif_rejet(
+            "Publication non reconnue dans Scopus, Web of Science (WoS), "
+            "DOAJ ni AJOL. ISSN=—, revue=Test, DOI=10.1000/xyz.",
+            "Rejetée",
+        )
+        self.assertEqual(motif["niveau"], "indexation")
+        self.assertEqual(len(motif["points"]), 1)
+        self.assertIn("Scopus", motif["points"][0])

@@ -458,9 +458,10 @@ def verifier_affiliations_et_auteurs(publication, texte_pdf="", meta_externes=No
             )
 
     if motifs:
+        corps = "\n".join(m.strip() for m in motifs if m and str(m).strip())
         return {
             "statut": "Rejetée",
-            "motif": f"{MOTIFS_PREFIXE} " + " ".join(motifs),
+            "motif": f"{MOTIFS_PREFIXE}\n{corps}",
             "institutions_reconnues": institutions_citees,
             "details": {
                 "auteurs_sans_institution": auteurs_sans_institution,

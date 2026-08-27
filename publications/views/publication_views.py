@@ -64,7 +64,7 @@ def user_publications(request):
         'publicationauteur_set__auteur',
         'publicationauteur_set__auteur__profile',
         'publicationauteur_set__auteur__profile__institution'
-    )
+    ).order_by('-date_ajout_systeme', '-id')
 
     return render(
         request,
@@ -299,7 +299,9 @@ def modal_article_scientifique(request):
                     motifs_prealables = []
                     if analyse_coauteurs.get("rejets"):
                         motifs_prealables.append(
-                            f"{MOTIFS_PREFIXE} " + " ".join(analyse_coauteurs["rejets"])
+                            MOTIFS_PREFIXE
+                            + "\n"
+                            + "\n".join(analyse_coauteurs["rejets"])
                         )
 
                     # ==========================================
@@ -535,7 +537,9 @@ def modal_communication_colloque(request):
                     motifs_prealables = []
                     if analyse_coauteurs.get("rejets"):
                         motifs_prealables.append(
-                            f"{MOTIFS_PREFIXE} " + " ".join(analyse_coauteurs["rejets"])
+                            MOTIFS_PREFIXE
+                            + "\n"
+                            + "\n".join(analyse_coauteurs["rejets"])
                         )
 
                     # ==========================================

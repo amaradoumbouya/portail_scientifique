@@ -208,13 +208,99 @@
         color: #2b3648;
     }
 
-    .reject-box {
+    .reject-card {
+        border-radius: 10px;
+        padding: 18px 20px;
+        margin-top: 4px;
+    }
+
+    .reject-card--affiliations,
+    .reject-card--indexation,
+    .reject-card--rejet {
         background: #fdecea;
         border: 1px solid #f6c9c1;
+        color: #7a2e22;
+    }
+
+    .reject-card--attente {
+        background: #fff8ee;
+        border: 1px solid #f3d7a7;
+        color: #7a5410;
+    }
+
+    .reject-card-head {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .reject-card-icon {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
         border-radius: 10px;
-        padding: 14px 16px;
-        color: #b3341f;
-        margin-top: 8px;
+        font-size: 20px;
+        flex: 0 0 40px;
+    }
+
+    .reject-card--affiliations .reject-card-icon,
+    .reject-card--indexation .reject-card-icon,
+    .reject-card--rejet .reject-card-icon {
+        background: #f8d7d2;
+        color: #c0392b;
+    }
+
+    .reject-card--attente .reject-card-icon {
+        background: #f8e6c4;
+        color: #c47b12;
+    }
+
+    .reject-card-kicker {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .6px;
+        margin: 0 0 2px;
+        opacity: .75;
+        font-weight: 700;
+    }
+
+    .reject-card-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        color: inherit;
+    }
+
+    .reject-card-intro {
+        margin: 0 0 12px;
+        line-height: 1.55;
+        font-size: 14px;
+    }
+
+    .reject-card-list {
+        margin: 0;
+        padding: 0 0 0 18px;
+    }
+
+    .reject-card-list li {
+        margin: 0 0 8px;
+        line-height: 1.55;
+        font-size: 14px;
+    }
+
+    .reject-card-list li:last-child {
+        margin-bottom: 0;
+    }
+
+    .reject-card-hint {
+        margin: 14px 0 0;
+        padding-top: 12px;
+        border-top: 1px solid rgba(0, 0, 0, .08);
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: .9;
     }
 </style>
 {% endblock style %}
@@ -328,26 +414,55 @@
 
     <!-- Motif de rejet / en attente -->
     {% if publication.statut_indexation != 'Acceptée' and publication.motif_rejet %}
+    {% with motif=publication.motif_rejet_structure %}
+    {% if motif %}
     <div class="row">
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-body">
-                    <p class="section-title">
-                        {% if "vérification des affiliations" in publication.motif_rejet %}
-                        Motif de rejet — affiliations
-                        {% elif publication.statut_indexation == 'Rejetée' %}
-                        Motif de rejet — indexation internationale
-                        {% else %}
-                        Motif
+                    <p class="section-title">{{ motif.titre }}</p>
+                    <div class="reject-card reject-card--{{ motif.niveau }}">
+                        <div class="reject-card-head">
+                            <div class="reject-card-icon">
+                                {% if motif.niveau == 'attente' %}
+                                <i class="mdi mdi-clock-outline"></i>
+                                {% else %}
+                                <i class="mdi mdi-alert-circle"></i>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <p class="reject-card-kicker">{{ motif.kicker }}</p>
+                                <h3 class="reject-card-title">
+                                    {% if motif.niveau == 'attente' %}
+                                    Contrôle non terminé
+                                    {% elif motif.points|length > 1 %}
+                                    {{ motif.points|length }} raisons identifiées
+                                    {% else %}
+                                    Une raison identifiée
+                                    {% endif %}
+                                </h3>
+                            </div>
+                        </div>
+                        {% if motif.intro %}
+                        <p class="reject-card-intro">{{ motif.intro }}</p>
                         {% endif %}
-                    </p>
-                    <div class="reject-box">
-                        <i class="mdi mdi-alert-circle"></i> {{ publication.motif_rejet }}
+                        {% if motif.points %}
+                        <ul class="reject-card-list">
+                            {% for point in motif.points %}
+                            <li>{{ point }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% if motif.conseil %}
+                        <p class="reject-card-hint"><strong>À faire :</strong> {{ motif.conseil }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
+    {% endwith %}
     {% endif %}
 
     <div class="row">
