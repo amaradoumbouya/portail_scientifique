@@ -6,6 +6,8 @@ from publications.models.publication import Publication, PublicationAuteur, Coll
 from auteurs.models import Auteur
 from encadreurs.models import Encadreur
 from publications.forms.publication_forms import PublicationForm,ArticleForm, ColloqueForm
+from publications.coauteurs import resoudre_auteurs_cites, enregistrer_coauteurs
+from publications.verification_affiliations import MOTIFS_PREFIXE
 from projets_detudes.forms.projet_forms import ProjetForm
 from notifications.models import Notification
 from auteurs.forms import AuteurForm
@@ -19,10 +21,6 @@ from django.db import transaction
 from django.utils.crypto import get_random_string
 
 # Envoi d'un email apres l'inscription sur le portail
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
@@ -33,6 +31,26 @@ from django.contrib.auth.decorators import login_required
 # Pour la vue d'activation du compte apres l'inscription
 from django.utils.encoding import force_str
 
+
+def _message_apres_soumission(request, publication, type_libelle):
+    """Informe l'utilisateur du résultat des vérifications (affiliations puis bases internationales)."""
+    if publication.statut_indexation == "Rejetée":
+        messages.warning(
+            request,
+            f"Votre {type_libelle} a été soumis mais rejeté. "
+            f"Motif : {publication.motif_rejet or 'non conforme.'}"
+        )
+    elif publication.statut_indexation == "Acceptée":
+        messages.success(
+            request,
+            f"Votre {type_libelle} a été soumis et indexé avec succès."
+        )
+    else:
+        messages.info(
+            request,
+            f"Votre {type_libelle} a été soumis. "
+            "La vérification d'indexation est en cours."
+        )
 
 
 # Vue pour lister toutes les publications effectuées par l'utilisateur
@@ -73,7 +91,15 @@ def statut_publication(request):
 
 # Detail_d'une_publication
 def detail_publication(request, slug):
-    publication = get_object_or_404(Publication, slug=slug)
+    publication = get_object_or_404(
+        Publication.objects.prefetch_related(
+            'publicationauteur_set',
+            'publicationauteur_set__auteur',
+            'publicationauteur_set__auteur__profile',
+            'publicationauteur_set__auteur__profile__institution',
+        ),
+        slug=slug,
+    )
     return render(request, 'back/publications/detail.html', {'publication': publication})
 
 # Modification_d'une_publication
@@ -198,8 +224,6 @@ def modal_article_scientifique(request):
 
                 user = request.user
 
-                current_site = get_current_site(request)
-
                 # ==========================================
                 # TRANSACTION PRINCIPALE
                 # ==========================================
@@ -249,158 +273,44 @@ def modal_article_scientifique(request):
 
                     print("Auteur principal ajouté")
 
-                    # ==========================================
-                    # TRAITEMENT CO-AUTEURS
-                    # ==========================================
-                    i = 0
+                    from publications.nlp_tools import (
+                        extraire_texte_du_pdf,
+                        enrichir_meta_depuis_doi,
+                    )
+                    doi = form_publication.cleaned_data.get("doi") or publication.doi
+                    fichier.seek(0)
+                    texte_pdf = extraire_texte_du_pdf(fichier) or ""
+                    meta_doi = enrichir_meta_depuis_doi(doi) if doi else None
 
-                    while True:
-
-                        nom = request.POST.get(f"auteurs[{i}][nom]")
-
-                        if not nom:
-                            break
-
-                        prenoms = request.POST.get(f"auteurs[{i}][prenoms]")
-
-                        email = request.POST.get(f"auteurs[{i}][email]")
-
-                        tel = request.POST.get(f"auteurs[{i}][tel]")
-
-                        role = request.POST.get(f"auteurs[{i}][role]") or "Co-auteur"
-
-                        # ==========================================
-                        # EMAIL OBLIGATOIRE
-                        # ==========================================
-                        if not email:
-                            i += 1
-                            continue
-
-                        # ==========================================
-                        # RECHERCHE UTILISATEUR
-                        # ==========================================
-                        auteur_as_user = (
-                            CustumerUser.objects.filter(
-                                email=email
-                            ).first()
-                        )
-
-                        # ==========================================
-                        # UTILISATEUR N'EXISTE PAS
-                        # ==========================================
-                        if not auteur_as_user:
-
-                            password_par_defaut = (get_random_string(10))
-
-                            auteur_as_user = (
-                                CustumerUser.objects.create_user(
-                                    prenoms=prenoms,
-                                    nom=nom,
-                                    email=email,
-                                    tel=tel,
-                                    password=password_par_defaut
-                                )
-                            )
-                            
-                            auteur_as_user.profile.role = 'enseignant'
-                            auteur_as_user.profile.save()
-
-                            publication_auteur, created = (
-                                PublicationAuteur.objects.get_or_create(
-                                    auteur=auteur_as_user,
-                                    publication=publication,
-                                    defaults={
-                                        'role': role,
-                                        'ordre': i + 2
-                                    }
-                                )
-                            )
-
-                            # ==========================================
-                            # EMAIL ACTIVATION
-                            # ==========================================
-                            uid = (urlsafe_base64_encode(force_bytes(auteur_as_user.pk)))
-
-                            token = (default_token_generator.make_token(auteur_as_user))
-
-                            activation_link = reverse(
-                                'portail_site:activation',
-                                kwargs={
-                                    'uidb64': uid,
-                                    'token': token
-                                }
-                            )
-
-                            activation_url = (f"http://{current_site.domain}" f"{activation_link}")
-
-                            mail_subject = ('Activation de votre compte')
-
-                            message = render_to_string(
-                                'emails/activation_email_participant.html',
-                                {
-                                    'user': auteur_as_user,
-                                    'role': publication_auteur.role,
-                                    'password': password_par_defaut,
-                                    'activation_url': activation_url,
-                                }
-                            )
-
-                            send_mail(
-                                mail_subject,
-                                '',
-                                settings.DEFAULT_FROM_EMAIL,
-                                [auteur_as_user.email],
-                                html_message=message,
-                                fail_silently=False
-                            )
-
-                        # ==========================================
-                        # UTILISATEUR EXISTE DEJA
-                        # ==========================================
-                        else:
-
-                            publication_auteur, created = (
-                                PublicationAuteur.objects.get_or_create(
-                                    auteur=auteur_as_user,
-                                    publication=publication,
-                                    defaults={
-                                        'role': role,
-                                        'ordre': i + 2
-                                    }
-                                )
-                            )
-
-                            login_url = (f"http://{current_site.domain}/connexion/")
-
-                            mail_subject = ('Participation à une publication scientifique')
-
-                            message = render_to_string('emails/information_participant.html',
-                                {
-                                    'user': auteur_as_user,
-                                    'role': publication_auteur.role,
-                                    'login_url': login_url,
-                                }
-                            )
-
-                            send_mail(
-                                mail_subject,
-                                '',
-                                settings.DEFAULT_FROM_EMAIL,
-                                [auteur_as_user.email],
-                                html_message=message,
-                                fail_silently=False
-                            )
-
-                        i += 1
+                    analyse_coauteurs = resoudre_auteurs_cites(
+                        texte_pdf=texte_pdf,
+                        meta_externes=meta_doi,
+                        deposant=user,
+                    )
+                    enregistrer_coauteurs(
+                        publication,
+                        analyse_coauteurs,
+                        request,
+                        sujet_existant="Participation à une publication scientifique",
+                    )
 
                     print("Co-auteurs traités")
+
+                    motifs_prealables = []
+                    if analyse_coauteurs.get("rejets"):
+                        motifs_prealables.append(
+                            f"{MOTIFS_PREFIXE} " + " ".join(analyse_coauteurs["rejets"])
+                        )
 
                     # ==========================================
                     # INDEXATION NLP COMPLETE
                     # ==========================================
                     fichier.seek(0)
 
-                    publication.indexer(fichier)
+                    publication.indexer(
+                        fichier,
+                        motifs_prealables=motifs_prealables,
+                    )
 
                     publication.save()
 
@@ -430,14 +340,8 @@ def modal_article_scientifique(request):
 
                 print("Notification interne créée")
 
-                # ==========================================
-                # SUCCESS MESSAGE
-                # ==========================================
-                messages.success(
-                    request,
-                    "Votre article scientifique "
-                    "a été soumis et indexé "
-                    "avec succès."
+                _message_apres_soumission(
+                    request, publication, "article scientifique"
                 )
 
                 return redirect('publications:index')
@@ -461,7 +365,7 @@ def modal_article_scientifique(request):
         'back/modals_publications/article_scientifique.html',
         {
             "form_publication": form_publication,
-            "form_article": form_article
+            "form_article": form_article,
         }
     )
 
@@ -554,8 +458,6 @@ def modal_communication_colloque(request):
 
                 user = request.user
 
-                current_site = get_current_site(request)
-
                 # ==========================================
                 # TRANSACTION PRINCIPALE
                 # ==========================================
@@ -607,197 +509,44 @@ def modal_communication_colloque(request):
 
                     print("Auteur principal ajouté")
 
-                    # ==========================================
-                    # TRAITEMENT CO-AUTEURS
-                    # ==========================================
-                    i = 0
+                    from publications.nlp_tools import (
+                        extraire_texte_du_pdf,
+                        enrichir_meta_depuis_doi,
+                    )
+                    doi = form_publication.cleaned_data.get("doi") or publication.doi
+                    fichier.seek(0)
+                    texte_pdf = extraire_texte_du_pdf(fichier) or ""
+                    meta_doi = enrichir_meta_depuis_doi(doi) if doi else None
 
-                    while True:
-
-                        nom = request.POST.get(
-                            f"auteurs[{i}][nom]"
-                        )
-
-                        if not nom:
-                            break
-
-                        prenoms = request.POST.get(
-                            f"auteurs[{i}][prenoms]"
-                        )
-
-                        email = request.POST.get(
-                            f"auteurs[{i}][email]"
-                        )
-
-                        tel = request.POST.get(
-                            f"auteurs[{i}][tel]"
-                        )
-
-                        role = (
-                            request.POST.get(
-                                f"auteurs[{i}][role]"
-                            ) or "Co-auteur"
-                        )
-
-                        # ==========================================
-                        # EMAIL OBLIGATOIRE
-                        # ==========================================
-                        if not email:
-
-                            i += 1
-
-                            continue
-
-                        # ==========================================
-                        # RECHERCHE UTILISATEUR
-                        # ==========================================
-                        auteur_as_user = (
-                            CustumerUser.objects.filter(
-                                email=email
-                            ).first()
-                        )
-
-                        # ==========================================
-                        # UTILISATEUR N'EXISTE PAS
-                        # ==========================================
-                        if not auteur_as_user:
-
-                            password_par_defaut = (
-                                get_random_string(10)
-                            )
-
-                            auteur_as_user = (
-                                CustumerUser.objects.create_user(
-                                    prenoms=prenoms,
-                                    nom=nom,
-                                    email=email,
-                                    tel=tel,
-                                    password=password_par_defaut
-                                )
-                            )
-
-                            auteur_as_user.profile.role = (
-                                'enseignant'
-                            )
-
-                            auteur_as_user.profile.save()
-
-                            publication_auteur, created = (
-                                PublicationAuteur.objects.get_or_create(
-                                    auteur=auteur_as_user,
-                                    publication=publication,
-                                    defaults={
-                                        'role': role,
-                                        'ordre': i + 2
-                                    }
-                                )
-                            )
-
-                            # ==========================================
-                            # EMAIL ACTIVATION
-                            # ==========================================
-                            uid = (
-                                urlsafe_base64_encode(
-                                    force_bytes(
-                                        auteur_as_user.pk
-                                    )
-                                )
-                            )
-
-                            token = (
-                                default_token_generator.make_token(
-                                    auteur_as_user
-                                )
-                            )
-
-                            activation_link = reverse(
-                                'portail_site:activation',
-                                kwargs={
-                                    'uidb64': uid,
-                                    'token': token
-                                }
-                            )
-
-                            activation_url = (
-                                f"http://{current_site.domain}"
-                                f"{activation_link}"
-                            )
-
-                            mail_subject = (
-                                'Activation de votre compte'
-                            )
-
-                            message = render_to_string(
-                                'emails/activation_email_participant.html',
-                                {
-                                    'user': auteur_as_user,
-                                    'role': publication_auteur.role,
-                                    'password': password_par_defaut,
-                                    'activation_url': activation_url,
-                                }
-                            )
-
-                            send_mail(
-                                mail_subject,
-                                '',
-                                settings.DEFAULT_FROM_EMAIL,
-                                [auteur_as_user.email],
-                                html_message=message,
-                                fail_silently=False
-                            )
-
-                        # ==========================================
-                        # UTILISATEUR EXISTE DEJA
-                        # ==========================================
-                        else:
-
-                            publication_auteur, created = (
-                                PublicationAuteur.objects.get_or_create(
-                                    auteur=auteur_as_user,
-                                    publication=publication,
-                                    defaults={
-                                        'role': role,
-                                        'ordre': i + 2
-                                    }
-                                )
-                            )
-
-                            login_url = (
-                                f"http://{current_site.domain}/connexion/"
-                            )
-
-                            mail_subject = (
-                                'Participation à une communication de colloque'
-                            )
-
-                            message = render_to_string(
-                                'emails/information_participant.html',
-                                {
-                                    'user': auteur_as_user,
-                                    'role': publication_auteur.role,
-                                    'login_url': login_url,
-                                }
-                            )
-
-                            send_mail(
-                                mail_subject,
-                                '',
-                                settings.DEFAULT_FROM_EMAIL,
-                                [auteur_as_user.email],
-                                html_message=message,
-                                fail_silently=False
-                            )
-
-                        i += 1
+                    analyse_coauteurs = resoudre_auteurs_cites(
+                        texte_pdf=texte_pdf,
+                        meta_externes=meta_doi,
+                        deposant=user,
+                    )
+                    enregistrer_coauteurs(
+                        publication,
+                        analyse_coauteurs,
+                        request,
+                        sujet_existant="Participation à une communication de colloque",
+                    )
 
                     print("Co-auteurs traités")
+
+                    motifs_prealables = []
+                    if analyse_coauteurs.get("rejets"):
+                        motifs_prealables.append(
+                            f"{MOTIFS_PREFIXE} " + " ".join(analyse_coauteurs["rejets"])
+                        )
 
                     # ==========================================
                     # INDEXATION NLP COMPLETE
                     # ==========================================
                     fichier.seek(0)
 
-                    publication.indexer(fichier)
+                    publication.indexer(
+                        fichier,
+                        motifs_prealables=motifs_prealables,
+                    )
 
                     publication.save()
 
@@ -829,14 +578,8 @@ def modal_communication_colloque(request):
 
                 print("Notification interne créée")
 
-                # ==========================================
-                # MESSAGE SUCCESS
-                # ==========================================
-                messages.success(
-                    request,
-                    "Votre communication de colloque "
-                    "a été soumise et indexée "
-                    "avec succès."
+                _message_apres_soumission(
+                    request, publication, "communication de colloque"
                 )
 
                 return redirect('publications:index')
@@ -864,7 +607,7 @@ def modal_communication_colloque(request):
         'back/modals_publications/colloque.html',
         {
             "form_publication": form_publication,
-            "form_colloque": form_colloque
+            "form_colloque": form_colloque,
         }
     )
 

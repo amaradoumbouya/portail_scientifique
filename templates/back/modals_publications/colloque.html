@@ -12,7 +12,11 @@
 
             <div class="form-group col-md-12">
                 {{form_publication.fichier_pdf|as_crispy_field}}
-                <small>Téléverser la communication. La langue est détectée automatiquement.</small>
+                <small>
+                    Téléverser la communication. Les co-auteurs et leurs affiliations sont lus
+                    automatiquement dans le PDF et, s'il est renseigné, via le DOI.
+                    Seules les institutions déjà inscrites sur le portail sont acceptées.
+                </small>
             </div>
 
             <div class="form-group col-md-6">
@@ -34,15 +38,6 @@
             <div class="form-group col-md-12">
                 {{form_publication.licence|as_crispy_field}}
                 <small>Licence de diffusion (science ouverte). CC BY 4.0 est recommandé.</small>
-            </div>
-
-            <div class="form-group col-md-12">
-                <!--  -->
-                <button type="button" id="add-auteur" class="btn btn-primary btn-block waves-effect waves-light">Cliquez
-                    pour ajouter un auteur <i class="mdi mdi-plus"></i></button>
-
-                <!-- Zone auteurs -->
-                <div id="auteurs-container"></div>
             </div>
 
         </div>

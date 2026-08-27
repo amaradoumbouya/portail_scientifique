@@ -327,44 +327,6 @@
             });
     }
 
-    // JavaScript Pour l'ajout dynamique des auteurs et encadreurs
-    let auteurIndex = 0;
-    let encadreurIndex = 0;
-
-    document.addEventListener("click", function (e) {
-
-        // 🔒 Vérifier qu'on est DANS le modal actif
-        const modal = document.getElementById("main-modal");
-
-        if (!modal || !modal.contains(e.target)) return;
-
-        // ===== AJOUT AUTEUR =====
-        if (e.target.id === "add-auteur" || e.target.closest("#add-auteur")) {
-
-            let container = modal.querySelector("#auteurs-container");
-            if (!container) return;
-
-            let html = `
-            <div class="border p-3 mt-2"><br>
-                <input type="text" name="auteurs[${auteurIndex}][nom]" class="form-control mb-2" placeholder="Nom co-auteur"><br>
-                <input type="text" name="auteurs[${auteurIndex}][prenoms]" class="form-control mb-2" placeholder="Prénom co-auteur"><br>
-                <input type="email" name="auteurs[${auteurIndex}][email]" class="form-control mb-2" placeholder="Email co-auteur"><br>
-                <input type="tel" name="auteurs[${auteurIndex}][tel]" class="form-control mb-2" placeholder="Téléphone co-auteur"><br>
-                <button type="button" class="btn btn-danger btn-sm remove">Supprimer</button><br>
-            </div>
-        `;
-
-            container.insertAdjacentHTML("beforeend", html);
-            auteurIndex++;
-        }
-
-        // ===== SUPPRESSION =====
-        if (e.target.classList.contains("remove")) {
-            e.target.closest(".border").remove();
-        }
-
-    });
-
 </script>
 
 {% endblock scripts %}

@@ -274,10 +274,21 @@ def _http_get(url, params=None, headers=None):
     return None
 
 
+def _meta_doi_vide():
+    return {
+        "issn": None,
+        "issns": [],
+        "nom_revue": None,
+        "titre": None,
+        "auteurs": [],
+        "affiliations": [],
+    }
+
+
 def enrichir_meta_depuis_doi(doi):
-    """Récupère ISSN + titre de revue via Crossref à partir du DOI."""
+    """Récupère ISSN, revue, auteurs et affiliations via Crossref à partir du DOI."""
     doi = normaliser_doi(doi)
-    meta = {"issn": None, "issns": [], "nom_revue": None, "titre": None}
+    meta = _meta_doi_vide()
     if not doi:
         return meta
 
@@ -302,6 +313,29 @@ def enrichir_meta_depuis_doi(doi):
             issns.append(issn)
     meta["issns"] = issns
     meta["issn"] = issns[0] if issns else None
+
+    auteurs = []
+    affiliations = []
+    for auteur in message.get("author") or []:
+        prenoms = (auteur.get("given") or "").strip()
+        nom = (auteur.get("family") or "").strip()
+        affs = []
+        for aff in auteur.get("affiliation") or []:
+            if isinstance(aff, dict):
+                name = (aff.get("name") or "").strip()
+            else:
+                name = str(aff or "").strip()
+            if name:
+                affs.append(name)
+                if name not in affiliations:
+                    affiliations.append(name)
+        auteurs.append({
+            "prenoms": prenoms,
+            "nom": nom,
+            "affiliations": affs,
+        })
+    meta["auteurs"] = auteurs
+    meta["affiliations"] = affiliations
     return meta
 
 
@@ -527,10 +561,13 @@ def verifier_indexation_internationale(
     nom_revue=None,
     texte_pdf=None,
     titre=None,
+    meta=None,
 ):
     """
-    Vérifie automatiquement si la publication est reconnue dans
+    Niveau 2 : vérifie si la publication est reconnue dans
     Scopus, WoS, DOAJ ou AJOL.
+
+    À n'appeler qu'après la vérification des affiliations (niveau 1).
 
     Retourne un dict :
       - statut: 'Acceptée' | 'Rejetée' | 'En attente'
@@ -542,10 +579,8 @@ def verifier_indexation_internationale(
     doi = normaliser_doi(doi)
     nom_revue = (nom_revue or "").strip() or None
 
-    # Enrichissement métadonnées
-    meta = enrichir_meta_depuis_doi(doi) if doi else {
-        "issn": None, "issns": [], "nom_revue": None, "titre": None
-    }
+    if meta is None:
+        meta = enrichir_meta_depuis_doi(doi) if doi else _meta_doi_vide()
     if not nom_revue:
         nom_revue = meta.get("nom_revue")
 

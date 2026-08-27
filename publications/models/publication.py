@@ -117,14 +117,18 @@ class Publication(models.Model):
         return doi
 
 
-    def indexer(self, fichier, verifier_international=True):
+    def indexer(self, fichier, verifier_international=True, motifs_prealables=None):
         """
         1) Enrichissement NLP (texte, résumé, mots-clés, domaine, langue)
         2) Enregistrement du modèle Indexation
-        3) Vérification d'indexation internationale (articles / colloques)
+        3) Niveau 1 — affiliations / auteurs (institutions inscrites)
+        4) Niveau 2 — indexation internationale (Scopus, WoS, DOAJ, AJOL)
 
-        Un article ou une communication de colloque n'est Accepté(e)
-        que s'il est reconnu dans Scopus, WoS, DOAJ ou AJOL.
+        Un article ou une communication de colloque n'est Accepté(e) que si :
+        - les institutions citées sont inscrites sur la plateforme ;
+        - les auteurs sont affiliés à ces institutions ;
+        - puis la revue/article est reconnu dans Scopus, WoS, DOAJ ou AJOL.
+
         Les mémoires / thèses passent uniquement par l'indexation NLP locale.
         """
         from publications.nlp_tools import (
@@ -135,7 +139,11 @@ class Publication(models.Model):
             classifier_domaine,
             detecter_langue,
             calculer_score_pertinence,
+            enrichir_meta_depuis_doi,
             verifier_indexation_internationale,
+        )
+        from publications.verification_affiliations import (
+            verifier_affiliations_et_auteurs,
         )
         from indexations.models import Indexation
 
@@ -152,7 +160,7 @@ class Publication(models.Model):
         if verifier_international:
             self.statut_indexation = 'En attente'
             self.bases_indexation = ''
-            self.motif_rejet = "Vérification d'indexation en cours…"
+            self.motif_rejet = "Vérification des affiliations en cours…"
 
         texte = ""
         try:
@@ -172,14 +180,14 @@ class Publication(models.Model):
                 if verifier_international:
                     self.motif_rejet = (
                         "Texte PDF court ou vide — enrichissement NLP limité. "
-                        "Vérification d'indexation en cours…"
+                        "Vérification des affiliations en cours…"
                     )
 
         except Exception as e:
             if verifier_international:
                 self.motif_rejet = (
                     f"Enrichissement NLP partiel ({e}). "
-                    "Vérification d'indexation en cours…"
+                    "Vérification des affiliations en cours…"
                 )
 
         score = calculer_score_pertinence(
@@ -205,6 +213,33 @@ class Publication(models.Model):
             self.motif_rejet = ''
             return
 
+        texte_pdf = texte or self.texte_integral or ""
+        meta_doi = enrichir_meta_depuis_doi(self.doi) if self.doi else None
+
+        # --------------------------------------------------
+        # Niveau 1 : institutions inscrites + affiliations
+        # --------------------------------------------------
+        resultat_aff = verifier_affiliations_et_auteurs(
+            self,
+            texte_pdf=texte_pdf,
+            meta_externes=meta_doi,
+        )
+        motifs_niveau1 = list(motifs_prealables or [])
+        if resultat_aff.get("statut") == "Rejetée":
+            motifs_niveau1.insert(0, resultat_aff.get("motif") or (
+                "Affiliations ou auteurs non conformes aux institutions "
+                "inscrites sur la plateforme."
+            ))
+        if motifs_niveau1:
+            self.statut_indexation = "Rejetée"
+            self.statut_publication = False
+            self.bases_indexation = ""
+            self.motif_rejet = " ".join(motifs_niveau1)
+            return
+
+        # --------------------------------------------------
+        # Niveau 2 : Scopus / WoS / DOAJ / AJOL
+        # --------------------------------------------------
         nom_revue = None
         try:
             real = self.get_real_instance()
@@ -215,8 +250,9 @@ class Publication(models.Model):
         resultat = verifier_indexation_internationale(
             doi=self.doi,
             nom_revue=nom_revue,
-            texte_pdf=texte or self.texte_integral or "",
+            texte_pdf=texte_pdf,
             titre=self.titre,
+            meta=meta_doi,
         )
 
         self.statut_indexation = resultat.get('statut', 'En attente')
@@ -227,6 +263,7 @@ class Publication(models.Model):
             self.statut_publication = True
             self.motif_rejet = ""
         elif self.statut_indexation == 'Rejetée':
+            self.statut_publication = False
             self.motif_rejet = resultat.get('motif') or (
                 "Non reconnu dans Scopus, WoS, DOAJ ni AJOL."
             )

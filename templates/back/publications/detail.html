@@ -332,7 +332,15 @@
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-body">
-                    <p class="section-title">Motif</p>
+                    <p class="section-title">
+                        {% if "vérification des affiliations" in publication.motif_rejet %}
+                        Motif de rejet — affiliations
+                        {% elif publication.statut_indexation == 'Rejetée' %}
+                        Motif de rejet — indexation internationale
+                        {% else %}
+                        Motif
+                        {% endif %}
+                    </p>
                     <div class="reject-box">
                         <i class="mdi mdi-alert-circle"></i> {{ publication.motif_rejet }}
                     </div>
@@ -387,7 +395,14 @@
                     {% for aut in publication.publicationauteur_set.all %}
                     <div class="person-item">
                         <div class="person-avatar">{{ aut.auteur.prenoms|first }}{{ aut.auteur.nom|first }}</div>
-                        <div class="person-name">{{ aut.auteur.prenoms }} {{ aut.auteur.nom }}{% if aut.role %} <small class="text-muted">({{ aut.role }})</small>{% endif %}</div>
+                        <div>
+                            <div class="person-name">{{ aut.auteur.prenoms }} {{ aut.auteur.nom }}{% if aut.role %} <small class="text-muted">({{ aut.role }})</small>{% endif %}</div>
+                            {% if aut.auteur.profile.institution %}
+                            <small class="text-muted">{{ aut.auteur.profile.institution.nom_institution }}</small>
+                            {% else %}
+                            <small class="text-danger">Aucune institution inscrite</small>
+                            {% endif %}
+                        </div>
                     </div>
                     {% empty %}
                     <p class="text-muted">Aucun auteur</p>
