@@ -48,7 +48,7 @@
                         <ul class="messages">
                             {% for message in messages %}
                             <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                                <div class="alert alert-success" role="alert">
+                                <div class="alert {% if 'error' in message.tags %}alert-danger{% elif 'warning' in message.tags %}alert-warning{% elif 'info' in message.tags %}alert-info{% else %}alert-success{% endif %}" role="alert">
                                     <strong>{{ message }}</strong>
                                 </div>
                                 </li>

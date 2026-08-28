@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -130,3 +131,9 @@ def deverrouiller(request):
         messages.error(request, "Mot de passe incorrect.")
 
     return render(request, 'back/accounts/verrouiller.html')
+
+
+@login_required
+def session_keepalive(request):
+    """Prolonge la session tant que l'utilisateur est actif dans le navigateur."""
+    return HttpResponse(status=204)

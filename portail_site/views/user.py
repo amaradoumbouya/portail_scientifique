@@ -424,4 +424,11 @@ def user_login_view(request, *args, **kwargs):
 
         return redirect('portail_site:connexion')
 
+    if request.GET.get('inactivite') == '1':
+        minutes = max(1, int(getattr(settings, 'SESSION_IDLE_TIMEOUT', 30 * 60)) // 60)
+        messages.warning(
+            request,
+            f"Vous avez été déconnecté après {minutes} minutes d'inactivité.",
+        )
+
     return render(request, 'registration/login.html', {})

@@ -1,0 +1,8 @@
+{% load static %}
+{% if user.is_authenticated %}
+<script src="{% static 'js/session-idle-timeout.js' %}"
+        data-timeout="{{ SESSION_IDLE_TIMEOUT|default:1800 }}"
+        data-logout-url="{% url 'portail_site:deconnexion' %}"
+        data-login-url="{% url 'portail_site:connexion' %}?inactivite=1"
+        data-keepalive-url="{% url 'accounts:session_keepalive' %}"></script>
+{% endif %}

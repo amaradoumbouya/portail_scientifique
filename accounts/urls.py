@@ -9,6 +9,7 @@ from accounts.views import (
     changer_mot_de_passe,
     verrouiller,
     deverrouiller,
+    session_keepalive,
 )
 
 app_name = "accounts"
@@ -19,6 +20,7 @@ urlpatterns = [
     path('changer-mot-de-passe/', login_required(changer_mot_de_passe), name='changer_mot_de_passe'),
     path('verrouiller/', login_required(verrouiller), name='verrouiller'),
     path('deverrouiller/', login_required(deverrouiller), name='deverrouiller'),
+    path('session-keepalive/', login_required(session_keepalive), name='session_keepalive'),
     path('update-custumer/<str:slug>/', login_required(CustumUserUpdateView.as_view()), name='update'),
     path('delete-custumer/<str:slug>/', login_required(CustumUserDeleteView.as_view()), name='delete'),
 ]
